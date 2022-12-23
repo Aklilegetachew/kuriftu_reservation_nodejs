@@ -1,0 +1,10 @@
+{
+    "port": 8000,
+    "database": {
+        "host": "localhost",
+        "database": "lalibela",
+        "username": "root",
+        "password": "",
+        "dialect": "mysql"
+    }
+}

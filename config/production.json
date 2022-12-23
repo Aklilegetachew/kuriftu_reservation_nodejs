@@ -1,0 +1,10 @@
+{
+    "port": 0,
+    "database": {
+        "host": "localhost",
+        "database": "fhc_asset",
+        "username": "root",
+        "password": "",
+        "dialect": "mysql"
+    }
+}
