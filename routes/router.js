@@ -1,4 +1,5 @@
 import express from 'express';
+import { auth } from '../controllers/authentication.controller';
 import { main } from '../controllers/index.controller';
 import { qrimage } from '../controllers/qrimages.controllers';
 import { acceptRequest } from '../controllers/request.controller';
@@ -13,4 +14,5 @@ router.post('/request', acceptRequest);
 router.get('/test', test);
 router.get('/qrimage/:id', qrimage)
 router.get('/verify/:id', verify);
+router.get('/auth/:id', auth);
 export default router;
