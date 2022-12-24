@@ -82,10 +82,12 @@ export const acceptRequest = async (req, res) => {
           order_status: order_status,
         };
         var strData = JSON.stringify(strData);
+        var sendURL = process.env.URL + '/auth/' + confirmation_code;
 
+        console.log(sendURL);
         qr.toFile(
           sentfile + "/" + confirmation_code + ".png",
-          "https://reservations.kurifturesorts.com/login/" + confirmation_code,
+          sendURL,
           function (err, code) {
             if (err) return res.json({ msg: "Error generating QR Code" });
           }

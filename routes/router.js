@@ -7,12 +7,12 @@ import { test } from '../controllers/test.controller';
 import { verify } from '../controllers/verification.controller';
 
 
-const router = express.Router(); 
+const router = express.Router();
 
 router.get('/', main);
 router.post('/request', acceptRequest);
 router.get('/test', test);
 router.get('/qrimage/:id', qrimage)
 router.get('/verify/:id', verify);
-router.get('/auth/:id', auth);
+router.get('/auth/:id/:id2', auth);
 export default router;
