@@ -20,7 +20,7 @@ export const verify = async(req, res) =>{
                     confirmation_code: id
                 }
             });
-            res.json({msg: 'reserved'})
+            res.json({msg: 'reserved'});
         }else{
             console.log('Already Checked In');
             res.json({msg: 'checked_in'});

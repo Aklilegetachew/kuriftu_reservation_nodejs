@@ -7,6 +7,7 @@ import pug from "pug";
 import path, { join } from "path";
 import qr from "qrcode";
 import ActivityReserv from "../models/ActivityReservation.model";
+import ActivityPrice from "../models/ActivityPrice.model";
 
 // import template from '../templates/email.pug';
 
@@ -23,6 +24,7 @@ export const acceptRequest = async (req, res) => {
   var reservationDate = new Date(req.body.reservationDate);
   var quantity = req.body.quantity;
   var email = req.body.email;
+  var phone_number = req.body.phone_number;
   var confirmation_code = generateUniqueId({
     length: 8,
     useLetters: true,
@@ -32,8 +34,16 @@ export const acceptRequest = async (req, res) => {
   var order_status = "reserved";
   var addons = req.body.addons;
 
-  var adultPrice = 0;
-  var kidsPrice = 0;
+  const WaterParkPrice = await ActivityPrice.findAll({
+    where: {
+      loation: "waterpark",
+    },
+  });
+
+  // const
+
+  var adultPrice = WaterParkPrice[0].price;
+  var kidsPrice = WaterParkPrice[1].price;
 
   var image;
   const sentfile = "assets/images";
@@ -50,14 +60,14 @@ export const acceptRequest = async (req, res) => {
           reservationDate.getDay() == 4 ||
           reservationDate.getDay() == 7
         ) {
-          adultPrice = 19;
-          kidsPrice = 16;
+          adultPrice;
+          kidsPrice;
         } else if (
           reservationDate.getDay() == 5 ||
           reservationDate.getDay() == 6
         ) {
-          adultPrice = 19 / 2;
-          kidsPrice = 16 / 2;
+          adultPrice = adultPrice / 2;
+          kidsPrice = kidsPrice / 2;
         }
         var price = adultPrice * adult + kidsPrice * kids;
 
@@ -65,8 +75,10 @@ export const acceptRequest = async (req, res) => {
           fname: fname,
           location: location,
           email: email,
+          phone_number: phone_number,
           confirmation_code: confirmation_code,
           reservation_date: reservationDate,
+          currency: currecnty,
           quantity: quantity,
           adult: adult,
           kids: kids,
