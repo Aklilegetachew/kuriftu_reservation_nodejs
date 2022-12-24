@@ -2,7 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import config from 'config';
 import cors from 'cors';
-import dd from 'body-parser';
+import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import router from './routes/router';
 
@@ -20,7 +20,7 @@ app.use(
 );
 
 app.options('*', cors());
-app.use(dd.json());
+app.use(bodyParser.json());
 app.use(cookieParser());
 
 app.use(router);
