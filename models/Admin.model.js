@@ -36,10 +36,4 @@ const Admin = database.define('admin',{
     }
 });
 
-// database.sync().then(()=>{
-//     console.log('Admin Table created Successfully!');
-// }).catch((error)=>{
-//     console.log('Unable to create table: ', error);
-// })
-
 export default Admin;

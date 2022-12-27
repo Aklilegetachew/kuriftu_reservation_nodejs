@@ -13,13 +13,4 @@ const ActivityPrice = database.define("activity_price", {
   },
 });
 
-// database
-//   .sync()
-//   .then(() => {
-//     console.log("Activity Price Table created Successfully!");
-//   })
-//   .catch((error) => {
-//     console.log("Unable to create table: ", error);
-//   });
-
 export default ActivityPrice;
