@@ -28,6 +28,7 @@ export const acceptRequest = async (req, res) => {
   var email = req.body.email;
   var phone_number = req.body.phone_number;
   var currency = req.body.currency;
+  var payment_method = req.body.payment_method;
   var confirmation_code = generateUniqueId({
     length: 8,
     useLetters: true,
@@ -52,75 +53,87 @@ export const acceptRequest = async (req, res) => {
   var adultPrice = WaterParkPrice[0].price;
   var kidsPrice = WaterParkPrice[1].price;
 
-  const sentfile = "assets/images";
+  const sentfile = "assets/images/qr_codes";
+
+  const dateFunction = (ts) => {
+    let date_ob = new Date(ts);
+    let date = date_ob.getDate();
+    let month = date_ob.getMonth() + 1;
+    let year = date_ob.getFullYear();
+
+    var final = year + "-" + month + "-" + date;
+    return final;
+  };
 
   try {
     if (location == "waterpark") {
       if (quantity > 10) {
         res.json({ msg: "quantity_greater_10" });
       } else {
-        if (currency == "ETB") {
-          var ETBPrice;
-          var requestOptions = {
-            method: "GET",
-            redirect: "follow",
-            headers: {
-              "Content-Type": "text/plain",
-              apikey: "m8pYh6zWnmUXPvxwRTVbrtqNtOqvR2xD",
-            },
-          };
-
-          fetch(
-            "https://api.apilayer.com/currency_data/convert?to=ETB&from=USD&amount=1",
-            requestOptions
-          )
-            .then((response) => response.text())
-            .then((result) => {
-              ETBPrice = JSON.parse(result).result;
-            })
-            .catch((error) => console.log("error", error));
-
-          await Currency.create({
-            rate: ETBPrice,
-          });
-
-          if (
-            reservationDate.getDay() == 1 ||
-            reservationDate.getDay() == 2 ||
-            reservationDate.getDay() == 3 ||
-            reservationDate.getDay() == 4 ||
-            reservationDate.getDay() == 7
-          ) {
-            adultPrice = adultPrice * ETBPrice;
-            kidsPrice = kidsPrice * ETBPrice;
-          } else if (
-            reservationDate.getDay() == 5 ||
-            reservationDate.getDay() == 6
-          ) {
-            adultPrice = (adultPrice * ETBPrice) / 2;
-            kidsPrice = (kidsPrice * ETBPrice) / 2;
-          }
-        } else if (currency == "USD") {
-          if (
-            reservationDate.getDay() == 1 ||
-            reservationDate.getDay() == 2 ||
-            reservationDate.getDay() == 3 ||
-            reservationDate.getDay() == 4 ||
-            reservationDate.getDay() == 7
-          ) {
-            adultPrice;
-            kidsPrice;
-          } else if (
-            reservationDate.getDay() == 5 ||
-            reservationDate.getDay() == 6
-          ) {
-            adultPrice = adultPrice / 2;
-            kidsPrice = kidsPrice / 2;
-          }
+        if (
+          reservationDate.getDay() == 1 ||
+          reservationDate.getDay() == 2 ||
+          reservationDate.getDay() == 3 ||
+          reservationDate.getDay() == 4 ||
+          reservationDate.getDay() == 7
+        ) {
+          adultPrice;
+          kidsPrice;
+        } else if (
+          reservationDate.getDay() == 5 ||
+          reservationDate.getDay() == 6
+        ) {
+          adultPrice = adultPrice / 2;
+          kidsPrice = kidsPrice / 2;
         }
 
         var price = adultPrice * adult + kidsPrice * kids;
+
+        if (currency == "ETB") {
+          const checkETB = await Currency.findAll({
+            limit: 1,
+            order: [["updatedAt", "DESC"]],
+          });
+          var ETBPrice;
+          var todayDate = dateFunction(Date.now());
+          var fetchDate = dateFunction(checkETB[0].updatedAt);
+          console.log(todayDate, fetchDate);
+
+          if (todayDate === fetchDate) {
+            console.log("equal");
+            ETBPrice = checkETB[0].rate;
+          } else {
+            console.log("different");
+
+            var requestOptions = {
+              method: "GET",
+              redirect: "follow",
+              headers: {
+                "Content-Type": "text/plain",
+                apikey: "m8pYh6zWnmUXPvxwRTVbrtqNtOqvR2xD",
+              },
+            };
+
+            await fetch(
+              "https://api.apilayer.com/currency_data/convert?to=ETB&from=USD&amount=1",
+              requestOptions
+            )
+              .then((response) => response.text())
+              .then((result) => {
+                // console.log(result);
+                ETBPrice = JSON.parse(result).result;
+              })
+              .catch((error) => console.log("error", error));
+            console.log("Price", ETBPrice);
+
+            await Currency.create({
+              rate: ETBPrice,
+            });
+          }
+          price = price * ETBPrice;
+        }
         console.log(price);
+        price = price.toFixed(2);
 
         const result = await ActivityReserv.create({
           fname: fname,
@@ -130,11 +143,13 @@ export const acceptRequest = async (req, res) => {
           confirmation_code: confirmation_code,
           reservation_date: reservationDate,
           currency: currency,
+          payment_method: payment_method,
+          payment_status: "unpaid",
           quantity: quantity,
           adult: adult,
           kids: kids,
           price: price,
-          order_status: order_status,
+          order_status: 'reserved',
           addons: addons,
         });
 
@@ -181,9 +196,10 @@ export const acceptRequest = async (req, res) => {
           "v:location": location,
           "v:email": email,
           "v:quantity": quantity,
-          "v:reservationDate": reservationDate,
+          "v:reservationDate": dateFunction(reservationDate),
           "v:confirmation": confirmation_code,
-          "v:price": price,
+          "v:price": price + " " + currency,
+          "v:payment": payment_method,
           "v:image": process.env.URL,
         };
 

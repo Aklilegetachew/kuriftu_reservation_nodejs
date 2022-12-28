@@ -58,35 +58,36 @@
 // import { Headers } from "request";
 // import http from 'http';
 import fetch from "node-fetch";
+import Currency from "../models/Currency.model";
 // const axios = require('axios');
 // import axios, {isCancel, AxiosError} from 'axios';
-// import 
+// import
 //  const fetch = require('node-fetch');
 // const axios = require('axios');\
 // const axios = require('axios')
 
 export const test = async (req, res) => {
-  // var header = new Headers();
-  var myHeaders = { 'apikey': "LTihJp3B4eDMs0JZQE1acsH4y4Iq15oh" };
-  //  myHeaders.append("apikey", "LTihJp3B4eDMs0JZQE1acsH4y4Iq15oh");
+  const dateFunction = (datee) => {
+    let ts = Date.now();
+    let date_ob = new Date(datee);
+    let date = date_ob.getDate();
+    let month = date_ob.getMonth() + 1;
+    let year = date_ob.getFullYear();
 
-  var requestOptions = {
-    method: "GET",
-    redirect: "follow",
-    headers: {
-      "Content-Type": "text/plain",
-      "apikey": "m8pYh6zWnmUXPvxwRTVbrtqNtOqvR2xD"
-    },
+    var final = year + "-" + month + "-" + date;
+    return final;
   };
 
-  fetch(
-    "https://api.apilayer.com/currency_data/convert?to=ETB&from=USD&amount=1",
-    requestOptions
-  )
-    .then((response) => response.text())
-    .then((result) => {
-     var ETBPrice = JSON.parse(result).result;
-     console.log(ETBPrice)
-    })
-    .catch((error) => console.log("error", error));
+  const checkETB = await Currency.findAll({
+    limit: 1,
+    order: [["updatedAt", "DESC"]],
+  });
+  var outdate = dateFunction(Date.now());
+  var indate = dateFunction(checkETB[0].updatedAt);
+
+  if (outdate === indate) {
+    console.log("equal");
+  } else {
+    console.log("different");
+  }
 };

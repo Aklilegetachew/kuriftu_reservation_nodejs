@@ -29,7 +29,7 @@ const ActivityReserv = database.define("activity_reservation", {
   kids: {
     type: DataTypes.INTEGER,
   },
-  currecnty: {
+  currency: {
     type: DataTypes.STRING,
   },
   price: {
