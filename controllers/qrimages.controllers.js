@@ -5,7 +5,7 @@ export const qrimage = async (req, res) => {
   var id = req.params.id;
 //   console.log(id);
   try {
-  var dir = path.join('assets/images' + "/" + id + ".png");
+  var dir = path.join('assets/images/qr_codes' + "/" + id + ".png");
 
   var mime = {
     html: "text/html",

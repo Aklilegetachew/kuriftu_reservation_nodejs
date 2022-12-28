@@ -1,6 +1,6 @@
 import generateUniqueId from "generate-unique-id";
 import Mailgun from "mailgun.js";
-import mailgun from "mailgun-js";
+// import mailgun from "mailgun-js";
 import formData from "form-data";
 import dotenv from "dotenv";
 import pug from "pug";
@@ -10,6 +10,9 @@ import ActivityReserv from "../models/ActivityReservation.model";
 import ActivityPrice from "../models/ActivityPrice.model";
 import Currency from "../models/Currency.model";
 import fetch from "node-fetch";
+import fsPromises from 'fs/promises';
+
+
 
 // import template from '../templates/email.pug';
 
@@ -19,7 +22,9 @@ export const acceptRequest = async (req, res) => {
   const API_KEY = process.env.MAILGUN_API;
   const DOMAIN = process.env.DOMAIN;
 
-  const mg = mailgun({ apiKey: API_KEY, domain: DOMAIN });
+  const mailgun = new Mailgun(formData);
+  const client = mailgun.client({ username: "api", key: API_KEY });
+  // const mg = mailgun({ apiKey: API_KEY, domain: DOMAIN });
 
   var location = req.body.location;
   var fname = req.body.fname;
@@ -149,7 +154,7 @@ export const acceptRequest = async (req, res) => {
           adult: adult,
           kids: kids,
           price: price,
-          order_status: 'reserved',
+          order_status: "reserved",
           addons: addons,
         });
 
@@ -185,30 +190,45 @@ export const acceptRequest = async (req, res) => {
           </div>
           `;
 
+        const filepath = sentfile + "/" + confirmation_code + ".png";
+        const file = {
+          filename: "sample.jpg",
+          data: await fsPromises.readFile(filepath),
+        };
+        const attachment = [file];
+        var qr_image = process.env.URL + '/' + confirmation_code;
+        // Email that is to be sent
         const emailSent = {
           from: "Kuriftu Water Park <postmaster@reservations.kurifturesorts.com>",
           to: email,
           subject: "Kuriftu Resort",
+          attachment,
           template: "kuriftu_design",
-          // html: template,
-          // attachment: {data: file, filename: 'QRCODE'},
+          // template: "kuriftu_test",
           "v:fname": fname,
           "v:location": location,
           "v:email": email,
           "v:quantity": quantity,
+          "v:reservation": 'Kuriftu WaterPark Reservation',
           "v:reservationDate": dateFunction(reservationDate),
           "v:confirmation": confirmation_code,
           "v:price": price + " " + currency,
           "v:payment": payment_method,
-          "v:image": process.env.URL,
+          "v:image": qr_image,
+          attachment
         };
 
-        mg.messages().send(emailSent, function (error, body) {
-          console.log(body);
-          console.log(sentfile);
-          res.send("Email Sent");
-        });
+        // Function that sends the email
+        client.messages
+          .create(DOMAIN, emailSent)
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((err) => {
+            console.error(err);
+          });
       }
+      res.json({msg: 'succes'});
     } else if (location == "entoto") {
     }
   } catch (error) {
