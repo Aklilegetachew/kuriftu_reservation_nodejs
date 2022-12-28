@@ -1,8 +1,11 @@
+
+import request from "request";
 import { Chapa } from "chapa-nodejs";
 
-export const recieveChappa = async (req, res) => {
+export const recieveChapa = async (req, res) => {
+  const datas = req.body;
   const chapa = new Chapa({
-    secretKey: "CHASECK_TEST-k1OznKI6893xmPpX6hCSWLU9uhn050Yp",
+    secretKey: "CHASECK_TEST-2MBUcoLYAH4xPJZ8och3gYRLA4klhAg8",
   });
 
   const tx_ref = await chapa.generateTransactionReference({
@@ -11,13 +14,13 @@ export const recieveChappa = async (req, res) => {
   });
   try {
     const response = await chapa.initialize({
-      first_name: "Jhon",
-      last_name: "Doe",
-      email: "john@gmail.com",
-      currency: "ETB",
-      amount: "200",
+      first_name: datas.fname,
+      last_name: datas.lname,
+      email: datas.email,
+      currency: datas.currency,
+      amount: datas.amount,
       tx_ref: tx_ref,
-      callback_url: "https://chapa.co",
+      callback_url: "http://localhost:8000/verifyChapa",
       return_url: "https://chapa.co",
       customization: {
         title: "Test Title",
@@ -29,4 +32,23 @@ export const recieveChappa = async (req, res) => {
   } catch (error) {
     console.log(error);
   }
+};
+
+
+
+export const verifyChapa = async (req, res) => {
+  // console.log(req.query);
+  const datas = req.query;
+  var options = {
+    method: "GET",
+    url: "https://api.chapa.co/v1/transaction/verify/" + datas.trx_ref,
+    headers: {
+      Authorization: "Bearer CHASECK_TEST-2MBUcoLYAH4xPJZ8och3gYRLA4klhAg8",
+    },
+  };
+
+  request(options, function (error, response) {
+    if (error) throw new Error(error);
+    console.log(JSON.parse(response.body));
+  });
 };
