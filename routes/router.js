@@ -4,7 +4,7 @@ import {
   view_activity_price,
 } from "../controllers/Activity.controller";
 import { auth } from "../controllers/authentication.controller";
-import { recieveChapa, verifyChapa } from "../controllers/chappa.controller";
+import { verifyChapa } from "../controllers/chappa.controller";
 import { main } from "../controllers/index.controller";
 import { qrimage } from "../controllers/qrimages.controllers";
 import { acceptRequest } from "../controllers/request.controller";
@@ -26,7 +26,7 @@ router.get("/view_activity_price", view_activity_price);
 router.post("/add_activity_price", add_activity_price);
 
 // Chappa Payment
-router.get("/recieveChapa", recieveChapa);
-router.get('/verifyChapa', verifyChapa);
+router.post('/verifyChapa', verifyChapa);
+// router.post('/verifyWebhook',);
 
 export default router;

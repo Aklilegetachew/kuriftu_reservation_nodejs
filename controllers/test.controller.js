@@ -1,9 +1,12 @@
 import request from "request";
 import { Chapa } from "chapa-nodejs";
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 export const test = async (req, res) => {
   const chapa = new Chapa({
-    secretKey: "CHASECK_TEST-2MBUcoLYAH4xPJZ8och3gYRLA4klhAg8",
+    secretKey: process.env.CHAPA_API,
   });
   //  var request = require('request');
   const tx_ref = await chapa.generateTransactionReference({
@@ -15,7 +18,7 @@ export const test = async (req, res) => {
     method: "POST",
     url: "https://api.chapa.co/v1/transaction/initialize",
     headers: {
-      Authorization: "Bearer CHASECK_TEST-2MBUcoLYAH4xPJZ8och3gYRLA4klhAg8",
+      Authorization: "Bearer " + process.env.CHAPA_API,
     },
     formData: {
       amount: "200",
@@ -24,7 +27,8 @@ export const test = async (req, res) => {
       first_name: "Natty",
       last_name: "Engeda",
       tx_ref: tx_ref,
-      callback_url: "http://localhost:8000/verifyChapa",
+      callback_url: "https://webhook.site/66467211-51a7-4590-a253-46c6495a5914",
+      // return_url: "http://localhost:8000/verifyChapa",
 
     },
   };
@@ -45,7 +49,7 @@ export const test = async (req, res) => {
   //   },
   // }).then(res => )
 
-  request(options, function async (error, response) {
+  request(options, function async(error, response) {
     if (error) throw new Error(error);
     console.log(response.body);
     var full_response = JSON.parse(response.body);
