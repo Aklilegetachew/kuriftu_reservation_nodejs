@@ -60,6 +60,7 @@ export const verifyChapa = async (req, res) => {
         tx_ref: ts_ref,
       }
     });
+    console.log("event", event);
 
     var qrdate = {
       first_name: event.frist_name,
