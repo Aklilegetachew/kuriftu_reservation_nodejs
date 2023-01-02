@@ -8,6 +8,7 @@ import fsPromises from 'fs/promises';
 import Mailgun from "mailgun.js";
 import formData from "form-data";
 import dotenv, { config } from "dotenv";
+import ActivityReserv from "../models/ActivityReservation.model";
 
 dotenv.config();
 
@@ -44,11 +45,21 @@ export const verifyChapa = async (req, res) => {
   //   console.log(JSON.parse(response.body));
   //   console.log(response.body);
   // });
-  const event = req.body;
+  const chapadata = req.body;
   const sentfile = "assets/images/qr_codes";
 
-  console.log(event);
-  if (event.status == 'success') {
+  console.log(chapadata);
+
+
+
+  if (chapadata.status == 'success') {
+
+    var ts_ref = chapadata.body.tx_ref;
+    var event = await ActivityReserv.findAll({
+      where: {
+        tx_ref: ts_ref,
+      }
+    });
 
     var qrdate = {
       first_name: event.frist_name,
@@ -60,7 +71,7 @@ export const verifyChapa = async (req, res) => {
     var strData = JSON.stringify(strData);
 
     qr.toFile(
-      sentfile + "/" + event.code + ".png",
+      sentfile + "/" + event.confirmation_code + ".png",
       "https://reservations.kurifturesorts.nfirmation_cocom/login/" + event.confirmation_code,
       function (err, code) {
         if (err) return res.json({ msg: "Error generating QR Code" });
