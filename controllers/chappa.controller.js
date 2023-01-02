@@ -72,16 +72,16 @@ export const verifyChapa = async (req, res) => {
       order_status: event.order_status,
     };
     var strData = JSON.stringify(strData);
-    event.confirmation_code = '12345';
+    // event.confirmation_code = '12345';
 
-    // qr.toFile(
-    //   sentfile + "/" + event.confirmation_code + ".png",
-    //   "https://reservations.kurifturesorts.nfirmation_cocom/login/" + event.confirmation_code,
-    //   function (err, code) {
-    //     if (err) return res.json({ msg: "Error generating QR Code" });
-    //     console.log("QR Code generated");
-    //   }
-    // );
+    qr.toFile(
+      sentfile + "/" + event.confirmation_code + ".png",
+      "https://reservations.kurifturesorts.confirmation_com/login/" + event.confirmation_code,
+      function (err, code) {
+        if (err) return res.json({ msg: "Error generating QR Code" });
+        console.log("QR Code generated");
+      }
+    );
 
 
     const filepath = sentfile + "/" + event.confirmation_code + ".png";
