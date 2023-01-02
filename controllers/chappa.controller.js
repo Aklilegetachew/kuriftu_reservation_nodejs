@@ -51,29 +51,30 @@ export const verifyChapa = async (req, res) => {
   if (event.status == 'success') {
 
     var qrdate = {
-      fname: fname,
-      email: email,
-      confirmation_code: confirmation_code,
-      order_status: order_status,
+      first_name: event.frist_name,
+      last_name: event.last_name,
+      email: event.email,
+      confirmation_code: event.confirmation_code,
+      order_status: event.order_status,
     };
     var strData = JSON.stringify(strData);
 
     qr.toFile(
-      sentfile + "/" + confirmation_code + ".png",
-      "https://reservations.kurifturesorts.com/login/" + confirmation_code,
+      sentfile + "/" + event.code + ".png",
+      "https://reservations.kurifturesorts.nfirmation_cocom/login/" + event.confirmation_code,
       function (err, code) {
         if (err) return res.json({ msg: "Error generating QR Code" });
       }
     );
 
 
-    const filepath = sentfile + "/" + confirmation_code + ".png";
+    const filepath = sentfile + "/" + event.confirmation_code + ".png";
     const file = {
       filename: "sample.jpg",
       data: await fsPromises.readFile(filepath),
     };
     const attachment = [file];
-    var qr_image = process.env.URL + '/' + confirmation_code;
+    var qr_image = process.env.URL + '/' + event.confirmation_code;
     // Email that is to be sent
     const emailSent = {
       from: "Kuriftu Water Park <postmaster@reservations.kurifturesorts.com>",
@@ -82,15 +83,15 @@ export const verifyChapa = async (req, res) => {
       attachment,
       template: "kuriftu_design",
       // template: "kuriftu_test",
-      "v:fname": fname,
-      "v:location": location,
-      "v:email": email,
-      "v:quantity": quantity,
+      "v:fname": event.first_name + event.last_name,
+      // "v:location": location,
+      "v:email": event.email,
+      "v:quantity": event.quantity,
       "v:reservation": 'Kuriftu WaterPark Reservation',
       "v:reservationDate": dateFunction(reservationDate),
-      "v:confirmation": confirmation_code,
-      "v:price": price + " " + currency,
-      "v:payment": payment_method,
+      "v:confirmation": event.confirmation_code,
+      "v:price": event.amount + " " + event.currency,
+      "v:payment": 'Chapa',
       "v:image": qr_image,
       attachment
     };
