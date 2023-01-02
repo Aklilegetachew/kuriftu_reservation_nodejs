@@ -73,6 +73,7 @@ export const verifyChapa = async (req, res) => {
     };
     var strData = JSON.stringify(strData);
     event.confirmation_code = '12345';
+
     // qr.toFile(
     //   sentfile + "/" + event.confirmation_code + ".png",
     //   "https://reservations.kurifturesorts.nfirmation_cocom/login/" + event.confirmation_code,
@@ -89,7 +90,7 @@ export const verifyChapa = async (req, res) => {
       data: await fsPromises.readFile(filepath),
     };
     const attachment = [file];
-    var qr_image = process.env.URL + '/' + event.confirmation_code;
+    var qr_image = process.env.URL + '/qrimage/' + event.confirmation_code;
     // Email that is to be sent
     const emailSent = {
       from: "Kuriftu Water Park <postmaster@reservations.kurifturesorts.com>",
