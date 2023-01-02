@@ -93,7 +93,7 @@ export const verifyChapa = async (req, res) => {
     // Email that is to be sent
     const emailSent = {
       from: "Kuriftu Water Park <postmaster@reservations.kurifturesorts.com>",
-      to: email,
+      to: event.email,
       subject: "Kuriftu Resort",
       attachment,
       template: "kuriftu_design",
