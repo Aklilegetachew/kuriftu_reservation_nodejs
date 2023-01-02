@@ -103,7 +103,7 @@ export const verifyChapa = async (req, res) => {
       "v:email": event.email,
       "v:quantity": event.quantity,
       "v:reservation": 'Kuriftu WaterPark Reservation',
-      "v:reservationDate": dateFunction(reservationDate),
+      "v:reservationDate": dateFunction(event.reservationDate),
       "v:confirmation": event.confirmation_code,
       "v:price": event.amount + " " + event.currency,
       "v:payment": 'Chapa',
