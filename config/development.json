@@ -2,9 +2,9 @@
     "port": 8000,
     "database": {
         "host": "localhost",
-        "database": "lalibela",
-        "username": "root",
-        "password": "",
+        "database": "reservation",
+        "username": "sam",
+        "password": "$@m1842Dontquit",
         "dialect": "mysql"
     }
 }
