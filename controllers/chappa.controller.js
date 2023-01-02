@@ -55,11 +55,12 @@ export const verifyChapa = async (req, res) => {
   if (chapadata.status == 'success') {
 
     var ts_ref = chapadata.tx_ref;
-    var event = await ActivityReserv.findAll({
+    var event1 = await ActivityReserv.findAll({
       where: {
         tx_ref: ts_ref,
       }
     });
+    var event = event1[0];
     console.log("event", event);
 
     var qrdate = {
