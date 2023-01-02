@@ -1,63 +1,63 @@
-import request from "request";
-import { Chapa } from "chapa-nodejs";
-import dotenv from 'dotenv';
+// import request from "request";
+// import { Chapa } from "chapa-nodejs";
+// import dotenv from 'dotenv';
 
-dotenv.config();
+// dotenv.config();
 
-export const test = async (req, res) => {
-  const chapa = new Chapa({
-    secretKey: process.env.CHAPA_API,
-  });
-  //  var request = require('request');
-  const tx_ref = await chapa.generateTransactionReference({
-    prefix: "TX", // defaults to `TX`
-    size: 20, // defaults to `15`
-  });
+// export const test = async (req, res) => {
+//   const chapa = new Chapa({
+//     secretKey: process.env.CHAPA_API,
+//   });
+//   //  var request = require('request');
+//   const tx_ref = await chapa.generateTransactionReference({
+//     prefix: "TX", // defaults to `TX`
+//     size: 20, // defaults to `15`
+//   });
 
-  var options = {
-    method: "POST",
-    url: "https://api.chapa.co/v1/transaction/initialize",
-    headers: {
-      Authorization: "Bearer " + process.env.CHAPA_API,
-    },
-    formData: {
-      amount: "200",
-      currency: "ETB",
-      email: "nattynengeda@gmail.com",
-      first_name: "Natty",
-      last_name: "Engeda",
-      tx_ref: tx_ref,
-      callback_url: "https://webhook.site/66467211-51a7-4590-a253-46c6495a5914",
-      // return_url: "http://localhost:8000/verifyChapa",
+//   var options = {
+//     method: "POST",
+//     url: "https://api.chapa.co/v1/transaction/initialize",
+//     headers: {
+//       Authorization: "Bearer " + process.env.CHAPA_API,
+//     },
+//     formData: {
+//       amount: "200",
+//       currency: "ETB",
+//       email: "nattynengeda@gmail.com",
+//       first_name: "Natty",
+//       last_name: "Engeda",
+//       tx_ref: tx_ref,
+//       callback_url: "https://webhook.site/66467211-51a7-4590-a253-46c6495a5914",
+//       // return_url: "http://localhost:8000/verifyChapa",
 
-    },
-  };
+//     },
+//   };
 
-  // axios.post('https://api.chapa.co/v1/transaction/initialize', {
-  //   headers: {
-  //     Authorization: "Bearer CHASECK_TEST-k1OznKI6893xmPpX6hCSWLU9uhn050Yp",
-  //   },
-  //   formData: {
-  //     amount: "100",
-  //     currency: "ETB",
-  //     email: "abebe@bikila.com",
-  //     first_name: "Abebe",
-  //     last_name: "Bikila",
-  //     tx_ref: tx_ref,
-  //     callback_url: "https://chapa.co",
+// axios.post('https://api.chapa.co/v1/transaction/initialize', {
+//   headers: {
+//     Authorization: "Bearer CHASECK_TEST-k1OznKI6893xmPpX6hCSWLU9uhn050Yp",
+//   },
+//   formData: {
+//     amount: "100",
+//     currency: "ETB",
+//     email: "abebe@bikila.com",
+//     first_name: "Abebe",
+//     last_name: "Bikila",
+//     tx_ref: tx_ref,
+//     callback_url: "https://chapa.co",
 
-  //   },
-  // }).then(res => )
+//   },
+// }).then(res => )
 
-  request(options, function async(error, response) {
-    if (error) throw new Error(error);
-    console.log(response.body);
-    var full_response = JSON.parse(response.body);
-    var check_out = full_response.data.checkout_url;
-    // res.json(check_out);
-    res.redirect(check_out);
-  });
-};
+//   request(options, function async(error, response) {
+//     if (error) throw new Error(error);
+//     console.log(response.body);
+//     var full_response = JSON.parse(response.body);
+//     var check_out = full_response.data.checkout_url;
+//     // res.json(check_out);
+//     res.redirect(check_out);
+//   });
+// };
 
 // import { Headers } from "request";
 // import http from 'http';
@@ -95,3 +95,22 @@ export const test = async (req, res) => {
 //     console.log("different");
 //   }
 // };
+
+import qr from "qrcode";
+
+const sentfile = "assets/images/qr_codes";
+
+
+export const test = async (req, res) => {
+
+  qr.toFile(
+    sentfile + "/1234as1d5.png",
+    "https://reservations.kurifturesorts.nfirmation_cocom/login/12345",
+    function (err, code) {
+      if (err) return res.json({ msg: "Error generating QR Code" });
+      console.log("QR Pass");
+    }
+  );
+
+  res.send("Hello");
+}
