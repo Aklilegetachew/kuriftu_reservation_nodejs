@@ -61,7 +61,8 @@ export const verifyChapa = async (req, res) => {
       }
     });
     var event = event1[0];
-    console.log("event", event);
+    // console.log("event", event);
+    console.log("Fetch Finished");
 
     var qrdate = {
       first_name: event.frist_name,
@@ -77,6 +78,7 @@ export const verifyChapa = async (req, res) => {
       "https://reservations.kurifturesorts.nfirmation_cocom/login/" + event.confirmation_code,
       function (err, code) {
         if (err) return res.json({ msg: "Error generating QR Code" });
+        console.log("QR Code generated");
       }
     );
 
