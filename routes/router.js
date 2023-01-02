@@ -2,6 +2,7 @@ import express from "express";
 import {
   add_activity_price,
   view_activity_price,
+  view_activity_reservation,
 } from "../controllers/Activity.controller";
 import { auth } from "../controllers/authentication.controller";
 import { verifyChapa } from "../controllers/chappa.controller";
@@ -24,7 +25,7 @@ router.get("/auth/:id", auth);
 // Activity
 router.get("/view_activity_price", view_activity_price);
 router.post("/add_activity_price", add_activity_price);
-
+router.get("/view_activity_reservation", view_activity_reservation);
 // Chappa Payment
 router.post('/verifyChapa', verifyChapa);
 // router.post('/verifyWebhook',);

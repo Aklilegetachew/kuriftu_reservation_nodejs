@@ -29,7 +29,7 @@ export const acceptRequest = async (req, res) => {
   var location = req.body.location;
   var first_name = req.body.first_name;
   var last_name = req.body.last_name;
-  var reservationDate = new Date(req.body.reservationDate);
+  var reservationDate = new Date(req.body.date);
   var quantity = req.body.quantity;
   var email = req.body.email;
   var phone_number = req.body.phone_number;
@@ -59,7 +59,6 @@ export const acceptRequest = async (req, res) => {
   var adultPrice = WaterParkPrice[0].price;
   var kidsPrice = WaterParkPrice[1].price;
 
-  const sentfile = "assets/images/qr_codes";
 
   const dateFunction = (ts) => {
     let date_ob = new Date(ts);

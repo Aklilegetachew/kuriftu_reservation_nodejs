@@ -45,6 +45,7 @@ export const verifyChapa = async (req, res) => {
   //   console.log(response.body);
   // });
   const event = req.body;
+  const sentfile = "assets/images/qr_codes";
 
   console.log(event);
   if (event.status == 'success') {
