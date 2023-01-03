@@ -8,7 +8,7 @@ import fsPromises from 'fs/promises';
 import Mailgun from "mailgun.js";
 import formData from "form-data";
 import dotenv, { config } from "dotenv";
-import ActivityReserv from "../models/ActivityReservation.model";
+import ActivityReserv from "../../../models/ActivityReservation.model";
 
 dotenv.config();
 
@@ -47,7 +47,7 @@ export const verifyChapa = async (req, res) => {
   // });
   const chapadata = req.body;
   // const sentfile = "/home/sam/kuriftu_reservation_nodejs/assets/images/qr_codes";
-  const sentfile = "";
+  const sentfile = "./";
 
   console.log(chapadata);
 
