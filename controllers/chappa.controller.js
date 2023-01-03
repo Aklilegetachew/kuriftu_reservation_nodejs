@@ -46,7 +46,8 @@ export const verifyChapa = async (req, res) => {
   //   console.log(response.body);
   // });
   const chapadata = req.body;
-  const sentfile = "/home/sam/kuriftu_reservation_nodejs/assets/images/qr_codes";
+  // const sentfile = "/home/sam/kuriftu_reservation_nodejs/assets/images/qr_codes";
+  const sentfile = "";
 
   console.log(chapadata);
 
