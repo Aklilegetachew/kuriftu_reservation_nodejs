@@ -9,7 +9,7 @@ import Mailgun from "mailgun.js";
 import formData from "form-data";
 import dotenv, { config } from "dotenv";
 
-import ActivityReserv from "../../../models/ActivityReservation.model";
+import ActivityReserv from "../models/ActivityReservation.model";
 
 dotenv.config();
 
