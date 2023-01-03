@@ -46,7 +46,7 @@ export const verifyChapa = async (req, res) => {
   //   console.log(response.body);
   // });
   const chapadata = req.body;
-  const sentfile = "assets/images/qr_codes";
+  const sentfile = "./assets/images/qr_codes";
 
   console.log(chapadata);
 
