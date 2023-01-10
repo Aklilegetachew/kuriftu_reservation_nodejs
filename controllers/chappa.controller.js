@@ -58,10 +58,10 @@ export const verifyChapa = async (req, res) => {
     var strData = JSON.stringify(strData);
     // event.confirmation_code = '12345';
 
-    qr.toFile(
+     qr.toFile(
       sentfile + "/" + event.confirmation_code + ".png",
       "https://reservations.kurifturesorts.confirmation_com/login/" + event.confirmation_code,
-      function (err, code) {
+       function (err, code) {
         if (err) return res.json({ msg: "Error generating QR Code" });
         console.log("QR Code generated");
       }
@@ -74,7 +74,7 @@ export const verifyChapa = async (req, res) => {
       data: await fsPromises.readFile(filepath),
     };
     const attachment = [file];
-    var qr_image = process.env.URL + '/qrimage/' + event.confirmation_code;
+    // var qr_image = process.env.URL + '/qrimage/' + event.confirmation_code;
     // Email that is to be sent
     const emailSent = {
       from: "Kuriftu Water Park <postmaster@reservations.kurifturesorts.com>",
@@ -92,7 +92,7 @@ export const verifyChapa = async (req, res) => {
       "v:confirmation": event.confirmation_code,
       "v:price": event.amount + " " + event.currency,
       "v:payment": 'Chapa',
-      "v:image": qr_image,
+      // "v:image": qr_image,
       attachment
     };
 
