@@ -1,11 +1,14 @@
 
 import request from "request";
 import { Chapa } from "chapa-nodejs";
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 export const recieveChapa = async (req, res) => {
   const datas = req.body;
   const chapa = new Chapa({
-    secretKey: "CHASECK_TEST-2MBUcoLYAH4xPJZ8och3gYRLA4klhAg8",
+    secretKey: process.env.CHAPPA_API,
   });
 
   const tx_ref = await chapa.generateTransactionReference({
@@ -43,7 +46,7 @@ export const verifyChapa = async (req, res) => {
     method: "GET",
     url: "https://api.chapa.co/v1/transaction/verify/" + datas.trx_ref,
     headers: {
-      Authorization: "Bearer CHASECK_TEST-2MBUcoLYAH4xPJZ8och3gYRLA4klhAg8",
+      Authorization: "Bearer "+ process.env.CHAPPA_API,
     },
   };
 

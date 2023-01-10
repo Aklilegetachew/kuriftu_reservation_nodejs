@@ -195,6 +195,7 @@ export const acceptRequest = async (req, res) => {
           filename: "sample.jpg",
           data: await fsPromises.readFile(filepath),
         };
+        
         const attachment = [file];
         var qr_image = process.env.URL + '/' + confirmation_code;
         // Email that is to be sent

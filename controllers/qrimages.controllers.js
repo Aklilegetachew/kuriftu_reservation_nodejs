@@ -18,6 +18,7 @@ export const qrimage = async (req, res) => {
     js: "application/javascript",
   };
 
+    
   
     res.writeHead(200, { "Content-type": "image/jpeg" });
     fs.createReadStream(dir).pipe(res);
