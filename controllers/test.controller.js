@@ -1,30 +1,30 @@
-import request from "request";
-import { Chapa } from "chapa-nodejs";
+// import request from "request";
+// import { Chapa } from "chapa-nodejs";
 
-export const test = async (req, res) => {
-  const chapa = new Chapa({
-    secretKey: process.env.CHAPPA_API,
-  });
-  //  var request = require('request');
-  const tx_ref = await chapa.generateTransactionReference({
-    prefix: "TX", // defaults to `TX`
-    size: 20, // defaults to `15`
-  });
+// export const test = async (req, res) => {
+//   const chapa = new Chapa({
+//     secretKey: process.env.CHAPPA_API,
+//   });
+//   //  var request = require('request');
+//   const tx_ref = await chapa.generateTransactionReference({
+//     prefix: "TX", // defaults to `TX`
+//     size: 20, // defaults to `15`
+//   });
 
-  var options = {
-    method: "POST",
-    url: "https://api.chapa.co/v1/transaction/initialize",
-    headers: {
-      Authorization: "Bearer CHASECK_TEST-2MBUcoLYAH4xPJZ8och3gYRLA4klhAg8",
-    },
-    formData: {
-      amount: "200",
-      currency: "ETB",
-      email: "nattynengeda@gmail.com",
-      first_name: "Natty",
-      last_name: "Engeda",
-      tx_ref: tx_ref,
-      callback_url: "http://localhost:8000/verifyChapa",
+//   var options = {
+//     method: "POST",
+//     url: "https://api.chapa.co/v1/transaction/initialize",
+//     headers: {
+//       Authorization: "Bearer CHASECK_TEST-2MBUcoLYAH4xPJZ8och3gYRLA4klhAg8",
+//     },
+//     formData: {
+//       amount: "200",
+//       currency: "ETB",
+//       email: "nattynengeda@gmail.com",
+//       first_name: "Natty",
+//       last_name: "Engeda",
+//       tx_ref: tx_ref,
+//       callback_url: "http://localhost:8000/verifyChapa",
 
 //     },
 //   };
