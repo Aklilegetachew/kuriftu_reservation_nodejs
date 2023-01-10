@@ -88,7 +88,7 @@ export const verifyChapa = async (req, res) => {
 
     const filepath = sentfile + "/" + event.confirmation_code + ".png";
     const file = {
-      filename: "sample.jpg",
+      filename: "confirmation.jpg",
       data: await fsPromises.readFile(filepath),
     };
     const attachment = [file];
