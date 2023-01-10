@@ -8,8 +8,6 @@ import fetch from "node-fetch";
 import request from "request";
 import { Chapa } from "chapa-nodejs";
 
-
-
 // import template from '../templates/email.pug';
 
 dotenv.config();
@@ -17,7 +15,6 @@ dotenv.config();
 export const acceptRequest = async (req, res) => {
   console.log(req.body);
   const CHAPA_API = process.env.CHAPA_API;
-
 
   // const mg = mailgun({ apiKey: API_KEY, domain: DOMAIN });
 
@@ -196,59 +193,35 @@ export const acceptRequest = async (req, res) => {
           addons: addons,
         });
 
-        var qrdate = {
-          fname: fname,
-          email: email,
-          confirmation_code: confirmation_code,
-          order_status: order_status,
-        };
-        var strData = JSON.stringify(strData);
+        var options = {
+          method: "POST",
+          url: "https://api.chapa.co/v1/transaction/initialize",
+          headers: {
+            Authorization: "Bearer " + CHAPA_API,
+          },
+          formData: {
+            amount: price,
+            currency: currency,
+            email: email,
+            first_name: first_name,
+            last_name: last_name,
+            tx_ref: tx_ref,
+            callback_url: process.env.CHAPA_CALLBACK_URL,
+            return_url: process.env.CHAPA_RETURN_URL,
 
-        qr.toFile(
-          sentfile + "/" + confirmation_code + ".png",
-          "https://reservations.kurifturesorts.com/login/" + confirmation_code,
-          function (err, code) {
-            if (err) return res.json({ msg: "Error generating QR Code" });
-          }
-        );
-
-        const filepath = sentfile + "/" + confirmation_code + ".png";
-        const file = {
-          filename: "sample.jpg",
-          data: await fsPromises.readFile(filepath),
-        };
-        const attachment = [file];
-        var qr_image = process.env.URL + '/' + confirmation_code;
-        // Email that is to be sent
-        const emailSent = {
-          from: "Kuriftu Water Park <postmaster@reservations.kurifturesorts.com>",
-          to: email,
-          subject: "Kuriftu Resort",
-          attachment,
-          template: "kuriftu_design",
-          // template: "kuriftu_test",
-          "v:fname": fname,
-          "v:location": location,
-          "v:email": email,
-          "v:quantity": quantity,
-          "v:reservation": 'Kuriftu WaterPark Reservation',
-          "v:reservationDate": dateFunction(reservationDate),
-          "v:confirmation": confirmation_code,
-          "v:price": price + " " + currency,
-          "v:payment": payment_method,
-          "v:image": qr_image,
-          attachment
+          },
         };
 
-        // Function that sends the email
-        client.messages
-          .create(DOMAIN, emailSent)
-          .then((res) => {
-            console.log(res);
-          })
-          .catch((err) => {
-            console.error(err);
-          });
+
+        request(options, function async(error, response) {
+          if (error) throw new Error(error);
+          var full_response = JSON.parse(response.body);
+          var check_out = full_response.data.checkout_url;
+          console.log(check_out);
+
+          res.json({ url: check_out });
+        });
+
       }
     } else if (location == "entoto") {
     }
