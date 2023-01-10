@@ -1,13 +1,16 @@
 import { Sequelize } from "sequelize";
-import config from 'config';
+// import config from 'config';
+import dotenv from 'dotenv';
 
+dotenv.config();
 const database = new Sequelize(
-    config.get('database.database'),
-    config.get('database.username'),
-    config.get('database.password'),
+    process.env.DB_NAME,
+    process.env.DB_USERNAME,
+    process.env.DB_PASSWORD,
     {
-        host: config.get('database.host'),
-        dialect: config.get('database.dialect')
+        host: 'localhost',
+        dialect: 'mysql',
+        timezone: '+03:00',
     }
 )
 

@@ -5,7 +5,10 @@ const ActivityReserv = database.define("activity_reservation", {
   location: {
     type: DataTypes.STRING,
   },
-  fname: {
+  first_name: {
+    type: DataTypes.STRING,
+  },
+  last_name: {
     type: DataTypes.STRING,
   },
   email: {
@@ -35,6 +38,9 @@ const ActivityReserv = database.define("activity_reservation", {
   price: {
     type: DataTypes.DOUBLE,
   },
+  tx_ref: {
+    type: DataTypes.STRING,
+  },
   payment_method: {
     type: DataTypes.STRING,
   },
@@ -49,5 +55,15 @@ const ActivityReserv = database.define("activity_reservation", {
     allowNull: true,
   },
 });
+
+// database
+//   .sync()
+//   .then(() => {
+//     console.log("Table created Successfully!");
+//   })
+//   .catch((error) => {
+//     console.log("Unable to create table: ", error);
+//   });
+
 
 export default ActivityReserv;

@@ -27,6 +27,7 @@
     "generate-unique-id": "^2.0.1",
     "mailgun-js": "^0.22.0",
     "mailgun.js": "^8.0.6",
+    "moment-timezone": "^0.5.40",
     "mysql2": "^2.3.3",
     "node-fetch": "^2.6.7",
     "node-libcurl": "^3.0.0",
@@ -35,5 +36,8 @@
     "qrcode": "^1.5.1",
     "request": "^2.88.2",
     "sequelize": "^6.28.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
   }
 }

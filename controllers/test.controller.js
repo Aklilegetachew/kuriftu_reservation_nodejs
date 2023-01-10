@@ -1,8 +1,5 @@
 import request from "request";
 import { Chapa } from "chapa-nodejs";
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 export const test = async (req, res) => {
   const chapa = new Chapa({
@@ -18,7 +15,7 @@ export const test = async (req, res) => {
     method: "POST",
     url: "https://api.chapa.co/v1/transaction/initialize",
     headers: {
-      Authorization: "Bearer "+ process.env.CHAPPA_API,
+      Authorization: "Bearer CHASECK_TEST-2MBUcoLYAH4xPJZ8och3gYRLA4klhAg8",
     },
     formData: {
       amount: "200",
@@ -29,34 +26,34 @@ export const test = async (req, res) => {
       tx_ref: tx_ref,
       callback_url: "http://localhost:8000/verifyChapa",
 
-    },
-  };
+//     },
+//   };
 
-  // axios.post('https://api.chapa.co/v1/transaction/initialize', {
-  //   headers: {
-  //     Authorization: "Bearer CHASECK_TEST-k1OznKI6893xmPpX6hCSWLU9uhn050Yp",
-  //   },
-  //   formData: {
-  //     amount: "100",
-  //     currency: "ETB",
-  //     email: "abebe@bikila.com",
-  //     first_name: "Abebe",
-  //     last_name: "Bikila",
-  //     tx_ref: tx_ref,
-  //     callback_url: "https://chapa.co",
+// axios.post('https://api.chapa.co/v1/transaction/initialize', {
+//   headers: {
+//     Authorization: "Bearer CHASECK_TEST-k1OznKI6893xmPpX6hCSWLU9uhn050Yp",
+//   },
+//   formData: {
+//     amount: "100",
+//     currency: "ETB",
+//     email: "abebe@bikila.com",
+//     first_name: "Abebe",
+//     last_name: "Bikila",
+//     tx_ref: tx_ref,
+//     callback_url: "https://chapa.co",
 
-  //   },
-  // }).then(res => )
+//   },
+// }).then(res => )
 
-  request(options, function async (error, response) {
-    if (error) throw new Error(error);
-    console.log(response.body);
-    var full_response = JSON.parse(response.body);
-    var check_out = full_response.data.checkout_url;
-    // res.json(check_out);
-    res.redirect(check_out);
-  });
-};
+//   request(options, function async(error, response) {
+//     if (error) throw new Error(error);
+//     console.log(response.body);
+//     var full_response = JSON.parse(response.body);
+//     var check_out = full_response.data.checkout_url;
+//     // res.json(check_out);
+//     res.redirect(check_out);
+//   });
+// };
 
 // import { Headers } from "request";
 // import http from 'http';
@@ -94,3 +91,22 @@ export const test = async (req, res) => {
 //     console.log("different");
 //   }
 // };
+
+import qr from "qrcode";
+
+const sentfile = "assets/images/qr_codes";
+
+
+export const test = async (req, res) => {
+
+  qr.toFile(
+    sentfile + "/1234as1d5.png",
+    "https://reservations.kurifturesorts.nfirmation_cocom/login/12345",
+    function (err, code) {
+      if (err) return res.json({ msg: "Error generating QR Code" });
+      console.log("QR Pass");
+    }
+  );
+
+  res.send("Hello");
+}

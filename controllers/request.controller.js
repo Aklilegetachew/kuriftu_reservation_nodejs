@@ -1,16 +1,12 @@
 import generateUniqueId from "generate-unique-id";
-import Mailgun from "mailgun.js";
-// import mailgun from "mailgun-js";
-import formData from "form-data";
 import dotenv from "dotenv";
-import pug from "pug";
-import path, { join } from "path";
-import qr from "qrcode";
+
 import ActivityReserv from "../models/ActivityReservation.model";
 import ActivityPrice from "../models/ActivityPrice.model";
 import Currency from "../models/Currency.model";
 import fetch from "node-fetch";
-import fsPromises from 'fs/promises';
+import request from "request";
+import { Chapa } from "chapa-nodejs";
 
 
 
@@ -19,21 +15,26 @@ import fsPromises from 'fs/promises';
 dotenv.config();
 
 export const acceptRequest = async (req, res) => {
-  const API_KEY = process.env.MAILGUN_API;
-  const DOMAIN = process.env.DOMAIN;
+  console.log(req.body);
+  const CHAPA_API = process.env.CHAPA_API;
 
-  const mailgun = new Mailgun(formData);
-  const client = mailgun.client({ username: "api", key: API_KEY });
+
   // const mg = mailgun({ apiKey: API_KEY, domain: DOMAIN });
 
+  const chapa = new Chapa({
+    secretKey: CHAPA_API,
+  });
+
+
   var location = req.body.location;
-  var fname = req.body.fname;
-  var reservationDate = new Date(req.body.reservationDate);
+  var first_name = req.body.first_name;
+  var last_name = req.body.last_name;
+  var reservationDate = new Date(req.body.date);
   var quantity = req.body.quantity;
   var email = req.body.email;
   var phone_number = req.body.phone_number;
   var currency = req.body.currency;
-  var payment_method = req.body.payment_method;
+  var payment_method = 'chapa';
   var confirmation_code = generateUniqueId({
     length: 8,
     useLetters: true,
@@ -49,16 +50,15 @@ export const acceptRequest = async (req, res) => {
     },
   });
 
-  const EntotoPrice = await ActivityPrice.findAll({
-    where: {
-      location: "entoto",
-    },
-  });
+  // const EntotoPrice = await ActivityPrice.findAll({
+  //   where: {
+  //     location: "entoto",
+  //   },
+  // });
 
   var adultPrice = WaterParkPrice[0].price;
   var kidsPrice = WaterParkPrice[1].price;
 
-  const sentfile = "assets/images/qr_codes";
 
   const dateFunction = (ts) => {
     let date_ob = new Date(ts);
@@ -72,6 +72,7 @@ export const acceptRequest = async (req, res) => {
 
   try {
     if (location == "waterpark") {
+      console.log("here")
       if (quantity > 10) {
         res.json({ msg: "quantity_greater_10" });
       } else {
@@ -95,19 +96,49 @@ export const acceptRequest = async (req, res) => {
         var price = adultPrice * adult + kidsPrice * kids;
 
         if (currency == "ETB") {
-          const checkETB = await Currency.findAll({
+          var checkETB = await Currency.findAll({
             limit: 1,
             order: [["updatedAt", "DESC"]],
           });
+
+          if (checkETB.length === 0) {
+            var requestOptions = {
+              method: "GET",
+              redirect: "follow",
+              headers: {
+                "Content-Type": "text/plain",
+                apikey: "m8pYh6zWnmUXPvxwRTVbrtqNtOqvR2xD",
+              },
+            };
+
+            await fetch(
+              "https://api.apilayer.com/currency_data/convert?to=ETB&from=USD&amount=1",
+              requestOptions
+            )
+              .then((response) => response.text())
+              .then((result) => {
+                // console.log(result);
+                ETBPrice = JSON.parse(result).result;
+              })
+              .catch((error) => console.log("error", error));
+            console.log("Price", ETBPrice);
+
+            checkETB = await Currency.create({
+              rate: ETBPrice,
+            });
+          }
+
           var ETBPrice;
           var todayDate = dateFunction(Date.now());
           var fetchDate = dateFunction(checkETB[0].updatedAt);
+
           console.log(todayDate, fetchDate);
 
           if (todayDate === fetchDate) {
             console.log("equal");
             ETBPrice = checkETB[0].rate;
-          } else {
+          }
+          else {
             console.log("different");
 
             var requestOptions = {
@@ -140,8 +171,14 @@ export const acceptRequest = async (req, res) => {
         console.log(price);
         price = price.toFixed(2);
 
+        const tx_ref = await chapa.generateTransactionReference({
+          prefix: "TX", // defaults to `TX`
+          size: 20, // defaults to `15`
+        });
+
         const result = await ActivityReserv.create({
-          fname: fname,
+          first_name: first_name,
+          last_name: last_name,
           location: location,
           email: email,
           phone_number: phone_number,
@@ -154,6 +191,7 @@ export const acceptRequest = async (req, res) => {
           adult: adult,
           kids: kids,
           price: price,
+          tx_ref: tx_ref,
           order_status: "reserved",
           addons: addons,
         });
@@ -195,7 +233,6 @@ export const acceptRequest = async (req, res) => {
           filename: "sample.jpg",
           data: await fsPromises.readFile(filepath),
         };
-        
         const attachment = [file];
         var qr_image = process.env.URL + '/' + confirmation_code;
         // Email that is to be sent
@@ -229,7 +266,6 @@ export const acceptRequest = async (req, res) => {
             console.error(err);
           });
       }
-      res.json({msg: 'succes'});
     } else if (location == "entoto") {
     }
   } catch (error) {

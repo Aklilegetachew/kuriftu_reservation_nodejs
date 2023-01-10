@@ -1,9 +1,6 @@
 
 import request from "request";
 import { Chapa } from "chapa-nodejs";
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 export const recieveChapa = async (req, res) => {
   const datas = req.body;
@@ -38,6 +35,10 @@ export const recieveChapa = async (req, res) => {
 };
 
 
+import ActivityReserv from "../models/ActivityReservation.model";
+>>>>>>> ae1fdd1891971b4bc6bee851801bc1753eefe1c7
+
+dotenv.config();
 
 export const verifyChapa = async (req, res) => {
   // console.log(req.query);
@@ -46,7 +47,7 @@ export const verifyChapa = async (req, res) => {
     method: "GET",
     url: "https://api.chapa.co/v1/transaction/verify/" + datas.trx_ref,
     headers: {
-      Authorization: "Bearer "+ process.env.CHAPPA_API,
+      Authorization: "Bearer CHASECK_TEST-2MBUcoLYAH4xPJZ8och3gYRLA4klhAg8",
     },
   };
 
