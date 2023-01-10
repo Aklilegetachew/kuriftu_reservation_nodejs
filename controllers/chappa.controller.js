@@ -33,27 +33,9 @@ export const verifyChapa = async (req, res) => {
     return final;
   };;
 
-  // var options = {
-  //   method: "GET",
-  //   url: "https://api.chapa.co/v1/transaction/verify/" + datas.trx_ref,
-  //   headers: {
-  //     Authorization: "Bearer " + process.env.CHAPA_API,
-  //   },
-  // };
-
-  // request(options, function (error, response) {
-  //   if (error) throw new Error(error);
-  //   console.log(JSON.parse(response.body));
-  //   console.log(response.body);
-  // });
   const chapadata = req.body;
   const sentfile = "/home/sam/kuriftu_reservation_nodejs/assets/images/qr_codes";
-  // const sentfile = "./";
-
-  console.log(chapadata);
-
-
-
+  // console.log(chapadata);
   if (chapadata.status == 'success') {
 
     var ts_ref = chapadata.tx_ref;
