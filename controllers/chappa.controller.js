@@ -1,58 +1,39 @@
-
-import request from "request";
-import { Chapa } from "chapa-nodejs";
-
-export const recieveChapa = async (req, res) => {
-  const datas = req.body;
-  const chapa = new Chapa({
-    secretKey: process.env.CHAPPA_API,
-  });
-
-  const tx_ref = await chapa.generateTransactionReference({
-    prefix: "TX", // defaults to `TX`
-    size: 20, // defaults to `15`
-  });
-  try {
-    const response = await chapa.initialize({
-      first_name: datas.fname,
-      last_name: datas.lname,
-      email: datas.email,
-      currency: datas.currency,
-      amount: datas.amount,
-      tx_ref: tx_ref,
-      callback_url: "http://localhost:8000/verifyChapa",
-      return_url: "https://chapa.co",
-      customization: {
-        title: "Test Title",
-        description: "This is a Test Description",
-      },
-    });
-
-    console.log(response);
-  } catch (error) {
-    console.log(error);
-  }
+const filepath = sentfile + "/" + event.confirmation_code + ".png";
+const file = {
+  filename: "sample.jpg",
+  data: await fsPromises.readFile(filepath),
+};
+const attachment = [file];
+var qr_image = process.env.URL + "/qrimage/" + event.confirmation_code;
+// Email that is to be sent
+const emailSent = {
+  from: "Kuriftu Water Park <postmaster@reservations.kurifturesorts.com>",
+  to: event.email,
+  subject: "Kuriftu Resort",
+  attachment,
+  template: "kuriftu_design",
+  // template: "kuriftu_test",
+  "v:fname": event.first_name + event.last_name,
+  // "v:location": location,
+  "v:email": event.email,
+  "v:quantity": event.quantity,
+  "v:reservation": "Kuriftu WaterPark Reservation",
+  "v:reservationDate": dateFunction(event.reservationDate),
+  "v:confirmation": event.confirmation_code,
+  "v:price": event.amount + " " + event.currency,
+  "v:payment": "Chapa",
+  "v:image": qr_image,
+  attachment,
 };
 
-
-import ActivityReserv from "../models/ActivityReservation.model";
->>>>>>> ae1fdd1891971b4bc6bee851801bc1753eefe1c7
-
-dotenv.config();
-
-export const verifyChapa = async (req, res) => {
-  // console.log(req.query);
-  const datas = req.query;
-  var options = {
-    method: "GET",
-    url: "https://api.chapa.co/v1/transaction/verify/" + datas.trx_ref,
-    headers: {
-      Authorization: "Bearer CHASECK_TEST-2MBUcoLYAH4xPJZ8och3gYRLA4klhAg8",
-    },
-  };
-
-  request(options, function (error, response) {
-    if (error) throw new Error(error);
-    console.log(JSON.parse(response.body));
+// Function that sends the email
+client.messages
+  .create(DOMAIN, emailSent)
+  .then((res) => {
+    console.log(res);
+  })
+  .catch((err) => {
+    console.error(err);
   });
-};
+
+res.json({ msg: "succes" });

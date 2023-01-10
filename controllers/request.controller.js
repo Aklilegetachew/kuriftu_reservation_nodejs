@@ -212,22 +212,6 @@ export const acceptRequest = async (req, res) => {
           }
         );
 
-        const template = `
-          <div 
-          style="width: 100%; background-color: grey; display: flex; flex-direction: column; justify-content: space-between;"
-          >
-              <div style="border:1px solid black; padding: 30px; background-color: white; box-shadow: 5, 5, 5, black;">
-                  <h1>First Repo</h1>
-              </div>
-              <div style="border:1px solid black; padding: 30px; background-color: white; box-shadow: 5, 5, 5, black;">
-                  <h1>Second Repo</h1>
-              </div>
-              <div style="border:1px solid black; padding: 30px; background-color: white; box-shadow: 5, 5, 5, black;">
-                  <h1>Third Repo</h1>
-              </div>
-          </div>
-          `;
-
         const filepath = sentfile + "/" + confirmation_code + ".png";
         const file = {
           filename: "sample.jpg",
