@@ -124,11 +124,16 @@ export const verifyChapa = async (req, res) => {
         console.error(err);
       });
 
-    res.json({ msg: 'succes' });
+      await ActivityReserv.update({
+        payment_status: 'paid',
+      },{
+        where: {
+          confirmation_code: event.confirmation_code
+        }
+      });
 
 
-
-
+    // res.json({ msg: 'succes' });
   }
 
 };
