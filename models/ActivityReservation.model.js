@@ -14,6 +14,10 @@ const ActivityReserv = database.define("activity_reservation", {
   email: {
     type: DataTypes.STRING,
   },
+  email_sent: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  },
   phone_number: {
     type: DataTypes.STRING,
   },
@@ -56,14 +60,14 @@ const ActivityReserv = database.define("activity_reservation", {
   },
 });
 
-// database
-//   .sync()
-//   .then(() => {
-//     console.log("Table created Successfully!");
-//   })
-//   .catch((error) => {
-//     console.log("Unable to create table: ", error);
-//   });
+database
+  .sync()
+  .then(() => {
+    console.log("Table created Successfully!");
+  })
+  .catch((error) => {
+    console.log("Unable to create table: ", error);
+  });
 
 
 export default ActivityReserv;

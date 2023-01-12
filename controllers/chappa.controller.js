@@ -34,88 +34,98 @@ export const verifyChapa = async (req, res) => {
   };;
 
   const chapadata = req.body;
-  const sentfile = "/home/sam/kuriftu_reservation_nodejs/assets/images/qr_codes";
+  const sentfile = process.env.QR_HOME;
   // console.log(chapadata);
   if (chapadata.status == 'success') {
-
+    console.log("Chapa Data", chapadata);
     var ts_ref = chapadata.tx_ref;
     var event1 = await ActivityReserv.findAll({
       where: {
         tx_ref: ts_ref,
       }
     });
+
     var event = event1[0];
-    // console.log("event", event);
-    console.log("Fetch Finished");
+    console.log("event", event.email_sent);
 
-    var qrdate = {
-      first_name: event.frist_name,
-      last_name: event.last_name,
-      email: event.email,
-      confirmation_code: event.confirmation_code,
-      order_status: event.order_status,
-    };
-    var strData = JSON.stringify(strData);
-    // event.confirmation_code = '12345';
+    if (event.email_sent == 0) {
 
-     qr.toFile(
-      sentfile + "/" + event.confirmation_code + ".png",
-      "https://reservations.kurifturesorts.confirmation_com/login/" + event.confirmation_code,
-       function (err, code) {
-        if (err) return res.json({ msg: "Error generating QR Code" });
-        console.log("QR Code generated");
-      }
-    );
+      // console.log("event", event);
+      console.log("Fetch Finished");
 
+      var strData = JSON.stringify(strData);
 
-    const filepath = sentfile + "/" + event.confirmation_code + ".png";
-    const file = {
-      filename: "confirmation.jpg",
-      data: await fsPromises.readFile(filepath),
-    };
-    const attachment = [file];
-    // var qr_image = process.env.URL + '/qrimage/' + event.confirmation_code;
-    // Email that is to be sent
-    const emailSent = {
-      from: "Kuriftu Water Park <postmaster@reservations.kurifturesorts.com>",
-      to: event.email,
-      subject: "Kuriftu Resort",
-      attachment,
-      template: "kuriftu_design",
-      // template: "kuriftu_test",
-      "v:fname": event.first_name + event.last_name,
-      // "v:location": location,
-      "v:email": event.email,
-      "v:quantity": event.quantity,
-      "v:reservation": 'Kuriftu WaterPark Reservation',
-      "v:reservationDate": dateFunction(event.reservationDate),
-      "v:confirmation": event.confirmation_code,
-      "v:price": event.amount + " " + event.currency,
-      "v:payment": 'Chapa',
-      // "v:image": qr_image,
-      attachment
-    };
+      qr.toFile(
+        sentfile + "/" + event.confirmation_code + ".png",
+        "https://reservations.kurifturesorts.confirmation_com/login/" + event.confirmation_code,
+        async function (err, code) {
+          if (err) return res.json({ msg: "Error generating QR Code" });
+          console.log("QR Code generated");
 
-    // Function that sends the email
-    client.messages
-      .create(DOMAIN, emailSent)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+          var attachment;
+          const filepath = sentfile + "/" + event.confirmation_code + ".png";
+          const file = {
+            filename: "confirmation.jpg",
+            data: await fsPromises.readFile(filepath),
+          };
+          attachment = [file];
 
-      await ActivityReserv.update({
-        payment_status: 'paid',
-      },{
-        where: {
-          confirmation_code: event.confirmation_code
+          console.log("After QR Creation1");
+
+          // var qr_image = process.env.URL + '/qrimage/' + event.confirmation_code;
+          // Email that is to be sent
+          const emailSent = {
+            from: "Kuriftu Water Park <postmaster@reservations.kurifturesorts.com>",
+            to: event.email,
+            subject: "Kuriftu Resort",
+            attachment,
+            template: "kuriftu_design",
+            // template: "kuriftu_test",
+            "v:fname": event.first_name + " " + event.last_name,
+            // "v:location": location,
+            "v:email": event.email,
+            "v:quantity": event.quantity,
+            "v:reservation": 'Kuriftu WaterPark Reservation',
+            "v:reservationDate": dateFunction(event.reservation_date),
+            "v:confirmation": event.confirmation_code,
+            "v:price": event.price + " " + event.currency,
+            "v:payment": 'Chapa',
+            // "v:image": qr_image,
+            attachment
+          };
+
+          // Function that sends the email
+          client.messages
+            .create(DOMAIN, emailSent)
+            .then((res) => {
+              console.log(res);
+            })
+            .catch((err) => {
+              console.error(err);
+            });
+
+          await ActivityReserv.update({
+            payment_status: 'paid',
+            email_sent: true,
+          }, {
+            where: {
+              confirmation_code: event.confirmation_code
+            }
+          });
+          // res.json({ msg: 'succes' });
         }
-      });
+      );
+    } else {
+      console.log("Email already sent");
+    }
 
 
-    // res.json({ msg: 'succes' });
   }
-
 };
+
+export const returnChappa = async (req, res) => {
+
+  console.log("Chappa Return URL");
+  res.send("Chappa Return URL");
+
+}

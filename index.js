@@ -7,6 +7,8 @@ import cookieParser from "cookie-parser";
 import database from "./database/database";
 import router from "./routes/router";
 import moment from 'moment-timezone';
+import fs from 'fs';
+import https from 'https';
 
 moment.tz.setDefault('Africa/Addis_Ababa')
 
@@ -30,6 +32,11 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 
+// https
+//   .createServer(app)
+//   .listen(8000,()=>{
+//     console.log("Server Started on Port: 8000");
+//   });
 
 app.use(router);
 

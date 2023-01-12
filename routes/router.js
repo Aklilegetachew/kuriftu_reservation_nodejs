@@ -5,7 +5,7 @@ import {
   view_activity_reservation,
 } from "../controllers/Activity.controller";
 import { auth } from "../controllers/authentication.controller";
-import { verifyChapa } from "../controllers/chappa.controller";
+import { returnChappa, verifyChapa } from "../controllers/chappa.controller";
 import { main } from "../controllers/index.controller";
 import { qrimage } from "../controllers/qrimages.controllers";
 import { acceptRequest } from "../controllers/request.controller";
@@ -28,6 +28,9 @@ router.post("/add_activity_price", add_activity_price);
 router.get("/view_activity_reservation", view_activity_reservation);
 // Chappa Payment
 router.post('/verifyChapa', verifyChapa);
+router.get('/chapareturn', returnChappa);
+
+
 // router.post('/verifyWebhook',);
 
 export default router;
