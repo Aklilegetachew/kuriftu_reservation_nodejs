@@ -27,7 +27,7 @@ export const verifyChapa = async (req, res) => {
     let month = date_ob.getMonth() + 1;
     let year = date_ob.getFullYear();
 
-    var final = year + "-" + month + "-" + date;
+    var final = date + "-" + month + "-" + year;
     return final;
   };
 
@@ -46,7 +46,7 @@ export const verifyChapa = async (req, res) => {
       'Authorization': 'Bearer ' + process.env.CHAPA_API,
     }
   };
-  request(options, async function(error, response) {
+  request(options, async function (error, response) {
     if (error) throw new Error(error);
     // console.log(response.body);
     var verChapa = JSON.parse(response.body);
@@ -87,6 +87,7 @@ export const verifyChapa = async (req, res) => {
 
             // var qr_image = process.env.URL + '/qrimage/' + event.confirmation_code;
             // Email that is to be sent
+            var reservation_date = dateFunction(user)
             const emailSent = {
               from: "Kuriftu Water Park <postmaster@reservations.kurifturesorts.com>",
               to: user.email,
@@ -100,12 +101,14 @@ export const verifyChapa = async (req, res) => {
               "v:quantity": user.quantity,
               "v:reservation": 'Kuriftu WaterPark Reservation',
               "v:reservationDate": dateFunction(user.reservation_date),
+              "V:expirationDate": dateFunction(user.reservation_date.setMonth(user.reservation_date.getMonth() + 2),),
               "v:confirmation": user.confirmation_code,
               "v:price": user.price + " " + user.currency,
               "v:payment": 'Chapa',
               // "v:image": qr_image,
               attachment
             };
+            console.log("Expiration Date", dateFunction(user.reservation_date.setMonth(user.reservation_date.getMonth() + 2),),);
 
             // Function that sends the email
             client.messages
@@ -125,18 +128,18 @@ export const verifyChapa = async (req, res) => {
                 confirmation_code: user.confirmation_code
               }
             });
-            res.json({ msg: 'succes' });
+            res.sendStatus(200);
           }
         );
       } else {
         console.log("Email Already Sent");
+        res.sendStatus(200);
       }
     } else {
       console.log("Chapa Verification Failed");
     }
 
   });
-
   // console.log(chapadata);
   // if (chapadata.status == 'success') {
   //   console.log("Chapa Data", chapadata);

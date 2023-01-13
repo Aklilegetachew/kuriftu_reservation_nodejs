@@ -92,21 +92,28 @@
 //   }
 // };
 
-import qr from "qrcode";
+// import qr from "qrcode";
 
-const sentfile = "assets/images/qr_codes";
+// const sentfile = "assets/images/qr_codes";
 
 
-export const test = async (req, res) => {
+// export const test = async (req, res) => {
 
-  qr.toFile(
-    sentfile + "/1234as1d5.png",
-    "https://reservations.kurifturesorts.nfirmation_cocom/login/12345",
-    function (err, code) {
-      if (err) return res.json({ msg: "Error generating QR Code" });
-      console.log("QR Pass");
-    }
-  );
+//   qr.toFile(
+//     sentfile + "/1234as1d5.png",
+//     "https://reservations.kurifturesorts.nfirmation_cocom/login/12345",
+//     function (err, code) {
+//       if (err) return res.json({ msg: "Error generating QR Code" });
+//       console.log("QR Pass");
+//     }
+//   );
 
-  res.send("Hello");
+//   res.send("Hello");
+// }
+
+export const test = async(req, res) =>{
+  var nowdate = new Date();
+  nowdate.setMonth(nowdate.getMonth() + 2);
+
+  res.send(nowdate);
 }
