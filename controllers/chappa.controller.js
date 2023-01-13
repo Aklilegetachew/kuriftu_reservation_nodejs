@@ -69,7 +69,7 @@ export const verifyChapa = async (req, res) => {
 
         qr.toFile(
           sentfile + "/" + user.confirmation_code + ".png",
-          "https://reservations.kurifturesorts.confirmation_com/login/" + user.confirmation_code,
+          process.env.CHECK_URL + user.confirmation_code,
           async function (err, code) {
             if (err) return res.json({ msg: "Error generating QR Code" });
             console.log("QR Code generated");
@@ -139,7 +139,7 @@ export const verifyChapa = async (req, res) => {
     }
 
   });
- 
+
 };
 
 export const returnChappa = async (req, res) => {
