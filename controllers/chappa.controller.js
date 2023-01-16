@@ -68,8 +68,7 @@ export const verifyChapa = async (req, res) => {
 
 
         qr.toFile(
-          sentfile + "/" + user.confirmation_code + ".png",
-          process.env.CHECK_URL + user.confirmation_code,
+          sentfile + "/" + user.confirmation_code + ".png", user.confirmation_code,
           async function (err, code) {
             if (err) return res.json({ msg: "Error generating QR Code" });
             console.log("QR Code generated");
