@@ -6,8 +6,10 @@ export const verify = async (req, res) => {
     const user_code = req.body.guest_token;
     const admin = req.body.user_token;
 
-    console.log(user_code)
-    console.log(admin)
+    // console.log(user_code)
+    // console.log(admin)
+
+    console.log(req.body)
     // console.log(id, token);
 
     // try {
