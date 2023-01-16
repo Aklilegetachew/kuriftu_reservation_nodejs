@@ -88,7 +88,7 @@ export const verifyChapa = async (req, res) => {
             // Email that is to be sent
             var reservation_date = dateFunction(user)
             const emailSent = {
-              from: "Kuriftu Water Park <postmaster@reservations.kurifturesorts.com>",
+              from: "Kuriftu Water Park <no-reply@reservations.kurifturesorts.com>",
               to: user.email,
               subject: "Kuriftu Resort",
               attachment,
