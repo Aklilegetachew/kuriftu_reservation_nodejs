@@ -5,43 +5,46 @@ import { QueryTypes } from "sequelize";
 export const verify = async (req, res) => {
     const user_code = req.body.guest_token;
     const admin = req.body.user_token;
+
+    console.log(user_code)
+    console.log(admin)
     // console.log(id, token);
 
-    try {
-        const user = await database.query(`SELECT * FROM users WHERE ticket_token='${admin}'`, { type: QueryTypes.SELECT });
-        console.log(user);
+    // try {
+    //     const user = await database.query(`SELECT * FROM users WHERE ticket_token='${admin}'`, { type: QueryTypes.SELECT });
+    //     console.log(user);
 
-        if (user.length > 0) {
-            const result = await ActivityReserv.findAll({
-                where: {
-                    confirmation_code: user_code,
-                }
-            });
-            if(result.length > 0){
-                if(result[0].order_status == 'reserved'){
-                    await ActivityReserv.update({
-                        order_status: 'checked_in',
-                    },{
-                        where:{
-                            confirmation_code: user_code,
-                        }
-                    });
-                    console.log("Reserved");
-                    res.json({msg: 'reserved', data: result});
+    //     if (user.length > 0) {
+    //         const result = await ActivityReserv.findAll({
+    //             where: {
+    //                 confirmation_code: user_code,
+    //             }
+    //         });
+    //         if(result.length > 0){
+    //             if(result[0].order_status == 'reserved'){
+    //                 await ActivityReserv.update({
+    //                     order_status: 'checked_in',
+    //                 },{
+    //                     where:{
+    //                         confirmation_code: user_code,
+    //                     }
+    //                 });
+    //                 console.log("Reserved");
+    //                 res.json({msg: 'reserved', data: result});
 
-                }else{
-                    console.log("Already Checked In");
-                    res.json({msg: 'checked_in', data: result});
-                }
-            }else{
-                res.json({msg: "unkown_confirmation_code"});
-            }
-        } else {
-            res.json({ msg: 'admin_error' })
-        }
+    //             }else{
+    //                 console.log("Already Checked In");
+    //                 res.json({msg: 'checked_in', data: result});
+    //             }
+    //         }else{
+    //             res.json({msg: "unkown_confirmation_code"});
+    //         }
+    //     } else {
+    //         res.json({ msg: 'admin_error' })
+    //     }
 
-    } catch (error) {
-        console.log(error);
-    }
+    // } catch (error) {
+    //     console.log(error);
+    // }
 }
 
