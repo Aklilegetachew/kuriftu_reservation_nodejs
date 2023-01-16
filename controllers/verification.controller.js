@@ -3,8 +3,8 @@ import ActivityReserv from "../models/ActivityReservation.model";
 import { QueryTypes } from "sequelize";
 
 export const verify = async (req, res) => {
-    const user_code = req.query.guest_token;
-    const admin = req.query.user_token;
+    const user_code = req.body.guest_token;
+    const admin = req.body.user_token;
     // console.log(id, token);
 
     try {
