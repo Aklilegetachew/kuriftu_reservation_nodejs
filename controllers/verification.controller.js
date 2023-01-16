@@ -11,13 +11,13 @@ export const verify = async (req, res) => {
 
 
     try {
-        const user = await database.query(`SELECT * FROM users WHERE ticket_token='${admin}'`, { type: QueryTypes.SELECT });
+        const user = await database.query(`SELECT * FROM users WHERE ticket_token='${user_token}'`, { type: QueryTypes.SELECT });
         console.log(user);
 
         if (user.length > 0) {
             const result = await ActivityReserv.findAll({
                 where: {
-                    confirmation_code: user_code,
+                    confirmation_code: guest_token,
                 }
             });
             if(result.length > 0){
@@ -26,7 +26,7 @@ export const verify = async (req, res) => {
                         order_status: 'checked_in',
                     },{
                         where:{
-                            confirmation_code: user_code,
+                            confirmation_code: guest_token,
                         }
                     });
                     console.log("Reserved");
