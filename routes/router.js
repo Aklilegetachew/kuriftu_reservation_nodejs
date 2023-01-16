@@ -19,7 +19,7 @@ router.get('/index', main);
 router.post("/request", acceptRequest);
 router.get("/test", test);
 router.get("/qrimage/:id", qrimage);
-router.get("/verify/:id", verify);
+router.post("/verify", verify);
 router.get("/auth/:id", auth);
 
 // Activity

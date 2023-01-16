@@ -1,32 +1,45 @@
+import database from "../database/database";
 import ActivityReserv from "../models/ActivityReservation.model";
+import { QueryTypes } from "sequelize";
 
-export const verify = async(req, res) =>{
-    const id = req.params.id;
+export const verify = async (req, res) => {
+    const user_code = req.query.user_token;
+    const admin = req.query.guest_token;
+    // console.log(id, token);
+
     try {
-        const result = await ActivityReserv.findAll({
-            where: {
-                confirmation_code: id,
-            }
-        });
-        
-        const status = result[0].dataValues.order_status
+        const user = await database.query(`SELECT * FROM users WHERE ticket_token='${admin}'`, { type: QueryTypes.SELECT });
+        console.log(user);
 
-        if(status == 'reserved'){
-            console.log('Reserved');
-            await ActivityReserv.update({
-                order_status: 'checked_in'
-            },{
+        if (user.length > 0) {
+            const result = await ActivityReserv.findAll({
                 where: {
-                    confirmation_code: id
+                    confirmation_code: user_code,
                 }
             });
-            res.json({msg: 'reserved'});
-        }else{
-            console.log('Already Checked In');
-            res.json({msg: 'checked_in'});
+            if(result.length > 0){
+                if(result[0].order_status == 'reserved'){
+                    await ActivityReserv.update({
+                        order_status: 'checked_in',
+                    },{
+                        where:{
+                            confirmation_code: user_code,
+                        }
+                    });
+                    console.log("Reserved");
+                    res.json({msg: 'reserved', data: result});
+
+                }else{
+                    console.log("Already Checked In");
+                    res.json({msg: 'checked_in', data: result});
+                }
+            }else{
+                res.json({msg: "unkown_confirmation_code"});
+            }
+        } else {
+            res.json({ msg: 'admin_error' })
         }
-        
-        res.json(result);
+
     } catch (error) {
         console.log(error);
     }
