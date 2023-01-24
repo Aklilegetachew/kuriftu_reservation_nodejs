@@ -36,6 +36,12 @@ const ActivityReserv = database.define("activity_reservation", {
   kids: {
     type: DataTypes.INTEGER,
   },
+  redeemed_adult_ticket: {
+    type: DataTypes.INTEGER,
+  },
+  redeemed_kids_ticket: {
+    type: DataTypes.INTEGER,
+  },
   currency: {
     type: DataTypes.STRING,
   },

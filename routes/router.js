@@ -10,7 +10,7 @@ import { main } from "../controllers/index.controller";
 import { qrimage } from "../controllers/qrimages.controllers";
 import { acceptRequest } from "../controllers/request.controller";
 import { test } from "../controllers/test.controller";
-import { verify } from "../controllers/verification.controller";
+import { checkGuest, verify } from "../controllers/verification.controller";
 
 const router = express.Router();
 
@@ -20,6 +20,7 @@ router.post("/request", acceptRequest);
 router.get("/test", test);
 router.get("/qrimage/:id", qrimage);
 router.post("/verify", verify);
+router.post("/checkGuest", checkGuest)
 router.get("/auth/:id", auth);
 
 // Activity
