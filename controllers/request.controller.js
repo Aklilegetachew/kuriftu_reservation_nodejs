@@ -3,10 +3,12 @@ import dotenv from "dotenv";
 
 import ActivityReserv from "../models/ActivityReservation.model";
 import ActivityPrice from "../models/ActivityPrice.model";
+import entotoRes from "../models/entotoRes.model";
 import Currency from "../models/Currency.model";
 import fetch from "node-fetch";
 import request from "request";
 import { Chapa } from "chapa-nodejs";
+import entotoPackage from "../models/entotoPrice.model";
 
 // import template from '../templates/email.pug';
 
@@ -26,35 +28,22 @@ export const acceptRequest = async (req, res) => {
   var location = req.body.location;
   var first_name = req.body.first_name;
   var last_name = req.body.last_name;
-  var reservationDate = new Date(req.body.date);
-  var quantity = req.body.quantity;
   var email = req.body.email;
   var phone_number = req.body.phone_number;
   var currency = req.body.currency;
-  var payment_method = 'chapa';
+  var payment_method = req.body.payment_method;
   var confirmation_code = generateUniqueId({
     length: 8,
     useLetters: true,
   });
-  var adult = req.body.adult;
-  var kids = req.body.kids;
-  var order_status = "reserved";
-  var addons = req.body.addons;
 
-  const WaterParkPrice = await ActivityPrice.findAll({
-    where: {
-      location: "waterpark",
-    },
-  });
+  // var addons = req.body.addons;
 
-  // const EntotoPrice = await ActivityPrice.findAll({
-  //   where: {
-  //     location: "entoto",
-  //   },
-  // });
 
-  var adultPrice = WaterParkPrice[0].price;
-  var kidsPrice = WaterParkPrice[1].price;
+
+
+
+
 
 
   const dateFunction = (ts) => {
@@ -69,6 +58,22 @@ export const acceptRequest = async (req, res) => {
 
   try {
     if (location == "waterpark") {
+
+      const quantity = req.body.quantity;
+      const reservationDate = new Date(req.body.date);
+      const adult = req.body.adult;
+      const kids = req.body.kids;
+      const WaterParkPrice = await ActivityPrice.findAll({
+        where: {
+          location: "waterpark",
+        },
+      });
+
+      var adultPrice = WaterParkPrice[0].price;
+      var kidsPrice = WaterParkPrice[1].price;
+
+
+
       console.log("here")
       if (quantity > 10) {
         res.json({ msg: "quantity_greater_10" });
@@ -224,8 +229,87 @@ export const acceptRequest = async (req, res) => {
 
       }
     } else if (location == "entoto") {
+      const amt = req.body.amt;
+      let sum = 0
+      amt.forEach(item => {
+        return sum += item.quantity
+      });
+
+      if (sum <= 15) {
+        const EntotoPrice = await entotoPackage.findAll()
+        let price = 0
+
+        console.log("form amt");
+        const kids = amt[0].quantity;
+        const Adrenaline = amt[1].quantity;
+        const Adventure = amt[2].quantity;
+
+
+        price = kids * EntotoPrice[0].price + Adrenaline * EntotoPrice[1].price + Adventure * EntotoPrice[2].price
+
+        console.log(price);
+        res.status(200).json({ msg: "success", price })
+      } else {
+        res.status(200).json({ msg: "too many tickets" })
+      }
+
+      const tx_ref_entoto = await chapa.generateTransactionReference({
+        prefix: "TX",
+        size: 20
+      })
+
+      const result_entoto = await entotoRes.create({
+        first_name: first_name,
+        last_name: last_name,
+        location: location,
+        email: email,
+        phone_number: phone_number,
+        confirmation_code: confirmation_code,
+        reservationDate: moment().format('YYYY-MM-DD hh:mm A'),
+        currency: 'ETB',
+        payment_method: payment_method,
+        payment_status: "unpaid",
+        quantity: sum,
+        amt: amt,
+        price: price,
+        tx_ref: tx_ref_entoto,
+        order_status: "reserved",
+      })
+
+      var options = {
+        method: "POST",
+        url: "https://api.chapa.co/v1/transaction/initialize",
+        headers: {
+          Authorization: "Bearer " + CHAPA_API,
+        },
+        formData: {
+          amount: price,
+          currency: currency,
+          email: email,
+          first_name: first_name,
+          last_name: last_name,
+          tx_ref: tx_ref,
+          // callback_url: process.env.CHAPA_CALLBACK_URL,
+          // return_url: process.env.URL + '/returnchapa',
+
+        },
+      };
+
+      request(options, function async(error, response) {
+        if (error) throw new Error(error);
+        var full_response = JSON.parse(response.body);
+        var check_out = full_response.data.checkout_url;
+        console.log(check_out);
+
+        res.json({ url: check_out });
+      });
+
+
+
+      // res.status(200).json({ msg: "success" })
     }
   } catch (error) {
     console.log(error);
   }
 };
+

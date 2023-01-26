@@ -1,6 +1,7 @@
 // import ActivityLocation from "../models/ActivityLocation.model";
 import ActivityPrice from "../models/ActivityPrice.model";
 import ActivityReserv from "../models/ActivityReservation.model";
+
 export const view_activity_price = async (req, res) => {
   try {
     const result = await ActivityPrice.findAll();
