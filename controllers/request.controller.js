@@ -9,7 +9,8 @@ import fetch from "node-fetch";
 import request from "request";
 import { Chapa } from "chapa-nodejs";
 import entotoPackage from "../models/entotoPrice.model";
-
+import moment from 'moment-timezone';
+import { response } from "express";
 // import template from '../templates/email.pug';
 
 dotenv.config();
@@ -237,7 +238,7 @@ export const acceptRequest = async (req, res) => {
 
       if (sum <= 15) {
         const EntotoPrice = await entotoPackage.findAll()
-        let price = 0
+        var price = 0
 
         console.log("form amt");
         const kids = amt[0].quantity;
@@ -248,7 +249,7 @@ export const acceptRequest = async (req, res) => {
         price = kids * EntotoPrice[0].price + Adrenaline * EntotoPrice[1].price + Adventure * EntotoPrice[2].price
 
         console.log(price);
-        res.status(200).json({ msg: "success", price })
+        // res.status(200).json({ msg: "success", price })
       } else {
         res.status(200).json({ msg: "too many tickets" })
       }
@@ -258,14 +259,16 @@ export const acceptRequest = async (req, res) => {
         size: 20
       })
 
-      const result_entoto = await entotoRes.create({
+      var today = moment().format('YYYY-MM-DD hh:mm A')
+
+      const result_entoto = await ActivityReserv.create({
         first_name: first_name,
         last_name: last_name,
         location: location,
         email: email,
         phone_number: phone_number,
         confirmation_code: confirmation_code,
-        reservationDate: moment().format('YYYY-MM-DD hh:mm A'),
+        reservation_date: today,
         currency: 'ETB',
         payment_method: payment_method,
         payment_status: "unpaid",
@@ -288,7 +291,7 @@ export const acceptRequest = async (req, res) => {
           email: email,
           first_name: first_name,
           last_name: last_name,
-          tx_ref: tx_ref,
+          tx_ref: tx_ref_entoto,
           // callback_url: process.env.CHAPA_CALLBACK_URL,
           // return_url: process.env.URL + '/returnchapa',
 
@@ -303,7 +306,6 @@ export const acceptRequest = async (req, res) => {
 
         res.json({ url: check_out });
       });
-
 
 
       // res.status(200).json({ msg: "success" })

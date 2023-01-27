@@ -61,7 +61,7 @@ export const verifyChapa = async (req, res) => {
         }
       });
       user = user[0];
-      // console.log("USER", user);
+      console.log("USER", user);
 
       if (user.email_sent == 0) {
         console.log("Fetch Finished");
@@ -85,11 +85,20 @@ export const verifyChapa = async (req, res) => {
 
             // var qr_image = process.env.URL + '/qrimage/' + event.confirmation_code;
             // Email that is to be sent
-            var reservation_date = dateFunction(user)
+            // var reservation_date = dateFunction(user)
+            var from, subject
+            if (user.location == 'waterpark') {
+              from = "Kuriftu Water Park"
+              subject = "Kuriftu Water Park ticket Reservation"
+            } else if (user.location == 'entoto') {
+              from = "Kuriftu Resort and Spa Entoto"
+              subject = "Kuriftu Resort and Spa Entoto ticket Reservation"
+            }
+
             const emailSent = {
-              from: "Kuriftu Water Park <no-reply@reservations.kurifturesorts.com>",
+              from: from + "<no-reply@reservations.kurifturesorts.com>",
               to: user.email,
-              subject: "Kuriftu Resort",
+              subject: subject,
               attachment,
               template: "kuriftu_design",
               // template: "kuriftu_test",

@@ -30,6 +30,9 @@ const ActivityReserv = database.define("activity_reservation", {
   quantity: {
     type: DataTypes.INTEGER,
   },
+  amt: {
+    type: DataTypes.JSON,
+  },
   adult: {
     type: DataTypes.INTEGER,
   },
