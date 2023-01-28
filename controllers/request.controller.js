@@ -24,6 +24,16 @@ export const acceptRequest = async (req, res) => {
     secretKey: CHAPA_API,
   });
 
+  const dateFunction = (ts) => {
+    let date_ob = new Date(ts);
+    let date = date_ob.getDate();
+    let month = date_ob.getMonth() + 1;
+    let year = date_ob.getFullYear();
+
+    var final = year + "-" + month + "-" + date;
+    return final;
+  };
+
 
   var location = req.body.location;
   var first_name = req.body.first_name;
@@ -112,15 +122,7 @@ export const acceptRequest = async (req, res) => {
 
   }
 
-  const dateFunction = (ts) => {
-    let date_ob = new Date(ts);
-    let date = date_ob.getDate();
-    let month = date_ob.getMonth() + 1;
-    let year = date_ob.getFullYear();
 
-    var final = year + "-" + month + "-" + date;
-    return final;
-  };
 
   try {
     if (location == "waterpark") {
