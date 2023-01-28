@@ -106,7 +106,7 @@ export const verifyChapa = async (req, res) => {
               // "v:location": location,
               "v:email": user.email,
               "v:quantity": user.quantity,
-              "v:reservation": 'Kuriftu WaterPark Reservation',
+              "v:reservation": subject,
               "v:reservationDate": dateFunction(user.reservation_date),
               "V:expirationDate": dateFunction(user.reservation_date.setMonth(user.reservation_date.getMonth() + 2),),
               "v:confirmation": user.confirmation_code,

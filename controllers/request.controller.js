@@ -3,7 +3,6 @@ import dotenv from "dotenv";
 
 import ActivityReserv from "../models/ActivityReservation.model";
 import ActivityPrice from "../models/ActivityPrice.model";
-import entotoRes from "../models/entotoRes.model";
 import Currency from "../models/Currency.model";
 import fetch from "node-fetch";
 import request from "request";
