@@ -41,8 +41,27 @@ export const verify = async (req, res) => {
                     }
 
                 } else if (result[0].location === 'entoto') {
-                    const amt = result[0].amt;
-                    res.json({ amt })
+
+                    const amt = JSON.parse(result[0].amt);
+                    console.log(amt);
+                    console.log(amt[0].quantity);
+                    console.log(amt[1].quantity);
+                    console.log(amt[2].quantity);
+                    // if (result[0].order_status == 'reserved' && result[0].payment_status == 'paid' ) {
+
+
+
+                    //     res.json({
+                    //         msg: 'available tickets',
+                    //         data: {
+                    //             ava_ticket, result
+                    //         }
+                    //     });
+
+                    // } else {
+                    //     console.log("Already Checked In");
+                    //     res.json({ msg: 'already_checked_in', data: result });
+                    // }
                 }
             } else {
                 res.json({ msg: "unkown_confirmation_code" });

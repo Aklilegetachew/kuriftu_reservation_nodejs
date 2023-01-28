@@ -259,6 +259,20 @@ export const acceptRequest = async (req, res) => {
         payment_status: "unpaid",
         quantity: sum,
         amt: amt,
+        redeemed_amt: [
+          {
+            package_type: "For Kids",
+            quantity: 0,
+          },
+          {
+            package_type: "Adrenaline",
+            quantity: 0
+          },
+          {
+            package_type: "Entoto Adventure",
+            quantity: 0
+          },
+        ],
         price: price,
         tx_ref: tx_ref_entoto,
         order_status: "reserved",
