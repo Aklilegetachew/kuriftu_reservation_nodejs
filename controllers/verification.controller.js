@@ -21,21 +21,28 @@ export const verify = async (req, res) => {
                 }
             });
             if (result.length > 0) {
-                if (result[0].order_status == 'reserved' && result[0].payment_status == 'paid' && (result[0].adult > result[0].redeemed_adult_ticket || result[0].kids > result[0].redeemed_kids_ticket)) {
 
-                    const ava_ad = result[0].adult - result[0].redeemed_adult_ticket;
-                    const ava_kid = result[0].kids - result[0].redeemed_kids_ticket;
+                if (result[0].location === 'waterpark') {
+                    if (result[0].order_status == 'reserved' && result[0].payment_status == 'paid' && (result[0].adult > result[0].redeemed_adult_ticket || result[0].kids > result[0].redeemed_kids_ticket)) {
 
-                    res.json({
-                        msg: 'available tickets',
-                        data: {
-                            ava_ad, ava_kid, result 
-                        }
-                    });
+                        const ava_ad = result[0].adult - result[0].redeemed_adult_ticket;
+                        const ava_kid = result[0].kids - result[0].redeemed_kids_ticket;
 
-                } else {
-                    console.log("Already Checked In");
-                    res.json({ msg: 'already_checked_in', data: result });
+                        res.json({
+                            msg: 'available tickets',
+                            data: {
+                                ava_ad, ava_kid, result
+                            }
+                        });
+
+                    } else {
+                        console.log("Already Checked In");
+                        res.json({ msg: 'already_checked_in', data: result });
+                    }
+
+                } else if (result[0].location === 'entoto') {
+                    const amt = result[0].amt;
+                    res.json({ amt })
                 }
             } else {
                 res.json({ msg: "unkown_confirmation_code" });

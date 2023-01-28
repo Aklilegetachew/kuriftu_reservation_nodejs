@@ -25,7 +25,7 @@ const ActivityReserv = database.define("activity_reservation", {
     type: DataTypes.STRING,
   },
   reservation_date: {
-    type: DataTypes.DATE,
+    type: DataTypes.STRING,
   },
   quantity: {
     type: DataTypes.INTEGER,
