@@ -37,7 +37,6 @@ export const acceptRequest = async (req, res) => {
     useLetters: true,
   });
 
-  // var addons = req.body.addons;
 
 
 
@@ -186,7 +185,6 @@ export const acceptRequest = async (req, res) => {
           price: price,
           tx_ref: tx_ref,
           order_status: "reserved",
-          addons: addons,
         });
 
         var options = {
