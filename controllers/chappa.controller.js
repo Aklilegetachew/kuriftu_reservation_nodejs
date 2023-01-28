@@ -115,7 +115,6 @@ export const verifyChapa = async (req, res) => {
               // "v:image": qr_image,
               attachment
             };
-            console.log("Expiration Date", dateFunction(user.reservation_date.setMonth(user.reservation_date.getMonth() + 2),),);
 
             // Function that sends the email
             client.messages
