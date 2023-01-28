@@ -29,7 +29,7 @@ export const verify = async (req, res) => {
                         const ava_kid = result[0].kids - result[0].redeemed_kids_ticket;
 
                         res.json({
-                            msg: 'available tickets',
+                            msg: 'waterpark tickets',
                             data: {
                                 ava_ad, ava_kid, result
                             }
@@ -43,25 +43,25 @@ export const verify = async (req, res) => {
                 } else if (result[0].location === 'entoto') {
 
                     const amt = JSON.parse(result[0].amt);
+                    const redeemed_amt = JSON.parse(result[0].redeemed_amt);
                     console.log(amt);
                     console.log(amt[0].quantity);
                     console.log(amt[1].quantity);
                     console.log(amt[2].quantity);
-                    // if (result[0].order_status == 'reserved' && result[0].payment_status == 'paid' ) {
+                    if (result[0].order_status == 'reserved' && result[0].payment_status == 'paid' && (amt[0].quantity > redeemed_amt[0].quantity || amt[1].quantity > redeemed_amt[1].quantity || amt[2].quantity > redeemed_amt[2].quantity)) {
+                        res.json({
+                            msg: 'entoto tickets',
+                            data: {
+                                forKids: amt[0].quantity - redeemed_amt[0].quantity,
+                                adre: amt[1].quantity - redeemed_amt[1].quantity,
+                                adv: amt[2].quantity - redeemed_amt[2].quantity,
+                            }
+                        });
 
-
-
-                    //     res.json({
-                    //         msg: 'available tickets',
-                    //         data: {
-                    //             ava_ticket, result
-                    //         }
-                    //     });
-
-                    // } else {
-                    //     console.log("Already Checked In");
-                    //     res.json({ msg: 'already_checked_in', data: result });
-                    // }
+                    } else {
+                        console.log("Already Checked In");
+                        res.json({ msg: 'already_checked_in', data: result });
+                    }
                 }
             } else {
                 res.json({ msg: "unkown_confirmation_code" });
