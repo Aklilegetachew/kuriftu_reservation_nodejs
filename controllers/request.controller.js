@@ -60,7 +60,7 @@ export const acceptRequest = async (req, res) => {
     if (location == "waterpark") {
 
       const quantity = req.body.quantity;
-      const reservationDate = new Date(req.body.date);
+      const reservationDate = req.body.reservation_date;
       const adult = req.body.adult;
       const kids = req.body.kids;
       const WaterParkPrice = await ActivityPrice.findAll({
@@ -78,21 +78,12 @@ export const acceptRequest = async (req, res) => {
       if (quantity > 10) {
         res.json({ msg: "quantity_greater_10" });
       } else {
-        if (
-          reservationDate.getDay() == 1 ||
-          reservationDate.getDay() == 2 ||
-          reservationDate.getDay() == 3 ||
-          reservationDate.getDay() == 4 ||
-          reservationDate.getDay() == 7
-        ) {
-          adultPrice;
-          kidsPrice;
-        } else if (
-          reservationDate.getDay() == 5 ||
-          reservationDate.getDay() == 6
-        ) {
+        if (reservationDate == "weekdays") {
           adultPrice = adultPrice / 2;
           kidsPrice = kidsPrice / 2;
+        } else if (reservationDate == "weekends") {
+          adultPrice;
+          kidsPrice;
         }
 
         var price = adultPrice * adult + kidsPrice * kids;
