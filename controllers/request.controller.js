@@ -266,19 +266,19 @@ export const acceptRequest = async (req, res) => {
             packages: [
               {
                 name: "Pedal Kart",
-                quantity: +this.entoto_kids,
+                quantity: 0,
               },
               {
                 name: "Trampoline",
-                quantity: +this.entoto_kids,
+                quantity: 0,
               },
               {
                 name: "Children playground",
-                quantity: +this.entoto_kids,
+                quantity: 0,
               },
               {
                 name: "wall climbing",
-                quantity: +this.entoto_kids,
+                quantity: 0,
               },
             ],
           },
@@ -288,15 +288,15 @@ export const acceptRequest = async (req, res) => {
             packages: [
               {
                 name: "Zip Line",
-                quantity: +this.adre,
+                quantity: 0,
               },
               {
                 name: "Rope Course",
-                quantity: +this.adre,
+                quantity: 0,
               },
               {
                 name: "Go Kart",
-                quantity: +this.adre,
+                quantity: 0,
               },
             ],
           },
@@ -306,19 +306,19 @@ export const acceptRequest = async (req, res) => {
             packages: [
               {
                 name: "Horse Riding",
-                quantity: +this.adv,
+                quantity: 0,
               },
               {
                 name: "Paintball",
-                quantity: +this.adv,
+                quantity: 0,
               },
               {
                 name: "Archery",
-                quantity: +this.adv,
+                quantity: 0,
               },
               {
                 name: "Zip Line",
-                quantity: +this.adv,
+                quantity: 0,
               },
             ],
           },
