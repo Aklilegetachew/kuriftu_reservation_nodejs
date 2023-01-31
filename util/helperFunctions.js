@@ -1,3 +1,6 @@
+import Currency from "../models/Currency.model"
+import fetch from "node-fetch"
+
 export const convertToETB = async () => {
   var ETBPrice
 
