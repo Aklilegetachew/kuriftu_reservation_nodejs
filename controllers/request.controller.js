@@ -296,7 +296,8 @@ export const acceptRequest = async (req, res) => {
           entotoPrice = entotoPrice * ETBPrice
         }
         console.log(entotoPrice)
-        // res.status(200).json({ msg: "success", price })
+
+        entotoPrice = entotoPrice.toFixed(2)
       } else {
         res.status(200).json({ msg: "too many tickets" })
       }
