@@ -1,6 +1,16 @@
 import Currency from "../models/Currency.model"
 import fetch from "node-fetch"
 
+const dateFunction = ts => {
+  let date_ob = new Date(ts)
+  let date = date_ob.getDate()
+  let month = date_ob.getMonth() + 1
+  let year = date_ob.getFullYear()
+
+  var final = year + "-" + month + "-" + date
+  return final
+}
+
 export const convertToETB = async () => {
   var ETBPrice
 
