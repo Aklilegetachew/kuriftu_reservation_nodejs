@@ -48,30 +48,6 @@ export const verify = async (req, res) => {
         } else if (result[0].location === "entoto") {
           const amt = JSON.parse(result[0].amt)
           const redeemed_amt = JSON.parse(result[0].redeemed_amt)
-<<<<<<< HEAD
-          console.log(amt)
-          console.log(amt[0].quantity)
-          console.log(amt[1].quantity)
-          console.log(amt[2].quantity)
-          if (
-            result[0].order_status == "reserved" &&
-            result[0].payment_status == "paid" &&
-            (amt[0].quantity > redeemed_amt[0].quantity ||
-              amt[1].quantity > redeemed_amt[1].quantity ||
-              amt[2].quantity > redeemed_amt[2].quantity)
-          ) {
-            res.json({
-              msg: "entoto tickets",
-              data: {
-                forKids: amt[0].quantity - redeemed_amt[0].quantity,
-                adre: amt[1].quantity - redeemed_amt[1].quantity,
-                adv: amt[2].quantity - redeemed_amt[2].quantity,
-              },
-            })
-          } else {
-            console.log("Already Checked In")
-            res.json({ msg: "already_checked_in", data: result })
-=======
           if (
             redeemed_amt[0].packages[0].quantity ===
               amt[0].packages[0].quantity &&
@@ -193,7 +169,6 @@ export const verify = async (req, res) => {
                 ava_amt,
               },
             })
->>>>>>> 203f6819ad234b1b54e25bd3816bae2253bf4184
           }
         }
       } else {
@@ -247,8 +222,6 @@ export const checkGuest = async (req, res) => {
     console.log(error)
     res.json({ msg: "error", error: error })
   }
-<<<<<<< HEAD
-=======
 }
 
 export const checkEntotoGuest = async (req, res) => {
@@ -373,5 +346,4 @@ export const checkEntotoGuest = async (req, res) => {
     console.log(error)
     res.json({ msg: "error", error: error })
   }
->>>>>>> 203f6819ad234b1b54e25bd3816bae2253bf4184
 }
