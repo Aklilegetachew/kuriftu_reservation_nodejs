@@ -263,14 +263,64 @@ export const acceptRequest = async (req, res) => {
           {
             package_type: "For Kids",
             quantity: 0,
+            packages: [
+              {
+                name: "Pedal Kart",
+                quantity: 0,
+              },
+              {
+                name: "Trampoline",
+                quantity: 0,
+              },
+              {
+                name: "Children playground",
+                quantity: 0,
+              },
+              {
+                name: "wall climbing",
+                quantity: 0,
+              },
+            ],
           },
           {
             package_type: "Adrenaline",
-            quantity: 0
+            quantity: 0,
+            packages: [
+              {
+                name: "Zip Line",
+                quantity: 0,
+              },
+              {
+                name: "Rope Course",
+                quantity: 0,
+              },
+              {
+                name: "Go Kart",
+                quantity: 0,
+              },
+            ],
           },
           {
             package_type: "Entoto Adventure",
-            quantity: 0
+            quantity: 0,
+            packages: [
+              {
+                name: "Horse Riding",
+                quantity: 0,
+              },
+              {
+                name: "Paintball",
+                quantity: 0,
+              },
+              {
+                name: "Archery",
+                quantity: 0,
+              },
+              {
+                name: "Zip Line",
+                quantity: 0,
+              },
+            ],
           },
         ],
         price: price,
