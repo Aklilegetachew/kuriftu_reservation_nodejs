@@ -48,28 +48,127 @@ export const verify = async (req, res) => {
         } else if (result[0].location === "entoto") {
           const amt = JSON.parse(result[0].amt)
           const redeemed_amt = JSON.parse(result[0].redeemed_amt)
-          console.log(amt)
-          console.log(amt[0].quantity)
-          console.log(amt[1].quantity)
-          console.log(amt[2].quantity)
           if (
-            result[0].order_status == "reserved" &&
-            result[0].payment_status == "paid" &&
-            (amt[0].quantity > redeemed_amt[0].quantity ||
-              amt[1].quantity > redeemed_amt[1].quantity ||
-              amt[2].quantity > redeemed_amt[2].quantity)
+            redeemed_amt[0].packages[0].quantity ===
+              amt[0].packages[0].quantity &&
+            redeemed_amt[0].packages[1].quantity ===
+              amt[0].packages[1].quantity &&
+            redeemed_amt[0].packages[2].quantity ===
+              amt[0].packages[2].quantity &&
+            redeemed_amt[0].packages[3].quantity ===
+              amt[0].packages[3].quantity &&
+            redeemed_amt[1].packages[0].quantity ===
+              amt[1].packages[0].quantity &&
+            redeemed_amt[1].packages[1].quantity ===
+              amt[1].packages[1].quantity &&
+            redeemed_amt[1].packages[2].quantity ===
+              amt[1].packages[2].quantity &&
+            redeemed_amt[2].packages[0].quantity ===
+              amt[2].packages[0].quantity &&
+            redeemed_amt[2].packages[1].quantity ===
+              amt[2].packages[1].quantity &&
+            redeemed_amt[2].packages[2].quantity ===
+              amt[2].packages[2].quantity &&
+            redeemed_amt[2].packages[3].quantity === amt[2].packages[3].quantity
           ) {
+            console.log("Already Checked In")
+            res.json({ msg: "already_checked_in", data: result })
+          } else {
+            const ava_amt = [
+              {
+                package_type: "For Kids",
+                quantity: +amt[0].quantity - +redeemed_amt[0].quantity,
+                packages: [
+                  {
+                    name: "Pedal Kart",
+                    quantity:
+                      +amt[0].packages[0].quantity -
+                      +redeemed_amt[0].packages[0].quantity,
+                  },
+                  {
+                    name: "Trampoline",
+                    quantity:
+                      +amt[0].packages[1].quantity -
+                      +redeemed_amt[0].packages[1].quantity,
+                  },
+                  {
+                    name: "Children playground",
+                    quantity:
+                      +amt[0].packages[2].quantity -
+                      +redeemed_amt[0].packages[2].quantity,
+                  },
+                  {
+                    name: "wall climbing",
+                    quantity:
+                      +amt[0].packages[3].quantity -
+                      +redeemed_amt[0].packages[3].quantity,
+                  },
+                ],
+              },
+              {
+                package_type: "Adrenaline",
+                quantity: +amt[1].quantity - +redeemed_amt[1].quantity,
+                packages: [
+                  {
+                    name: "Zip Line",
+                    quantity:
+                      +amt[1].packages[0].quantity -
+                      +redeemed_amt[1].packages[0].quantity,
+                  },
+                  {
+                    name: "Rope Course",
+                    quantity:
+                      +amt[1].packages[1].quantity -
+                      +redeemed_amt[1].packages[1].quantity,
+                  },
+                  {
+                    name: "Go Kart",
+                    quantity:
+                      +amt[1].packages[2].quantity -
+                      +redeemed_amt[1].packages[2].quantity,
+                  },
+                ],
+              },
+              {
+                package_type: "Entoto Adventure",
+                quantity: +amt[2].quantity - +redeemed_amt[2].quantity,
+                packages: [
+                  {
+                    name: "Horse Riding",
+                    quantity:
+                      +amt[2].packages[0].quantity -
+                      +redeemed_amt[2].packages[0].quantity,
+                  },
+                  {
+                    name: "Paintball",
+                    quantity:
+                      +amt[2].packages[1].quantity -
+                      +redeemed_amt[2].packages[1].quantity,
+                  },
+                  {
+                    name: "Archery",
+                    quantity:
+                      +amt[2].packages[2].quantity -
+                      +redeemed_amt[2].packages[2].quantity,
+                  },
+                  {
+                    name: "Zip Line",
+                    quantity:
+                      +amt[2].packages[3].quantity -
+                      +redeemed_amt[2].packages[3].quantity,
+                  },
+                ],
+              },
+            ]
             res.json({
               msg: "entoto tickets",
               data: {
                 amt,
                 redeemed_amt,
                 result,
+                ava_amt,
               },
             })
-          } else {
-            console.log("Already Checked In")
-            res.json({ msg: "already_checked_in", data: result })
           }
         }
       } else {
@@ -118,6 +217,130 @@ export const checkGuest = async (req, res) => {
       } else {
         res.json({ msg: "already_checked_in" })
       }
+    }
+  } catch (error) {
+    console.log(error)
+    res.json({ msg: "error", error: error })
+  }
+}
+
+export const checkEntotoGuest = async (req, res) => {
+  const data = req.body.data
+  const guest_token = req.body.guest_token
+
+  console.log(guest_token)
+  try {
+    const result = await ActivityReserv.findAll({
+      where: {
+        confirmation_code: guest_token,
+      },
+    })
+    if (result.length > 0) {
+      const amt = JSON.parse(result[0].amt)
+      const redeemed_amt = JSON.parse(result[0].redeemed_amt)
+
+      // For kids redeemed
+      const newPedalKart = redeemed_amt[0].packages[0].quantity + data.pedalKart
+      const newTrampoline =
+        redeemed_amt[0].packages[1].quantity + data.trampoline
+      const newChildrenPlayground =
+        redeemed_amt[0].packages[2].quantity + data.childrenPlayground
+      const newWallClimbing =
+        redeemed_amt[0].packages[3].quantity + data.wallClimbing
+
+      // Adrenaline redeemed
+      const newZipLine = redeemed_amt[1].packages[0].quantity + data.zipAdre
+      const newRopeCourse =
+        redeemed_amt[1].packages[1].quantity + data.ropeCourse
+      const newGoKart = redeemed_amt[1].packages[2].quantity + data.goKart
+
+      // Entoto Adventure redeemed
+      const newHorseRiding =
+        redeemed_amt[2].packages[0].quantity + data.horseRiding
+      const newPaintball = redeemed_amt[2].packages[1].quantity + data.paintBall
+      const newArchery = redeemed_amt[2].packages[2].quantity + data.archery
+      const newZipLineEntoto =
+        redeemed_amt[2].packages[3].quantity + data.zipAdv
+
+      const newRedeemedAmt = [
+        {
+          package_type: "For Kids",
+          quantity: +amt[0].quantity,
+          packages: [
+            {
+              name: "Pedal Kart",
+              quantity: +newPedalKart,
+            },
+            {
+              name: "Trampoline",
+              quantity: +newTrampoline,
+            },
+            {
+              name: "Children playground",
+              quantity: +newChildrenPlayground,
+            },
+            {
+              name: "wall climbing",
+              quantity: +newWallClimbing,
+            },
+          ],
+        },
+        {
+          package_type: "Adrenaline",
+          quantity: +amt[1].quantity,
+          packages: [
+            {
+              name: "Zip Line",
+              quantity: +newZipLine,
+            },
+            {
+              name: "Rope Course",
+              quantity: +newRopeCourse,
+            },
+            {
+              name: "Go Kart",
+              quantity: +newGoKart,
+            },
+          ],
+        },
+        {
+          package_type: "Entoto Adventure",
+          quantity: +amt[2].quantity,
+          packages: [
+            {
+              name: "Horse Riding",
+              quantity: +newHorseRiding,
+            },
+            {
+              name: "Paintball",
+              quantity: +newPaintball,
+            },
+            {
+              name: "Archery",
+              quantity: +newArchery,
+            },
+            {
+              name: "Zip Line",
+              quantity: +newZipLineEntoto,
+            },
+          ],
+        },
+      ]
+
+      await ActivityReserv.update(
+        {
+          redeemed_amt: newRedeemedAmt,
+        },
+        {
+          where: {
+            confirmation_code: guest_token,
+          },
+        }
+      )
+
+      res.json({ msg: "checked_in" })
+    } else {
+      res.json({ msg: "already_checked_in" })
     }
   } catch (error) {
     console.log(error)
