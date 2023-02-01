@@ -363,6 +363,65 @@ export const acceptRequest = async (req, res) => {
       })
 
       // res.status(200).json({ msg: "success" })
+    } else if (location == "boston") {
+      const bostonQuantity = req.body.bostonQuantity
+
+      if (bostonQuantity <= 5) {
+        var bostonPrice = 68 * bostonQuantity
+        bostonPrice = bostonPrice * price
+
+        bostonPrice = bostonPrice.toFixed(2)
+
+        const tx_ref_boston = await chapa.generateTransactionReference({
+          prefix: "TX",
+          size: 20,
+        })
+
+        const result_boston = await ActivityReserv.create({
+          first_name: first_name,
+          last_name: last_name,
+          location: location,
+          email: email,
+          phone_number: phone_number,
+          confirmation_code: confirmation_code,
+          currency: currency,
+          payment_method: payment_method,
+          payment_status: "unpaid",
+          quantity: bostonQuantity,
+          price: bostonPrice,
+          tx_ref: tx_ref_boston,
+          order_status: "reserved",
+        })
+
+        var options = {
+          method: "POST",
+          url: "https://api.chapa.co/v1/transaction/initialize",
+          headers: {
+            Authorization: "Bearer " + CHAPA_API,
+          },
+          formData: {
+            amount: bostonPrice,
+            currency: currency,
+            email: email,
+            first_name: first_name,
+            last_name: last_name,
+            tx_ref: tx_ref_boston,
+            // callback_url: process.env.CHAPA_CALLBACK_URL,
+            // return_url: process.env.URL + '/returnchapa',
+          },
+        }
+
+        request(options, function async(error, response) {
+          if (error) throw new Error(error)
+          var full_response = JSON.parse(response.body)
+          var check_out = full_response.data.checkout_url
+          console.log(check_out)
+
+          res.json({ url: check_out })
+        })
+      } else {
+        res.status(200).json({ msg: "too many tickets" })
+      }
     }
   } catch (error) {
     console.log(error)
