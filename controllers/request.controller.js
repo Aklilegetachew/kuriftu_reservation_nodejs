@@ -239,7 +239,7 @@ export const acceptRequest = async (req, res) => {
           Adrenaline * EntotoPrice[1].price +
           Adventure * EntotoPrice[2].price
 
-        console.log(entotoPrice * price)
+        entotoPrice = entotoPrice * price
 
         entotoPrice = entotoPrice.toFixed(2)
       } else {
