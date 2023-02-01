@@ -26,7 +26,7 @@ const dateFunction = ts => {
 }
 
 export const acceptRequest = async (req, res) => {
-  console.log(req.body)
+  // console.log(req.body)
   const CHAPA_API = process.env.CHAPA_API
 
   // const mg = mailgun({ apiKey: API_KEY, domain: DOMAIN });
@@ -46,6 +46,93 @@ export const acceptRequest = async (req, res) => {
     length: 8,
     useLetters: true,
   })
+  var price
+
+  if (currency == "ETB") {
+    var checkETB = await Currency.findAll({
+      limit: 1,
+      order: [["updatedAt", "DESC"]],
+    })
+    // console.log(checkETB.length)
+
+    if (checkETB.length === 0) {
+      var requestOptions = {
+        method: "GET",
+        redirect: "follow",
+        headers: {
+          "Content-Type": "text/plain",
+          apikey: "m8pYh6zWnmUXPvxwRTVbrtqNtOqvR2xD",
+        },
+      }
+      var ETBPrice
+
+      await fetch(
+        "https://api.apilayer.com/currency_data/convert?to=ETB&from=USD&amount=1",
+        requestOptions
+      )
+        .then(response => response.text())
+        .then(result => {
+          // console.log(JSON.parse(result).result)
+          ETBPrice = JSON.parse(result).result
+        })
+        .catch(error => console.log("error", error))
+      // console.log("Price", ETBPrice)
+
+      checkETB = await Currency.create({
+        rate: ETBPrice,
+      })
+    }
+
+    var todayDate = dateFunction(Date.now())
+    var fetchDate = dateFunction(checkETB[0].updatedAt)
+
+    // console.log(todayDate, fetchDate)
+
+    if (todayDate === fetchDate) {
+      // console.log("equal")
+      ETBPrice = checkETB[0].rate
+    } else {
+      // console.log("different")
+
+      var requestOptions = {
+        method: "GET",
+        redirect: "follow",
+        headers: {
+          "Content-Type": "text/plain",
+          apikey: "m8pYh6zWnmUXPvxwRTVbrtqNtOqvR2xD",
+        },
+      }
+
+      await fetch(
+        "https://api.apilayer.com/currency_data/convert?to=ETB&from=USD&amount=1",
+        requestOptions
+      )
+        .then(response => response.text())
+        .then(result => {
+          // console.log(result);
+          ETBPrice = JSON.parse(result).result
+        })
+        .catch(error => console.log("error", error))
+      // console.log("Price", ETBPrice)
+
+      const nowValue = await Currency.findAll()
+
+      await Currency.update(
+        {
+          rate: ETBPrice,
+        },
+        {
+          where: {
+            id: nowValue[0].id,
+          },
+        }
+      )
+    }
+    price = ETBPrice
+  } else if (currency == "USD") {
+    price = 1
+  }
+  console.log("Price", price)
 
   try {
     if (location == "waterpark") {
@@ -74,82 +161,11 @@ export const acceptRequest = async (req, res) => {
           kidsPrice
         }
 
-        var price = adultPrice * adult + kidsPrice * kids
+        var waterParkPrice = adultPrice * adult + kidsPrice * kids
 
-        if (currency == "ETB") {
-          var checkETB = await Currency.findAll({
-            limit: 1,
-            order: [["updatedAt", "DESC"]],
-          })
+        waterParkPrice = WaterParkPrice * price
 
-          if (checkETB.length === 0) {
-            var requestOptions = {
-              method: "GET",
-              redirect: "follow",
-              headers: {
-                "Content-Type": "text/plain",
-                apikey: "m8pYh6zWnmUXPvxwRTVbrtqNtOqvR2xD",
-              },
-            }
-
-            await fetch(
-              "https://api.apilayer.com/currency_data/convert?to=ETB&from=USD&amount=1",
-              requestOptions
-            )
-              .then(response => response.text())
-              .then(result => {
-                // console.log(result);
-                ETBPrice = JSON.parse(result).result
-              })
-              .catch(error => console.log("error", error))
-            console.log("Price", ETBPrice)
-
-            checkETB = await Currency.create({
-              rate: ETBPrice,
-            })
-          }
-
-          var ETBPrice
-          var todayDate = dateFunction(Date.now())
-          var fetchDate = dateFunction(checkETB[0].updatedAt)
-
-          console.log(todayDate, fetchDate)
-
-          if (todayDate === fetchDate) {
-            console.log("equal")
-            ETBPrice = checkETB[0].rate
-          } else {
-            console.log("different")
-
-            var requestOptions = {
-              method: "GET",
-              redirect: "follow",
-              headers: {
-                "Content-Type": "text/plain",
-                apikey: "m8pYh6zWnmUXPvxwRTVbrtqNtOqvR2xD",
-              },
-            }
-
-            await fetch(
-              "https://api.apilayer.com/currency_data/convert?to=ETB&from=USD&amount=1",
-              requestOptions
-            )
-              .then(response => response.text())
-              .then(result => {
-                // console.log(result);
-                ETBPrice = JSON.parse(result).result
-              })
-              .catch(error => console.log("error", error))
-            console.log("Price", ETBPrice)
-
-            await Currency.create({
-              rate: ETBPrice,
-            })
-          }
-          price = price * ETBPrice
-        }
-
-        price = price.toFixed(2)
+        waterParkPrice = waterParkPrice.toFixed(2)
 
         const tx_ref = await chapa.generateTransactionReference({
           prefix: "TX", // defaults to `TX`
@@ -170,7 +186,7 @@ export const acceptRequest = async (req, res) => {
           quantity: quantity,
           adult: adult,
           kids: kids,
-          price: price,
+          price: waterParkPrice,
           tx_ref: tx_ref,
           order_status: "reserved",
         })
@@ -182,7 +198,7 @@ export const acceptRequest = async (req, res) => {
             Authorization: "Bearer " + CHAPA_API,
           },
           formData: {
-            amount: price,
+            amount: waterParkPrice,
             currency: currency,
             email: email,
             first_name: first_name,
@@ -223,79 +239,7 @@ export const acceptRequest = async (req, res) => {
           Adrenaline * EntotoPrice[1].price +
           Adventure * EntotoPrice[2].price
 
-        if (currency == "ETB") {
-          var checkETB = await Currency.findAll({
-            limit: 1,
-            order: [["updatedAt", "DESC"]],
-          })
-
-          if (checkETB.length === 0) {
-            var requestOptions = {
-              method: "GET",
-              redirect: "follow",
-              headers: {
-                "Content-Type": "text/plain",
-                apikey: "m8pYh6zWnmUXPvxwRTVbrtqNtOqvR2xD",
-              },
-            }
-
-            await fetch(
-              "https://api.apilayer.com/currency_data/convert?to=ETB&from=USD&amount=1",
-              requestOptions
-            )
-              .then(response => response.text())
-              .then(result => {
-                // console.log(result);
-                ETBPrice = JSON.parse(result).result
-              })
-              .catch(error => console.log("error", error))
-            console.log("Price", ETBPrice)
-
-            checkETB = await Currency.create({
-              rate: ETBPrice,
-            })
-          }
-
-          var ETBPrice
-          var todayDate = dateFunction(Date.now())
-          var fetchDate = dateFunction(checkETB[0].updatedAt)
-
-          console.log(todayDate, fetchDate)
-
-          if (todayDate === fetchDate) {
-            console.log("equal")
-            ETBPrice = checkETB[0].rate
-          } else {
-            console.log("different")
-
-            var requestOptions = {
-              method: "GET",
-              redirect: "follow",
-              headers: {
-                "Content-Type": "text/plain",
-                apikey: "m8pYh6zWnmUXPvxwRTVbrtqNtOqvR2xD",
-              },
-            }
-
-            await fetch(
-              "https://api.apilayer.com/currency_data/convert?to=ETB&from=USD&amount=1",
-              requestOptions
-            )
-              .then(response => response.text())
-              .then(result => {
-                // console.log(result);
-                ETBPrice = JSON.parse(result).result
-              })
-              .catch(error => console.log("error", error))
-            console.log("Price", ETBPrice)
-
-            await Currency.create({
-              rate: ETBPrice,
-            })
-          }
-          entotoPrice = entotoPrice * ETBPrice
-        }
-        console.log(entotoPrice)
+        console.log(entotoPrice * price)
 
         entotoPrice = entotoPrice.toFixed(2)
       } else {
@@ -418,7 +362,7 @@ export const acceptRequest = async (req, res) => {
         res.json({ url: check_out })
       })
 
-      // res.status(200).json({ msg: "success" })
+      res.status(200).json({ msg: "success" })
     }
   } catch (error) {
     console.log(error)

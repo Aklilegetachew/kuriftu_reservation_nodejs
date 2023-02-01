@@ -1,0 +1,74 @@
+{
+  "first_name": "Samuel",
+  "last_name": "Addisu",
+  "location": "entoto",
+  "email": "samueladdisu7@gmail.com",
+  "phone_number": "+251944064546",
+  "currency": "USD",
+  "payment_method": "chapa",
+  "quantity": 12,
+  "amt": [
+    {
+      "package_type": "For Kids",
+      "quantity": 4,
+      "packages": [
+        {
+          "name": "Pedal Kart",
+          "quantity": 4
+        },
+        {
+          "name": "Trampoline",
+          "quantity": 4
+        },
+        {
+          "name": "Children playground",
+          "quantity": 4
+        },
+        {
+          "name": "wall climbing",
+          "quantity": 4
+        }
+      ]
+    },
+    {
+      "package_type": "Adrenaline",
+      "quantity": 4,
+      "packages": [
+        {
+          "name": "Zip Line",
+          "quantity": 4
+        },
+        {
+          "name": "Rope Course",
+          "quantity": 4
+        },
+        {
+          "name": "Go Kart",
+          "quantity": 4
+        }
+      ]
+    },
+    {
+      "package_type": "Entoto Adventure",
+      "quantity": 4,
+      "packages": [
+        {
+          "name": "Horse Riding",
+          "quantity": 4
+        },
+        {
+          "name": "Paintball",
+          "quantity": 4
+        },
+        {
+          "name": "Archery",
+          "quantity": 4
+        },
+        {
+          "name": "Zip Line",
+          "quantity": 4
+        }
+      ]
+    }
+  ]
+}
