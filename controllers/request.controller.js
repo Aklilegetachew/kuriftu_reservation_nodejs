@@ -362,7 +362,7 @@ export const acceptRequest = async (req, res) => {
         res.json({ url: check_out })
       })
 
-      res.status(200).json({ msg: "success" })
+      // res.status(200).json({ msg: "success" })
     }
   } catch (error) {
     console.log(error)
