@@ -365,7 +365,7 @@ export const acceptRequest = async (req, res) => {
       // res.status(200).json({ msg: "success" })
     } else if (location == "boston") {
       const bostonQuantity = req.body.bostonQuantity
-
+      const bostonAmt = req.body.amt
       if (bostonQuantity <= 5) {
         var bostonPrice = 68 * bostonQuantity
         bostonPrice = bostonPrice * price
@@ -388,6 +388,25 @@ export const acceptRequest = async (req, res) => {
           payment_method: payment_method,
           payment_status: "unpaid",
           quantity: bostonQuantity,
+          amt: bostonAmt,
+          redeemed_amt: [
+            {
+              name: "Peedcure & deep manicure",
+              quantity: 0,
+            },
+            {
+              name: "Aroma massage",
+              quantity: 0,
+            },
+            {
+              name: "Spa",
+              quantity: 0,
+            },
+            {
+              name: "Hair",
+              quantity: 0,
+            },
+          ],
           price: bostonPrice,
           tx_ref: tx_ref_boston,
           order_status: "reserved",
