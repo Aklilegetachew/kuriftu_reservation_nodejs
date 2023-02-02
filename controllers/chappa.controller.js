@@ -37,7 +37,7 @@ export const verifyChapa = async (req, res) => {
   const chapadata = req.body;
   const sentfile = process.env.QR_HOME;
 
-  console.log(chapadata);
+  console.log(chapadata.customization.title);
 
   // var options = {
   //   'method': 'GET',
