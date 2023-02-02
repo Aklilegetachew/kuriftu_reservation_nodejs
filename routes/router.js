@@ -5,7 +5,7 @@ import {
   view_activity_reservation,
 } from "../controllers/Activity.controller"
 import { auth } from "../controllers/authentication.controller"
-import { returnChappa, verifyChapa } from "../controllers/chappa.controller"
+import {  verifyChapa } from "../controllers/chappa.controller"
 import { main } from "../controllers/index.controller"
 import { qrimage } from "../controllers/qrimages.controllers"
 import { acceptRequest } from "../controllers/request.controller"
