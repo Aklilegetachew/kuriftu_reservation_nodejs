@@ -170,6 +170,45 @@ export const verify = async (req, res) => {
               },
             })
           }
+        } else if (result[0].location === "boston") {
+          const amt = JSON.parse(result[0].amt)
+          const redeemed_amt = JSON.parse(result[0].redeemed_amt)
+
+          if (
+            redeemed_amt[0].quantity === amt[0].quantity &&
+            redeemed_amt[1].quantity === amt[1].quantity &&
+            redeemed_amt[2].quantity === amt[2].quantity &&
+            redeemed_amt[3].quantity === amt[3].quantity
+          ) {
+            console.log("Already Checked In")
+            res.json({ msg: "already_checked_in", data: result })
+          } else {
+            const ava_amt = [
+              {
+                name: "Peedcure & deep manicure",
+                quantity: +amt[0].quantity - +redeemed_amt[0].quantity,
+              },
+              {
+                name: "Aroma massage",
+                quantity: +amt[1].quantity - +redeemed_amt[1].quantity,
+              },
+              {
+                name: "Spa",
+                quantity: +amt[2].quantity - +redeemed_amt[2].quantity,
+              },
+              {
+                name: "Hair",
+                quantity: +amt[3].quantity - +redeemed_amt[3].quantity,
+              },
+            ]
+            res.json({
+              msg: "boston tickets",
+              amt,
+              redeemed_amt,
+              ava_amt,
+              result,
+            })
+          }
         }
       } else {
         res.json({ msg: "unkown_confirmation_code" })
@@ -346,4 +385,58 @@ export const checkEntotoGuest = async (req, res) => {
     console.log(error)
     res.json({ msg: "error", error: error })
   }
+}
+
+export const checkBostonGuest = async (req, res) => {
+    const data = req.body.data
+    const guest_token = req.body.guest_token
+
+    try {
+      const result = await ActivityReserv.findAll({
+        where: {
+          confirmation_code: guest_token,
+        }
+      })
+      if (result.length > 0) {
+        const amt = JSON.parse(result[0].amt)
+        const redeemed_amt = JSON.parse(result[0].redeemed_amt)
+
+        const newPediMani = redeemed_amt[0].quantity + data.pediMani
+        const newAroma = redeemed_amt[1].quantity + data.aroma
+        const newSpa = redeemed_amt[2].quantity + data.spa
+        const newHair = redeemed_amt[3].quantity + data.hair
+
+        const newRedeemedAmt = [
+          {
+            name: "Peedcure & deep manicure",
+            quantity: +newPediMani,
+          },
+          {
+            name: "Aroma massage",
+            quantity: +newAroma
+          },
+          {
+            name: "Spa",
+            quantity: +newSpa
+          },
+          {
+            name: "Hair",
+            quantity: +newHair
+          }
+        ]
+
+        await ActivityReserv.update({
+          redeemed_amt: newRedeemedAmt
+        },
+        {
+          where: {
+            confirmation_code: guest_token,
+          }
+        })
+        res.json({ msg: "checked_in" })
+      }
+    } catch (error) {
+      console.log(error)
+    res.json({ msg: "error", error: error })
+    }
 }

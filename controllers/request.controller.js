@@ -163,7 +163,7 @@ export const acceptRequest = async (req, res) => {
 
         var waterParkPrice = adultPrice * adult + kidsPrice * kids
 
-        waterParkPrice = WaterParkPrice * price
+        waterParkPrice = waterParkPrice * price
 
         waterParkPrice = waterParkPrice.toFixed(2)
 
@@ -367,7 +367,7 @@ export const acceptRequest = async (req, res) => {
       const bostonQuantity = req.body.bostonQuantity
       const bostonAmt = req.body.amt
       if (bostonQuantity <= 5) {
-        var bostonPrice = 68 * bostonQuantity
+        var bostonPrice = 60 * bostonQuantity
         bostonPrice = bostonPrice * price
 
         bostonPrice = bostonPrice.toFixed(2)

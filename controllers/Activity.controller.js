@@ -29,8 +29,14 @@ export const add_activity_price = async (req, res) => {
 };
 
 export const view_activity_reservation = async (req, res) => {
+
+  const location = req.body.location
   try {
-    const result = await ActivityReserv.findAll();
+    const result = await ActivityReserv.findAll({
+      where: {
+        location: location
+      }
+    });
     console.log(result);
     res.json(result);
   } catch (error) {

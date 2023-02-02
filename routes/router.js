@@ -14,6 +14,7 @@ import {
   checkGuest,
   verify,
   checkEntotoGuest,
+  checkBostonGuest
 } from "../controllers/verification.controller"
 
 const router = express.Router()
@@ -30,11 +31,12 @@ router.get("/auth/:id", auth)
 // Activity
 router.get("/view_activity_price", view_activity_price)
 router.post("/add_activity_price", add_activity_price)
-router.get("/view_activity_reservation", view_activity_reservation)
+router.post("/view_activity_reservation", view_activity_reservation)
 // Chappa Payment
 router.post("/verifyChapa", verifyChapa)
 router.get("/chapareturn", returnChappa)
 router.post("/checkEntotoGuest", checkEntotoGuest)
+router.post("/checkBostonGuest", checkBostonGuest)
 
 // router.post('/verifyWebhook',);
 
