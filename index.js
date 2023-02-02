@@ -12,8 +12,6 @@ import https from 'https';
 
 moment.tz.setDefault('Africa/Addis_Ababa')
 
-// console.log(moment().format('YYYY-MM-DD hh:mm A'));
-
 dotenv.config();
 const app = express();
 // app.use(

@@ -117,11 +117,11 @@ export const verifyChapa = async (req, res) => {
               "v:quantity": user.quantity,
               "v:price": user.price + " " + user.currency,
               "v:purchaseDate": dateFunction(user.createdAt),
-              "v:expirationDate": dateFunction(user.createdAt.setMonth(user.createdAt.getMonth() + 3),),
+              "v:expDate": dateFunction(user.createdAt.setMonth(user.createdAt.getMonth() + 3),),
               attachment
             };
 
-            let exp = dateFunction(user.createdAt.setMonth(user.createdAt.getMonth() + 3),);
+            
 
             console.log(exp);
 
