@@ -86,45 +86,50 @@ export const verifyChapa = async (req, res) => {
             // var qr_image = process.env.URL + '/qrimage/' + event.confirmation_code;
             // Email that is to be sent
             // var reservation_date = dateFunction(user)
-            var from, subject
+            var emailSent, subject, from, template;
             if (user.location == 'waterpark') {
               from = "Kuriftu Water Park"
-              subject = "Kuriftu Water Park ticket Reservation"
+              subject = "You've successfully purchased Kuriftu Water Park ticket"
+              template = "waterpark"
+              
+  
+              // Function that sends the email
+              
             } else if (user.location == 'entoto') {
               from = "Kuriftu Resort and Spa Entoto"
               subject = "Kuriftu Resort and Spa Entoto ticket Reservation"
+              template = 'entoto'
+            } else if (user.location == 'boston'){
+              from = "Boston Day Spa"
+              subject = "You've successfully purchased Boston Day Spa ticket"
+              template = "boston"
             }
 
-            const emailSent = {
+            emailSent = {
               from: from + "<no-reply@reservations.kurifturesorts.com>",
               to: user.email,
-              subject: subject,
-              attachment,
-              template: "kuriftu_design",
-              // template: "kuriftu_test",
-              "v:fname": user.first_name + " " + user.last_name,
-              // "v:location": location,
+              subject,
+              template,
+              "v:firstname": user.first_name,
+              "v:name": user.first_name + " " + user.last_name,
               "v:email": user.email,
-              "v:quantity": user.quantity,
-              "v:reservation": subject,
-              "v:reservationDate": user.reservation_date,
-              "V:expirationDate": "After 2 months from the purchase date",
               "v:confirmation": user.confirmation_code,
+              "v:quantity": user.quantity,
               "v:price": user.price + " " + user.currency,
-              "v:payment": 'Chapa',
-              // "v:image": qr_image,
+              "v:purchaseDate": dateFunction(user.createdAt),
+              "v:expirationDate": dateFunction(user.createdAt.setMonth(user.createdAt.getMonth() + 3),),
               attachment
             };
 
-            // Function that sends the email
+
             client.messages
-              .create(DOMAIN, emailSent)
-              .then((res) => {
-                console.log(res);
-              })
-              .catch((err) => {
-                console.error(err);
-              });
+                .create(DOMAIN, emailSent)
+                .then((res) => {
+                  console.log(res);
+                })
+                .catch((err) => {
+                  console.error(err);
+                });
             console.log("Email Sent");
             await ActivityReserv.update({
               payment_status: 'paid',
