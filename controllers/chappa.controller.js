@@ -121,6 +121,9 @@ export const verifyChapa = async (req, res) => {
               attachment
             };
 
+            let exp = dateFunction(user.createdAt.setMonth(user.createdAt.getMonth() + 3),);
+
+            console.log(exp);
 
             client.messages
                 .create(DOMAIN, emailSent)
