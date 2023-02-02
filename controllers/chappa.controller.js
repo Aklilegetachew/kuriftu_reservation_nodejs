@@ -123,8 +123,6 @@ export const verifyChapa = async (req, res) => {
 
             
 
-            console.log(exp);
-
             client.messages
                 .create(DOMAIN, emailSent)
                 .then((res) => {
