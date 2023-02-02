@@ -198,16 +198,17 @@ export const acceptRequest = async (req, res) => {
             Authorization: "Bearer " + CHAPA_API,
           },
           formData: {
-            // amount: waterParkPrice,
-            amount: 1,
+            amount: waterParkPrice,
+            // amount: 1,
             currency: currency,
             email: email,
             first_name: first_name,
             last_name: last_name,
             tx_ref: tx_ref,
-            "customization[title]": "ticket"
+            "customization[title]": "ticket",
             // callback_url: process.env.CHAPA_CALLBACK_URL,
             // return_url: process.env.URL + '/returnchapa',
+            return_url: "https://kurifturesorts.com",
           },
         }
 
@@ -352,6 +353,8 @@ export const acceptRequest = async (req, res) => {
           tx_ref: tx_ref_entoto,
           // callback_url: process.env.CHAPA_CALLBACK_URL,
           // return_url: process.env.URL + '/returnchapa',
+          "customization[title]": "ticket",
+          return_url: "https://kurifturesorts.com",
         },
       }
 
@@ -421,15 +424,16 @@ export const acceptRequest = async (req, res) => {
             Authorization: "Bearer " + CHAPA_API,
           },
           formData: {
-            // amount: bostonPrice,
-            amount: 0.01,
+            amount: bostonPrice,
+            // amount: 0.01,
             currency: currency,
             email: email,
             first_name: first_name,
             last_name: last_name,
             tx_ref: tx_ref_boston,
+            "customization[title]": "ticket",
             // callback_url: process.env.CHAPA_CALLBACK_URL,
-            // return_url: process.env.URL + '/returnchapa',
+            return_url: "https://kurifturesorts.com",
           },
         }
 
