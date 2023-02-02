@@ -34,7 +34,6 @@ router.post("/add_activity_price", add_activity_price)
 router.post("/view_activity_reservation", view_activity_reservation)
 // Chappa Payment
 router.post("/verifyChapa", verifyChapa)
-router.get("/chapareturn", returnChappa)
 router.post("/checkEntotoGuest", checkEntotoGuest)
 router.post("/checkBostonGuest", checkBostonGuest)
 
