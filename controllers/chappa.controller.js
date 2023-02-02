@@ -154,10 +154,3 @@ export const verifyChapa = async (req, res) => {
   // });
 
 };
-
-export const returnChappa = async (req, res) => {
-
-  console.log("Chappa Return URL");
-  res.send("Chappa Return URL");
-
-}

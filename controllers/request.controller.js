@@ -204,6 +204,7 @@ export const acceptRequest = async (req, res) => {
             first_name: first_name,
             last_name: last_name,
             tx_ref: tx_ref,
+            "customization[title]": "ticket"
             // callback_url: process.env.CHAPA_CALLBACK_URL,
             // return_url: process.env.URL + '/returnchapa',
           },
