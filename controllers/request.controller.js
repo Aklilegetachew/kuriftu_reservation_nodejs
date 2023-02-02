@@ -199,7 +199,7 @@ export const acceptRequest = async (req, res) => {
           },
           formData: {
             // amount: waterParkPrice,
-            amount: 0.01,
+            amount: 1,
             currency: currency,
             email: email,
             first_name: first_name,
