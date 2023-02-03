@@ -32,13 +32,20 @@ export const view_activity_reservation = async (req, res) => {
 
   const location = req.body.location
   try {
-    const result = await ActivityReserv.findAll({
-      where: {
-        location: location
-      }
-    });
-    console.log(result);
-    res.json(result);
+    if (location == "all") {
+      const result = await ActivityReserv.findAll();
+      console.log(result);
+      res.json(result);
+    } else {
+      const result = await ActivityReserv.findAll({
+        where: {
+          location: location
+        }
+      });
+      console.log(result);
+      res.json(result);
+    }
+
   } catch (error) {
     console.log(error);
   }
