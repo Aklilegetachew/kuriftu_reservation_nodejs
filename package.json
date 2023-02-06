@@ -24,6 +24,8 @@
     "form-data": "^4.0.0",
     "fs": "^0.0.1-security",
     "generate-unique-id": "^2.0.1",
+    "joi": "^17.7.0",
+    "joi-phone-number": "^5.1.1",
     "mailgun-js": "^0.22.0",
     "mailgun.js": "^8.0.6",
     "moment-timezone": "^0.5.40",

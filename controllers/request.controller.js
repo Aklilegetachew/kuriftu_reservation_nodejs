@@ -1,6 +1,6 @@
 import generateUniqueId from "generate-unique-id"
 import dotenv from "dotenv"
-
+import JoiPhoneNumber from "joi-phone-number"
 import ActivityReserv from "../models/ActivityReservation.model"
 import ActivityPrice from "../models/ActivityPrice.model"
 import request from "request"
@@ -10,10 +10,24 @@ import { Chapa } from "chapa-nodejs"
 import entotoPackage from "../models/entotoPrice.model"
 import moment from "moment-timezone"
 import { response } from "express"
+import Joi from "joi"
 // import { convertToETB } from "../util/helperFunctions"
 // import template from '../templates/email.pug';
 
-dotenv.config()
+const customPhone = Joi.extend(JoiPhoneNumber)
+
+const firstNameJoi = Joi.string().alphanum().min(3).max(30).required()
+const lastNameJoi = Joi.string().alphanum().min(3).max(30).required()
+const phoneNumberJoi = customPhone.string().phoneNumber().required()
+
+const emailJoi = Joi.string().email({ minDomainSegments: 2 }).required()
+const currencyJoi = Joi.string().required()
+const locationJoi = Joi.string().required()
+const reservationDateJoi = Joi.string().optional()
+const payment_methodJoi = Joi.string().required()
+const quantityJoi = Joi.number().optional()
+const adultJoi = Joi.number().optional()
+const kidsJoi = Joi.number().optional()
 
 const dateFunction = ts => {
   let date_ob = new Date(ts)
@@ -30,6 +44,58 @@ export const acceptRequest = async (req, res) => {
   const CHAPA_API = process.env.CHAPA_API
 
   // const mg = mailgun({ apiKey: API_KEY, domain: DOMAIN });
+
+  const fNameResult = firstNameJoi.validate(req.body.first_name)
+  const lNameResult = lastNameJoi.validate(req.body.last_name)
+  const phoneResult = phoneNumberJoi.validate(req.body.phone_number)
+  const emailResult = emailJoi.validate(req.body.email)
+  const currencyResult = currencyJoi.validate(req.body.currency)
+  const locationResult = locationJoi.validate(req.body.location)
+  const payment_methodResult = payment_methodJoi.validate(
+    req.body.payment_method
+  )
+  const quantityResult = quantityJoi.validate(req.body.quantity)
+  const adultResult = adultJoi.validate(req.body.adult)
+  const kidsResult = kidsJoi.validate(req.body.kids)
+  const reservationDateResult = reservationDateJoi.validate(
+    req.body.reservation_date
+  )
+
+  if (
+    fNameResult.error ||
+    lNameResult.error ||
+    phoneResult.error ||
+    emailResult.error ||
+    currencyResult.error ||
+    locationResult.error ||
+    payment_methodResult.error ||
+    quantityResult.error ||
+    adultResult.error ||
+    kidsResult.error ||
+    reservationDateResult.error
+  ) {
+    const error = {
+      first_name: fNameResult.error ? fNameResult.error.message : null,
+      last_name: lNameResult.error ? lNameResult.error.message : null,
+      phone_number: phoneResult.error ? phoneResult.error.message : null,
+      email: emailResult.error ? emailResult.error.message : null,
+      currency: currencyResult.error ? currencyResult.error.message : null,
+      location: locationResult.error ? locationResult.error.message : null,
+      payment_method: payment_methodResult.error
+        ? payment_methodResult.error.message
+        : null,
+      quantity: quantityResult.error ? quantityResult.error.message : null,
+      adult: adultResult.error ? adultResult.error.message : null,
+      kids: kidsResult.error ? kidsResult.error.message : null,
+      reservation_date: reservationDateResult.error
+        ? reservationDateResult.error.message
+        : null,
+    }
+    return res.status(400).json({
+      msg: "Invalid Request",
+      error,
+    })
+  }
 
   const chapa = new Chapa({
     secretKey: CHAPA_API,
