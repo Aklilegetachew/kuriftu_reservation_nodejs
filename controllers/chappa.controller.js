@@ -37,7 +37,7 @@ export const verifyChapa = async (req, res) => {
   const chapadata = req.body;
   const sentfile = process.env.QR_HOME;
 
-  const title = chapadata.customization.title
+  const title = chapadata.customization.title || null
 
   if (title == "ticket"){
     var options = {
