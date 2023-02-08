@@ -29,6 +29,7 @@ const app = express()
 // })
 
 app.use(cors())
+console.log(ddd)
 app.options("*", cors())
 app.use(bodyParser.json())
 app.use(cookieParser())
