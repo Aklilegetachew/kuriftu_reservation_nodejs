@@ -34,7 +34,11 @@ export const view_activity_reservation = async (req, res) => {
   try {
     if (location == "all") {
       const result = await ActivityReserv.findAll();
-      console.log(result);
+      result.forEach((item) => {
+        item.amt = JSON.parse(item.amt);
+        item.redeemed_amt = JSON.parse(item.redeemed_amt);
+      })
+
       res.json(result);
     } else {
       const result = await ActivityReserv.findAll({
@@ -42,6 +46,10 @@ export const view_activity_reservation = async (req, res) => {
           location: location
         }
       });
+      result.forEach((item) => {
+        item.amt = JSON.parse(item.amt);
+        item.redeemed_amt = JSON.parse(item.redeemed_amt);
+      })
       console.log(result);
       res.json(result);
     }

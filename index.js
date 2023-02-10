@@ -4,40 +4,19 @@ import dotenv from "dotenv"
 import cors from "cors"
 import bodyParser from "body-parser"
 import cookieParser from "cookie-parser"
-import database from "./database/database"
 import router from "./routes/router"
 import moment from "moment-timezone"
-import fs from "fs"
-import https from "https"
 
 moment.tz.setDefault("Africa/Addis_Ababa")
 
 dotenv.config()
 const app = express()
-// app.use(
-//   cors({
-//     origin: ["http://localhost:3000"],
-//     optionsSuccessStatus: 200,
-//     credentials: true,
-//     methods: ["GET", "POST", "PUT", "DELETE"],
-//   })
-// );
-// process.on('uncaughtException', function (err) {
-//   console.error((new Date).toUTCString() + ' uncaughtException:', err.message)
-//   console.error(err.stack)
-//   process.exit(1)
-// })
 
 app.use(cors())
 app.options("*", cors())
 app.use(bodyParser.json())
 app.use(cookieParser())
 
-// https
-//   .createServer(app)
-//   .listen(8000,()=>{
-//     console.log("Server Started on Port: 8000");
-//   });
 
 app.use(router)
 
