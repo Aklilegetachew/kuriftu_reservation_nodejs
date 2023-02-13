@@ -34,14 +34,14 @@ export const view_activity_reservation = async (req, res) => {
   try {
     if (location == "all") {
       const result = await ActivityReserv.findAll();
-      result.forEach((item) => {
-        try {
-          item.amt = JSON.parse(item.amt);
-          item.redeemed_amt = JSON.parse(item.redeemed_amt);
-        } catch (error) {
-          console.error(`Error parsing JSON data: ${error.message}`);
-        }
-      })
+      // result.forEach((item) => {
+      //   try {
+      //     item.amt = JSON.parse(item.amt);
+      //     item.redeemed_amt = JSON.parse(item.redeemed_amt);
+      //   } catch (error) {
+      //     console.error(`Error parsing JSON data: ${error.message}`);
+      //   }
+      // })
   
       res.json(result);
     } else {
