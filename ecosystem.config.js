@@ -3,6 +3,6 @@ module.exports = {
     script: "./server.js",
     max_restarts: 3, 
     max_memory_restart: "200M",
-    watch: true,
+    watch: false,
     restart_delay: 3000,
 }
