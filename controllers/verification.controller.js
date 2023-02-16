@@ -46,8 +46,8 @@ export const verify = async (req, res) => {
             res.json({ msg: "already_checked_in", data: result })
           }
         } else if (result[0].location === "entoto") {
-          const amt = JSON.parse(result[0].amt)
-          const redeemed_amt = JSON.parse(result[0].redeemed_amt)
+          const amt = result[0].amt
+          const redeemed_amt = result[0].redeemed_amt
           if (
             redeemed_amt[0].packages[0].quantity ===
               amt[0].packages[0].quantity &&
@@ -171,9 +171,11 @@ export const verify = async (req, res) => {
             })
           }
         } else if (result[0].location === "boston") {
-          const amt = JSON.parse(result[0].amt)
-          const redeemed_amt = JSON.parse(result[0].redeemed_amt)
+          // const amt = result[0].amt
+          // const redeemed_amt = result[0].redeemed_amt
 
+          const amt = result[0].amt
+          const redeemed_amt = result[0].redeemed_amt
           if (
             redeemed_amt[0].quantity === amt[0].quantity &&
             redeemed_amt[1].quantity === amt[1].quantity &&
@@ -275,8 +277,8 @@ export const checkEntotoGuest = async (req, res) => {
       },
     })
     if (result.length > 0) {
-      const amt = JSON.parse(result[0].amt)
-      const redeemed_amt = JSON.parse(result[0].redeemed_amt)
+      const amt = result[0].amt
+      const redeemed_amt = result[0].redeemed_amt
 
       // For kids redeemed
       const newPedalKart = redeemed_amt[0].packages[0].quantity + data.pedalKart
@@ -398,8 +400,8 @@ export const checkBostonGuest = async (req, res) => {
         }
       })
       if (result.length > 0) {
-        const amt = JSON.parse(result[0].amt)
-        const redeemed_amt = JSON.parse(result[0].redeemed_amt)
+        const amt = result[0].amt
+        const redeemed_amt = result[0].redeemed_amt
 
         const newPediMani = redeemed_amt[0].quantity + data.pediMani
         const newAroma = redeemed_amt[1].quantity + data.aroma
