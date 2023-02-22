@@ -254,7 +254,7 @@ export const acceptRequest = async (req, res) => {
           kids: kids,
           price: waterParkPrice,
           tx_ref: tx_ref,
-          order_status: "reserved",
+          order_status: "pending_payment",
         })
 
         var options = {

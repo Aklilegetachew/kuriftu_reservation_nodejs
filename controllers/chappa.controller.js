@@ -137,6 +137,7 @@ export const verifyChapa = async (req, res) => {
               console.log("Email Sent");
               await ActivityReserv.update({
                 payment_status: 'paid',
+                order_status: "reserved",
                 email_sent: true,
               }, {
                 where: {
