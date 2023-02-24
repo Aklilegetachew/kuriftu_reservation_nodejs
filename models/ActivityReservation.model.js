@@ -70,6 +70,10 @@ const ActivityReserv = database.define("activity_reservation", {
     type: DataTypes.STRING,
     allowNull: true,
   },
+  scanned_agent: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
 });
 
 // database
@@ -80,6 +84,5 @@ const ActivityReserv = database.define("activity_reservation", {
 //   .catch((error) => {
 //     console.log("Unable to create table: ", error);
 //   });
-
 
 export default ActivityReserv;
