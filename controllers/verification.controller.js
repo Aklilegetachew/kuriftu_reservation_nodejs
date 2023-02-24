@@ -51,7 +51,7 @@ export const verify = async (req, res) => {
               {
                 order_status: "checked_in",
                 scanned_agent:
-                  user[0].user_firstName + "" + user[0].user_lastName,
+                  user[0].user_firstName + " " + user[0].user_lastName,
               },
               {
                 where: {
