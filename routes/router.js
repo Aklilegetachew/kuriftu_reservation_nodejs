@@ -35,6 +35,7 @@ router.get("/view_activity_price", view_activity_price);
 router.post("/add_activity_price", add_activity_price);
 router.post("/view_activity_reservation", view_activity_reservation);
 router.post("/view_redemed_reservation", view_redemed_reservation);
+router.post("/reddeem_activity_reservation", view_redemed_location);
 router.post("/view_activity_unpaid", view_unpaid_activity);
 // Chappa Payment
 router.post("/verifyChapa", verifyChapa);
