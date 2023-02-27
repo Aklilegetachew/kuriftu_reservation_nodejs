@@ -5,6 +5,7 @@ import {
   view_activity_reservation,
   view_unpaid_activity,
   view_redemed_reservation,
+  view_redemed_location
 } from "../controllers/Activity.controller";
 import { auth } from "../controllers/authentication.controller";
 import { verifyChapa } from "../controllers/chappa.controller";
