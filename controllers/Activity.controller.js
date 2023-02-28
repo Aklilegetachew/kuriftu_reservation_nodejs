@@ -1,6 +1,8 @@
 // import ActivityLocation from "../models/ActivityLocation.model";
 import ActivityPrice from "../models/ActivityPrice.model";
 import ActivityReserv from "../models/ActivityReservation.model";
+const Sequelize = require('sequelize');
+
 
 export const view_activity_price = async (req, res) => {
   try {
