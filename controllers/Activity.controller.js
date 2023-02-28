@@ -32,7 +32,13 @@ export const view_activity_reservation = async (req, res) => {
   const location = req.body.location;
   try {
     if (location == "all") {
-      const result = await ActivityReserv.findAll();
+      const result = await ActivityReserv.findAll({
+        where: {
+          order_status: {
+            [Sequelize.Op.not]: "checked_in",
+          },
+        },
+      });
       // result.forEach((item) => {
       //   try {
       //     item.amt = JSON.parse(item.amt);
@@ -47,6 +53,9 @@ export const view_activity_reservation = async (req, res) => {
       const result = await ActivityReserv.findAll({
         where: {
           location: location,
+          order_status: {
+            [Sequelize.Op.not]: "checked_in",
+          },
         },
       });
       result.forEach((item) => {
@@ -74,7 +83,7 @@ export const view_redemed_reservation = async (req, res) => {
           order_status: "checked_in",
         },
       });
-     
+
       res.json(result);
     } else {
       const result = await ActivityReserv.findAll({
@@ -99,7 +108,6 @@ export const view_redemed_reservation = async (req, res) => {
   }
 };
 
-
 export const view_redemed_location = async (req, res) => {
   const location = req.body.location;
   try {
@@ -109,7 +117,7 @@ export const view_redemed_location = async (req, res) => {
           order_status: "checked_in",
         },
       });
-     
+
       res.json(result);
     } else {
       const result = await ActivityReserv.findAll({
