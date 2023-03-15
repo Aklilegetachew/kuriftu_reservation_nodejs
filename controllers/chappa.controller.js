@@ -130,12 +130,12 @@ export const verifyChapa = async (req, res) => {
                   .create(DOMAIN, emailSent)
                   .then((res) => {
                     console.log(res);
-                    fs.unlink(filepath, (err) => {
-                      if (error) {
-                        throw err;
-                      }
-                      console.log("QR Code Deleted");
-                    });
+                    // fs.unlink(filepath, (err) => {
+                    //   if (error) {
+                    //     throw err;
+                    //   }
+                    //   console.log("QR Code Deleted");
+                    // });
                   })
                   .catch((err) => {
                     console.error(err);
