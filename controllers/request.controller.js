@@ -112,92 +112,92 @@ export const acceptRequest = async (req, res) => {
     length: 8,
     useLetters: true,
   });
-  var price;
+  var price = 1;
 
-  if (currency == "ETB") {
-    var checkETB = await Currency.findAll({
-      limit: 1,
-      order: [["updatedAt", "DESC"]],
-    });
-    // console.log(checkETB.length)
+  // if (currency == "ETB") {
+  //   var checkETB = await Currency.findAll({
+  //     limit: 1,
+  //     order: [["updatedAt", "DESC"]],
+  //   });
+  //   // console.log(checkETB.length)
 
-    if (checkETB.length === 0) {
-      var requestOptions = {
-        method: "GET",
-        redirect: "follow",
-        headers: {
-          "Content-Type": "text/plain",
-          apikey: "m8pYh6zWnmUXPvxwRTVbrtqNtOqvR2xD",
-        },
-      };
-      var ETBPrice;
+  //   if (checkETB.length === 0) {
+  //     var requestOptions = {
+  //       method: "GET",
+  //       redirect: "follow",
+  //       headers: {
+  //         "Content-Type": "text/plain",
+  //         apikey: "m8pYh6zWnmUXPvxwRTVbrtqNtOqvR2xD",
+  //       },
+  //     };
+  //     var ETBPrice;
 
-      await fetch(
-        "https://api.apilayer.com/currency_data/convert?to=ETB&from=USD&amount=1",
-        requestOptions
-      )
-        .then((response) => response.text())
-        .then((result) => {
-          // console.log(JSON.parse(result).result)
-          ETBPrice = JSON.parse(result).result;
-        })
-        .catch((error) => console.log("error", error));
-      // console.log("Price", ETBPrice)
+  //     await fetch(
+  //       "https://api.apilayer.com/currency_data/convert?to=ETB&from=USD&amount=1",
+  //       requestOptions
+  //     )
+  //       .then((response) => response.text())
+  //       .then((result) => {
+  //         // console.log(JSON.parse(result).result)
+  //         ETBPrice = JSON.parse(result).result;
+  //       })
+  //       .catch((error) => console.log("error", error));
+  //     // console.log("Price", ETBPrice)
 
-      checkETB = await Currency.create({
-        rate: ETBPrice,
-      });
-    }
+  //     checkETB = await Currency.create({
+  //       rate: ETBPrice,
+  //     });
+  //   }
 
-    var todayDate = dateFunction(Date.now());
-    var fetchDate = dateFunction(checkETB[0].updatedAt);
+  //   var todayDate = dateFunction(Date.now());
+  //   var fetchDate = dateFunction(checkETB[0].updatedAt);
 
-    // console.log(todayDate, fetchDate)
+  //   // console.log(todayDate, fetchDate)
 
-    if (todayDate === fetchDate) {
-      // console.log("equal")
-      ETBPrice = checkETB[0].rate;
-    } else {
-      // console.log("different")
+  //   if (todayDate === fetchDate) {
+  //     // console.log("equal")
+  //     ETBPrice = checkETB[0].rate;
+  //   } else {
+  //     // console.log("different")
 
-      var requestOptions = {
-        method: "GET",
-        redirect: "follow",
-        headers: {
-          "Content-Type": "text/plain",
-          apikey: "m8pYh6zWnmUXPvxwRTVbrtqNtOqvR2xD",
-        },
-      };
+  //     var requestOptions = {
+  //       method: "GET",
+  //       redirect: "follow",
+  //       headers: {
+  //         "Content-Type": "text/plain",
+  //         apikey: "m8pYh6zWnmUXPvxwRTVbrtqNtOqvR2xD",
+  //       },
+  //     };
 
-      await fetch(
-        "https://api.apilayer.com/currency_data/convert?to=ETB&from=USD&amount=1",
-        requestOptions
-      )
-        .then((response) => response.text())
-        .then((result) => {
-          // console.log(result);
-          ETBPrice = JSON.parse(result).result;
-        })
-        .catch((error) => console.log("error", error));
-      // console.log("Price", ETBPrice)
+  //     await fetch(
+  //       "https://api.apilayer.com/currency_data/convert?to=ETB&from=USD&amount=1",
+  //       requestOptions
+  //     )
+  //       .then((response) => response.text())
+  //       .then((result) => {
+  //         // console.log(result);
+  //         ETBPrice = JSON.parse(result).result;
+  //       })
+  //       .catch((error) => console.log("error", error));
+  //     // console.log("Price", ETBPrice)
 
-      const nowValue = await Currency.findAll();
+  //     const nowValue = await Currency.findAll();
 
-      await Currency.update(
-        {
-          rate: ETBPrice,
-        },
-        {
-          where: {
-            id: nowValue[0].id,
-          },
-        }
-      );
-    }
-    price = ETBPrice;
-  } else if (currency == "USD") {
-    price = 1;
-  }
+  //     await Currency.update(
+  //       {
+  //         rate: ETBPrice,
+  //       },
+  //       {
+  //         where: {
+  //           id: nowValue[0].id,
+  //         },
+  //       }
+  //     );
+  //   }
+  //   price = ETBPrice;
+  // } else if (currency == "USD") {
+  //   price = 1;
+  // }
   console.log("Price", price);
 
   try {
@@ -216,78 +216,78 @@ export const acceptRequest = async (req, res) => {
       var kidsPrice = WaterParkPrice[1].price;
 
       console.log("here");
-      if (quantity > 10) {
-        res.json({ msg: "quantity_greater_10" });
-      } else {
-        if (reservationDate == "weekdays") {
-          adultPrice = adultPrice / 2;
-          kidsPrice = kidsPrice / 2;
-        } else if (reservationDate == "weekends") {
-          adultPrice;
-          kidsPrice;
-        }
+      // if (quantity > 10) {
+      //   res.json({ msg: "quantity_greater_10" });
+      // } else {
+      // if (reservationDate == "weekdays") {
+      //   adultPrice = adultPrice / 2;
+      //   kidsPrice = kidsPrice / 2;
+      // } else if (reservationDate == "weekends") {
+      //   adultPrice;
+      //   kidsPrice;
+      // }
 
-        var waterParkPrice = adultPrice * adult + kidsPrice * kids;
+      var waterParkPrice = adultPrice * adult + kidsPrice * kids;
 
-        waterParkPrice = waterParkPrice * price;
+      waterParkPrice = waterParkPrice * price;
 
-        waterParkPrice = waterParkPrice.toFixed(2);
+      waterParkPrice = waterParkPrice.toFixed(2);
 
-        const tx_ref = await chapa.generateTransactionReference({
-          prefix: "TX", // defaults to `TX`
-          size: 20, // defaults to `15`
-        });
+      const tx_ref = await chapa.generateTransactionReference({
+        prefix: "TX", // defaults to `TX`
+        size: 20, // defaults to `15`
+      });
 
-        const result = await ActivityReserv.create({
+      const result = await ActivityReserv.create({
+        first_name: first_name,
+        last_name: last_name,
+        location: location,
+        email: email,
+        phone_number: phone_number,
+        confirmation_code: confirmation_code,
+        reservation_date: reservationDate,
+        currency: currency,
+        payment_method: payment_method,
+        payment_status: "unpaid",
+        quantity: quantity,
+        adult: adult,
+        kids: kids,
+        price: waterParkPrice,
+        tx_ref: tx_ref,
+        order_status: "pending_payment",
+        scanned_agent: "",
+      });
+
+      var options = {
+        method: "POST",
+        url: "https://api.chapa.co/v1/transaction/initialize",
+        headers: {
+          Authorization: "Bearer " + CHAPA_API,
+        },
+        formData: {
+          // amount: waterParkPrice,
+          amount: 1,
+          currency: currency,
+          email: email,
           first_name: first_name,
           last_name: last_name,
-          location: location,
-          email: email,
-          phone_number: phone_number,
-          confirmation_code: confirmation_code,
-          reservation_date: reservationDate,
-          currency: currency,
-          payment_method: payment_method,
-          payment_status: "unpaid",
-          quantity: quantity,
-          adult: adult,
-          kids: kids,
-          price: waterParkPrice,
           tx_ref: tx_ref,
-          order_status: "pending_payment",
-          scanned_agent: "",
-        });
+          "customization[title]": "ticket",
+          // callback_url: process.env.CHAPA_CALLBACK_URL,
+          // return_url: process.env.URL + '/returnchapa',
+          return_url: "https://kurifturesorts.com",
+        },
+      };
 
-        var options = {
-          method: "POST",
-          url: "https://api.chapa.co/v1/transaction/initialize",
-          headers: {
-            Authorization: "Bearer " + CHAPA_API,
-          },
-          formData: {
-            // amount: waterParkPrice,
-            amount: 1,
-            currency: currency,
-            email: email,
-            first_name: first_name,
-            last_name: last_name,
-            tx_ref: tx_ref,
-            "customization[title]": "ticket",
-            // callback_url: process.env.CHAPA_CALLBACK_URL,
-            // return_url: process.env.URL + '/returnchapa',
-            return_url: "https://kurifturesorts.com",
-          },
-        };
+      request(options, function async(error, response) {
+        if (error) throw new Error(error);
+        var full_response = JSON.parse(response.body);
+        var check_out = full_response.data.checkout_url;
+        console.log(check_out);
 
-        request(options, function async(error, response) {
-          if (error) throw new Error(error);
-          var full_response = JSON.parse(response.body);
-          var check_out = full_response.data.checkout_url;
-          console.log(check_out);
-
-          res.json({ url: check_out });
-        });
-      }
+        res.json({ url: check_out });
+      });
+      // }
     } else if (location == "entoto") {
       const amt = req.body.amt;
       let sum = 0;
