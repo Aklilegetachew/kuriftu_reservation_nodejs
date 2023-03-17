@@ -4,4 +4,5 @@ module.exports = {
     max_restarts: 3, 
     max_memory_restart: "100M",
     restart_delay: 3000,
+    ignore_watch: ["assets/images/qr_codes"]
 }
