@@ -114,90 +114,94 @@ export const acceptRequest = async (req, res) => {
   });
   var price = 1;
 
-  // if (currency == "ETB") {
-  //   var checkETB = await Currency.findAll({
-  //     limit: 1,
-  //     order: [["updatedAt", "DESC"]],
-  //   });
-  //   // console.log(checkETB.length)
+  if (currency == "ETB") {
+    if (location == "waterpark") {
+      price = 1;
+    } else {
+      var checkETB = await Currency.findAll({
+        limit: 1,
+        order: [["updatedAt", "DESC"]],
+      });
+      // console.log(checkETB.length)
 
-  //   if (checkETB.length === 0) {
-  //     var requestOptions = {
-  //       method: "GET",
-  //       redirect: "follow",
-  //       headers: {
-  //         "Content-Type": "text/plain",
-  //         apikey: "m8pYh6zWnmUXPvxwRTVbrtqNtOqvR2xD",
-  //       },
-  //     };
-  //     var ETBPrice;
+      if (checkETB.length === 0) {
+        var requestOptions = {
+          method: "GET",
+          redirect: "follow",
+          headers: {
+            "Content-Type": "text/plain",
+            apikey: "m8pYh6zWnmUXPvxwRTVbrtqNtOqvR2xD",
+          },
+        };
+        var ETBPrice;
 
-  //     await fetch(
-  //       "https://api.apilayer.com/currency_data/convert?to=ETB&from=USD&amount=1",
-  //       requestOptions
-  //     )
-  //       .then((response) => response.text())
-  //       .then((result) => {
-  //         // console.log(JSON.parse(result).result)
-  //         ETBPrice = JSON.parse(result).result;
-  //       })
-  //       .catch((error) => console.log("error", error));
-  //     // console.log("Price", ETBPrice)
+        await fetch(
+          "https://api.apilayer.com/currency_data/convert?to=ETB&from=USD&amount=1",
+          requestOptions
+        )
+          .then((response) => response.text())
+          .then((result) => {
+            // console.log(JSON.parse(result).result)
+            ETBPrice = JSON.parse(result).result;
+          })
+          .catch((error) => console.log("error", error));
+        // console.log("Price", ETBPrice)
 
-  //     checkETB = await Currency.create({
-  //       rate: ETBPrice,
-  //     });
-  //   }
+        checkETB = await Currency.create({
+          rate: ETBPrice,
+        });
+      }
 
-  //   var todayDate = dateFunction(Date.now());
-  //   var fetchDate = dateFunction(checkETB[0].updatedAt);
+      var todayDate = dateFunction(Date.now());
+      var fetchDate = dateFunction(checkETB[0].updatedAt);
 
-  //   // console.log(todayDate, fetchDate)
+      // console.log(todayDate, fetchDate)
 
-  //   if (todayDate === fetchDate) {
-  //     // console.log("equal")
-  //     ETBPrice = checkETB[0].rate;
-  //   } else {
-  //     // console.log("different")
+      if (todayDate === fetchDate) {
+        // console.log("equal")
+        ETBPrice = checkETB[0].rate;
+      } else {
+        // console.log("different")
 
-  //     var requestOptions = {
-  //       method: "GET",
-  //       redirect: "follow",
-  //       headers: {
-  //         "Content-Type": "text/plain",
-  //         apikey: "m8pYh6zWnmUXPvxwRTVbrtqNtOqvR2xD",
-  //       },
-  //     };
+        var requestOptions = {
+          method: "GET",
+          redirect: "follow",
+          headers: {
+            "Content-Type": "text/plain",
+            apikey: "m8pYh6zWnmUXPvxwRTVbrtqNtOqvR2xD",
+          },
+        };
 
-  //     await fetch(
-  //       "https://api.apilayer.com/currency_data/convert?to=ETB&from=USD&amount=1",
-  //       requestOptions
-  //     )
-  //       .then((response) => response.text())
-  //       .then((result) => {
-  //         // console.log(result);
-  //         ETBPrice = JSON.parse(result).result;
-  //       })
-  //       .catch((error) => console.log("error", error));
-  //     // console.log("Price", ETBPrice)
+        await fetch(
+          "https://api.apilayer.com/currency_data/convert?to=ETB&from=USD&amount=1",
+          requestOptions
+        )
+          .then((response) => response.text())
+          .then((result) => {
+            // console.log(result);
+            ETBPrice = JSON.parse(result).result;
+          })
+          .catch((error) => console.log("error", error));
+        // console.log("Price", ETBPrice)
 
-  //     const nowValue = await Currency.findAll();
+        const nowValue = await Currency.findAll();
 
-  //     await Currency.update(
-  //       {
-  //         rate: ETBPrice,
-  //       },
-  //       {
-  //         where: {
-  //           id: nowValue[0].id,
-  //         },
-  //       }
-  //     );
-  //   }
-  //   price = ETBPrice;
-  // } else if (currency == "USD") {
-  //   price = 1;
-  // }
+        await Currency.update(
+          {
+            rate: ETBPrice,
+          },
+          {
+            where: {
+              id: nowValue[0].id,
+            },
+          }
+        );
+      }
+      price = ETBPrice;
+    }
+  } else if (currency == "USD") {
+    price = 1;
+  }
   console.log("Price", price);
 
   try {
