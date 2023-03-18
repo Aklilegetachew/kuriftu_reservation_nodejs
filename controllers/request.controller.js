@@ -269,8 +269,7 @@ export const acceptRequest = async (req, res) => {
           Authorization: "Bearer " + CHAPA_API,
         },
         formData: {
-          // amount: waterParkPrice,
-          amount: 1,
+          amount: waterParkPrice,
           currency: currency,
           email: email,
           first_name: first_name,
