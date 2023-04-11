@@ -442,7 +442,7 @@ export const acceptRequest = async (req, res) => {
       const bostonQuantity = req.body.bostonQuantity;
       const bostonAmt = req.body.amt;
       if (bostonQuantity <= 5) {
-        var bostonPrice = 60 * bostonQuantity;
+        var bostonPrice = 61 * bostonQuantity;
         bostonPrice = bostonPrice * price;
 
         bostonPrice = bostonPrice.toFixed(2);
