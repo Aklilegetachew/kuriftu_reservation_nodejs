@@ -431,8 +431,8 @@ export const acceptRequest = async (req, res) => {
       request(options, function async(error, response) {
         if (error) throw new Error(error);
         var full_response = JSON.parse(response.body);
+        console.log(error);
         var check_out = full_response.data.checkout_url;
-        console.log(check_out);
 
         res.json({ url: check_out });
       });
@@ -442,8 +442,8 @@ export const acceptRequest = async (req, res) => {
       const bostonQuantity = req.body.bostonQuantity;
       const bostonAmt = req.body.amt;
       if (bostonQuantity <= 5) {
-        var bostonPrice = 61 * bostonQuantity;
-        bostonPrice = bostonPrice * price;
+        var bostonPrice = 3080 * bostonQuantity;
+        // bostonPrice = bostonPrice * price;
 
         bostonPrice = bostonPrice.toFixed(2);
 
@@ -488,6 +488,10 @@ export const acceptRequest = async (req, res) => {
           scanned_agent: "",
         });
 
+        console.log(
+          `Input: Boston Price: ${bostonPrice} Currency: /${currency}/ email: ${email} first_name|: ${first_name} lastname: ${last_name} tx_ref: ${tx_ref_boston}`
+        );
+
         var options = {
           method: "POST",
           url: "https://api.chapa.co/v1/transaction/initialize",
@@ -496,8 +500,8 @@ export const acceptRequest = async (req, res) => {
           },
           formData: {
             amount: bostonPrice,
-            // amount: 0.01,
-            currency: currency,
+            // amount: 10,
+            currency: "ETB",
             email: email,
             first_name: first_name,
             last_name: last_name,
