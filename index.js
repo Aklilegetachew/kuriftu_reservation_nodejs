@@ -11,7 +11,7 @@ moment.tz.setDefault("Africa/Addis_Ababa");
 
 dotenv.config();
 const env = process.env.NODE_ENV || "development";
-const port = process.env.PORT;
+const port = process.env.PORT || 8000;
 
 const app = express();
 
