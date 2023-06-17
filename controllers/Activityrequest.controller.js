@@ -1,19 +1,13 @@
 import generateUniqueId from "generate-unique-id";
-import dotenv from "dotenv";
 import JoiPhoneNumber from "joi-phone-number";
-import ActivityReserv from "../models/ActivityReservation.model";
 import ActivityPrice from "../models/ActivityPrice.model";
-import request from "request";
-import Currency from "../models/Currency.model";
-import fetch from "node-fetch";
-import { Chapa } from "chapa-nodejs";
-import entotoPackage from "../models/entotoPrice.model";
-import moment from "moment-timezone";
-import { response } from "express";
 import Joi from "joi";
 import SuperAppActivityReserv from "../models/allActivityReservation.model";
-// import { convertToETB } from "../util/helperFunctions"
-// import template from '../templates/email.pug';
+const applyFabricToken = require("./applyFabricTokenService");
+const requestCreateOrder = require("./requestCreateOrder");
+const tools = require("../utils/tools");
+const config = require("../config/config");
+
 
 const customPhone = Joi.extend(JoiPhoneNumber);
 const firstNameJoi = Joi.string().alphanum().min(3).max(30).required();
@@ -22,7 +16,7 @@ const phoneNumberJoi = customPhone.string().phoneNumber().required();
 const emailJoi = Joi.string().email({ minDomainSegments: 2 }).required();
 const currencyJoi = Joi.string().required();
 const locationJoi = Joi.string().required();
-const reservationType = Joi.string().optional();
+const reservationTypeJoi = Joi.string().optional();
 const quantityJoi = Joi.number().optional();
 
 const dateFunction = (ts) => {
@@ -35,6 +29,29 @@ const dateFunction = (ts) => {
   return final;
 };
 
+function createRawRequest(prepayId) {
+  let map = {
+    appid: config.merchantAppId,
+    merch_code: config.merchantCode,
+    nonce_str: tools.createNonceStr(),
+    prepay_id: prepayId,
+    timestamp: tools.createTimeStamp(),
+  };
+  let sign = tools.signRequestObject(map);
+  // order by ascii in array
+  let rawRequest = [
+    "appid=" + map.appid,
+    "merch_code=" + map.merch_code,
+    "nonce_str=" + map.nonce_str,
+    "prepay_id=" + map.prepay_id,
+    "timestamp=" + map.timestamp,
+    "sign=" + sign,
+    "sign_type=SHA256WithRSA",
+  ].join("&");
+  console.log("rawRequest = ", rawRequest);
+  return rawRequest;
+}
+
 export const acceptActivityRequest = async (req, res) => {
   const fNameResult = firstNameJoi.validate(req.body.first_name);
   const lNameResult = lastNameJoi.validate(req.body.last_name);
@@ -43,7 +60,7 @@ export const acceptActivityRequest = async (req, res) => {
   const currencyResult = currencyJoi.validate(req.body.currency);
   const locationResult = locationJoi.validate(req.body.location);
   const quantityResult = quantityJoi.validate(req.body.quantity);
-  const reservationType = reservationType.validate(req.body.reservationType);
+  const reservationType = reservationTypeJoi.validate(req.body.reservationType);
 
   if (
     fNameResult.error ||
@@ -62,9 +79,7 @@ export const acceptActivityRequest = async (req, res) => {
       email: emailResult.error ? emailResult.error.message : null,
       currency: currencyResult.error ? currencyResult.error.message : null,
       location: locationResult.error ? locationResult.error.message : null,
-
       quantity: quantityResult.error ? quantityResult.error.message : null,
-
       reservation_Type: reservationType.error
         ? reservationType.error.message
         : null,
@@ -117,7 +132,20 @@ export const acceptActivityRequest = async (req, res) => {
 
           ///////// super App thingy /////////////////////////
 
+          let title = "Kuriftu " + req.body.reservationType;
+          let amount = totalPrice;
+          let applyFabricTokenResult = await applyFabricToken();
+          let fabricToken = applyFabricTokenResult.token;
+          let createOrderResult = await requestCreateOrder(
+            fabricToken,
+            title,
+            amount
+          );
 
+          let prepayId = createOrderResult.biz_content.prepay_id;
+          let rawRequest = createRawRequest(prepayId);
+          console.log("RAW_REQ_Ebsa: ", rawRequest);
+          res.send(rawRequest);
 
           ///////////// IDK ///////////////////////////////
         } catch (err) {
@@ -131,7 +159,7 @@ export const acceptActivityRequest = async (req, res) => {
         });
       }
     } catch (err) {
-      res.status(400).json({
+      res.status(401).json({
         msg: "Uknown Activity",
         err,
       });
