@@ -8,7 +8,6 @@ const requestCreateOrder = require("./requestCreateOrder");
 const tools = require("../utils/tools");
 const config = require("../config/config");
 
-
 const customPhone = Joi.extend(JoiPhoneNumber);
 const firstNameJoi = Joi.string().alphanum().min(3).max(30).required();
 const lastNameJoi = Joi.string().alphanum().min(3).max(30).required();
@@ -18,6 +17,7 @@ const currencyJoi = Joi.string().required();
 const locationJoi = Joi.string().required();
 const reservationTypeJoi = Joi.string().optional();
 const quantityJoi = Joi.number().optional();
+const IDJoi = Joi.number().optional();
 
 const dateFunction = (ts) => {
   let date_ob = new Date(ts);
@@ -53,6 +53,7 @@ function createRawRequest(prepayId) {
 }
 
 export const acceptActivityRequest = async (req, res) => {
+  console.log(req.body);
   const fNameResult = firstNameJoi.validate(req.body.first_name);
   const lNameResult = lastNameJoi.validate(req.body.last_name);
   const phoneResult = phoneNumberJoi.validate(req.body.phone_number);
@@ -61,6 +62,7 @@ export const acceptActivityRequest = async (req, res) => {
   const locationResult = locationJoi.validate(req.body.location);
   const quantityResult = quantityJoi.validate(req.body.quantity);
   const reservationType = reservationTypeJoi.validate(req.body.reservationType);
+  const ID = IDJoi.validate(req.body.ID);
 
   if (
     fNameResult.error ||
@@ -70,7 +72,8 @@ export const acceptActivityRequest = async (req, res) => {
     currencyResult.error ||
     locationResult.error ||
     quantityResult.error ||
-    reservationType.error
+    reservationType.error ||
+    ID.error
   ) {
     const error = {
       first_name: fNameResult.error ? fNameResult.error.message : null,
@@ -84,20 +87,20 @@ export const acceptActivityRequest = async (req, res) => {
         ? reservationType.error.message
         : null,
     };
+    console.log(error);
     return res.status(400).json({
       msg: "Invalid Request",
       error,
     });
   } else {
     try {
-      var activityType = ActivityPrice.findAll({
+      var activityType = await ActivityPrice.findOne({
         where: {
-          name: req.body.reservationType,
-          location: req.body.location,
+          id: ID.value,
         },
       });
 
-      if (activityType.length == 1) {
+      if (activityType) {
         const activityPrice = activityType.price;
         const NumberOfGuest = req.body.quantity;
         var totalPrice = activityPrice * NumberOfGuest;
@@ -131,7 +134,7 @@ export const acceptActivityRequest = async (req, res) => {
           });
 
           ///////// super App thingy /////////////////////////
-
+          console.log("SUPER APP");
           let title = "Kuriftu " + req.body.reservationType;
           let amount = totalPrice;
           let applyFabricTokenResult = await applyFabricToken();
@@ -143,12 +146,14 @@ export const acceptActivityRequest = async (req, res) => {
           );
 
           let prepayId = createOrderResult.biz_content.prepay_id;
+          // console.log("PAYER ID ID", createOrderResult);
           let rawRequest = createRawRequest(prepayId);
           console.log("RAW_REQ_Ebsa: ", rawRequest);
           res.send(rawRequest);
 
           ///////////// IDK ///////////////////////////////
         } catch (err) {
+          console.log(err);
           res.status(400).json({
             msg: "Error Signup User",
           });
@@ -159,6 +164,7 @@ export const acceptActivityRequest = async (req, res) => {
         });
       }
     } catch (err) {
+      console.log(err);
       res.status(401).json({
         msg: "Uknown Activity",
         err,

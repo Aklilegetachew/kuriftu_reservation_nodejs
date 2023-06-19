@@ -21,7 +21,7 @@ function createRequestObject(title, amount) {
     merch_code: config.merchantCode,
     merch_order_id: createMerchantOrderId(),
     title: title,
-    total_amount: amount,
+    total_amount: "" + amount + "",
     trans_currency: "ETB",
     timeout_express: "120m",
     payee_identifier: "220311",
@@ -36,7 +36,7 @@ function createRequestObject(title, amount) {
   return req;
 }
 
-exports.requestCreateOrder = async (fabricToken, title, amount) => {
+function requestCreateOrder(fabricToken, title, amount) {
   return new Promise((resolve) => {
     let reqObject = createRequestObject(title, amount);
 
@@ -65,4 +65,5 @@ exports.requestCreateOrder = async (fabricToken, title, amount) => {
       console.log("ANOTHER ERROR ", err);
     }
   });
-};
+}
+module.exports = requestCreateOrder;

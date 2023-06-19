@@ -1,13 +1,26 @@
 // import ActivityLocation from "../models/ActivityLocation.model";
 import ActivityPrice from "../models/ActivityPrice.model";
 import ActivityReserv from "../models/ActivityReservation.model";
-const Sequelize = require('sequelize');
-
+const Sequelize = require("sequelize");
 
 export const view_activity_price = async (req, res) => {
   try {
     const result = await ActivityPrice.findAll();
     console.log(result);
+    res.json(result);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const view_activity_ById = async (req, res) => {
+  console.log(req.body.ID);
+  try {
+    const result = await ActivityPrice.findAll({
+      where: {
+        id: req.body.ID,
+      },
+    });
     res.json(result);
   } catch (error) {
     console.log(error);

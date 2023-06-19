@@ -17,6 +17,12 @@ const ActivityPrice = database.define("activity_price", {
   photo: {
     type: DataTypes.STRING,
   },
+  descTitle: {
+    type: DataTypes.STRING,
+  },
+  descDetail: {
+    type: DataTypes.STRING,
+  },
 });
 
 export default ActivityPrice;

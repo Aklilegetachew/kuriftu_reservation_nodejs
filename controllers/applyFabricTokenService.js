@@ -18,11 +18,11 @@ function applyFabricToken() {
         appSecret: config.appSecret,
       }),
     };
-
+    console.log(options);
     try {
       request(options, function (error, response) {
         // console.log("***********");
-        console.log("BODY", response.body);
+        // console.log("BODY", response);
         // console.log(typeof response.body);
         let result = JSON.parse(response.body);
         // console.log(result);
@@ -30,7 +30,7 @@ function applyFabricToken() {
         resolve(result);
       });
     } catch (err) {
-      console.log(err);
+      console.log("==========================================================");
     }
   });
 }

@@ -2,6 +2,7 @@ import express from "express";
 import {
   add_activity_price,
   view_activity_price,
+  view_activity_ById,
   view_activity_reservation,
   view_unpaid_activity,
   view_redemed_reservation,
@@ -35,6 +36,8 @@ router.get("/auth/:id", auth);
 
 // Activity
 router.get("/view_activity_price", view_activity_price);
+router.post("/view_activity_price_ID", view_activity_ById);
+
 router.post("/add_activity_price", add_activity_price);
 router.post("/view_activity_reservation", view_activity_reservation);
 router.post("/view_redemed_reservation", view_redemed_reservation);
