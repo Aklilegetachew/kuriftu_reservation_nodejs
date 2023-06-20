@@ -131,25 +131,35 @@ export const acceptActivityRequest = async (req, res) => {
             payment_method: "Super App",
             payment_status: "Unpaid",
             order_status: "Unconfirmed",
+            package: activityType.name,
           });
 
           ///////// super App thingy /////////////////////////
-          console.log("SUPER APP");
-          let title = "Kuriftu " + req.body.reservationType;
-          let amount = totalPrice;
-          let applyFabricTokenResult = await applyFabricToken();
-          let fabricToken = applyFabricTokenResult.token;
-          let createOrderResult = await requestCreateOrder(
-            fabricToken,
-            title,
-            amount
-          );
+          try {
+            console.log("SUPER APP");
+            let title = "Kuriftu " + req.body.reservationType;
+            let amount = totalPrice;
+            let applyFabricTokenResult = await applyFabricToken();
+            let fabricToken = applyFabricTokenResult.token;
+            let createOrderResult = await requestCreateOrder(
+              fabricToken,
+              title,
+              amount
+            );
 
-          let prepayId = createOrderResult.biz_content.prepay_id;
-          // console.log("PAYER ID ID", createOrderResult);
-          let rawRequest = createRawRequest(prepayId);
-          console.log("RAW_REQ_Ebsa: ", rawRequest);
-          res.send(rawRequest);
+            let prepayId = createOrderResult.biz_content.prepay_id;
+            // console.log("PAYER ID ID", createOrderResult);
+            let rawRequest = createRawRequest(prepayId);
+            console.log("RAW_REQ_Ebsa: ", rawRequest);
+
+            res.send(rawRequest);
+          } catch (err) {
+            console.log(err);
+            res.status(400).json({
+              msg: "Error Telebirr Please try again",
+            });
+          }
+          
 
           ///////////// IDK ///////////////////////////////
         } catch (err) {

@@ -50,6 +50,9 @@ const SuperAppActivityReserv = database.define(
     order_status: {
       type: DataTypes.STRING,
     },
+    package: {
+      type: DataTypes.STRING,
+    },
   }
 );
 
