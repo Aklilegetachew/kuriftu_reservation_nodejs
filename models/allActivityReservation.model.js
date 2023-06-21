@@ -56,13 +56,13 @@ const SuperAppActivityReserv = database.define(
   }
 );
 
-database
-  .sync()
-  .then(() => {
-    console.log("Table created Successfully!");
-  })
-  .catch((error) => {
-    console.log("Unable to create table: ", error);
-  });
+// database
+//   .sync()
+//   .then(() => {
+//     console.log("Table created Successfully!");
+//   })
+//   .catch((error) => {
+//     console.log("Unable to create table: ", error);
+//   });
 
 export default SuperAppActivityReserv;
