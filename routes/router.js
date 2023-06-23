@@ -6,7 +6,8 @@ import {
   view_activity_reservation,
   view_unpaid_activity,
   view_redemed_reservation,
-  view_redemed_location
+  view_redemed_location, 
+  activity_confirmation
 } from "../controllers/Activity.controller";
 import { auth } from "../controllers/authentication.controller";
 import { verifyChapa } from "../controllers/chappa.controller";
@@ -37,6 +38,11 @@ router.get("/auth/:id", auth);
 // Activity
 router.get("/view_activity_price", view_activity_price);
 router.post("/view_activity_price_ID", view_activity_ById);
+
+// verify telebir super app confirmation
+
+router.post("/activity_confirmation", activity_confirmation);
+
 
 router.post("/add_activity_price", add_activity_price);
 router.post("/view_activity_reservation", view_activity_reservation);
