@@ -13,6 +13,16 @@ export const view_activity_price = async (req, res) => {
   }
 };
 
+export const activity_confirmation = async (req, res) => {
+  try {
+    const result = req.body;
+    console.log(result);
+    res.send(result);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const view_activity_ById = async (req, res) => {
   console.log(req.body.ID);
   try {
