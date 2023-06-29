@@ -32,7 +32,7 @@ function createRequestObject(title, amount) {
   req.biz_content = biz;
   req.sign = tools.signRequestObject(req);
   req.sign_type = "SHA256WithRSA";
-  console.log(req);
+  console.log("===================", req);
   return req;
 }
 
