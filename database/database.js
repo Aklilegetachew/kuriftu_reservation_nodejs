@@ -10,6 +10,7 @@ const database = new Sequelize(
   {
     // host: "127.0.0.1",
     host: "109.70.148.58",
+    // host: "localhost",
     dialect: "mysql",
     timezone: "+03:00",
   }
