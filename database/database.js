@@ -9,6 +9,7 @@ const database = new Sequelize(
   process.env.DB_PASSWORD,
   {
     host: "109.70.148.58",
+    // host: "localhost",
     dialect: "mysql",
     timezone: "+03:00",
   }
