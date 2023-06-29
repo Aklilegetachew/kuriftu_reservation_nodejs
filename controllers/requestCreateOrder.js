@@ -14,8 +14,8 @@ function createRequestObject(title, amount) {
     version: "1.0",
   };
   let biz = {
-    // notify_url: "https://node-api-muxu.onrender.com/api/v1/notify",
-    notify_url: "http://196.188.123.12:43000/activity_confirmation",
+
+    notify_url: "6ju",
     trade_type: "InApp",
     appid: config.merchantAppId,
     merch_code: config.merchantCode,

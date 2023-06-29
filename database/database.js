@@ -8,7 +8,8 @@ const database = new Sequelize(
   process.env.DB_USERNAME,
   process.env.DB_PASSWORD,
   {
-    host: "127.0.0.1",
+    // host: "127.0.0.1",
+    host: "109.70.148.58",
     dialect: "mysql",
     timezone: "+03:00",
   }

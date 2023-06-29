@@ -15,6 +15,7 @@ export const view_activity_price = async (req, res) => {
 
 export const activity_confirmation = async (req, res) => {
   try {
+    console.log("HERE is Notification from Telebir Super App")
     const result = req.body;
     console.log(result);
     res.send(result);
