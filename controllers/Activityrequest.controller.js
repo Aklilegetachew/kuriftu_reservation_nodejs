@@ -146,7 +146,7 @@ export const acceptActivityRequest = async (req, res) => {
               title,
               amount
             );
-
+            console.log("PAYER ID ID", createOrderResult);
             let prepayId = createOrderResult.biz_content.prepay_id;
             // console.log("PAYER ID ID", createOrderResult);
             let rawRequest = createRawRequest(prepayId);
@@ -159,7 +159,6 @@ export const acceptActivityRequest = async (req, res) => {
               msg: "Error Telebirr Please try again",
             });
           }
-          
 
           ///////////// IDK ///////////////////////////////
         } catch (err) {
