@@ -15,7 +15,7 @@ function createRequestObject(title, amount) {
   };
   let biz = {
 
-    notify_url: "6ju",
+    notify_url: "https://tickets.kuriftucloud.com/activity_confirmation",
     trade_type: "InApp",
     appid: config.merchantAppId,
     merch_code: config.merchantCode,
