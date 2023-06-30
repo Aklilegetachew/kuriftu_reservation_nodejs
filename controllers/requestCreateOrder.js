@@ -24,10 +24,10 @@ function createRequestObject(title, amount) {
     total_amount: "" + amount + "",
     trans_currency: "ETB",
     timeout_express: "120m",
-    payee_identifier: "220311",
+    payee_identifier: config.merchantCode,
     payee_identifier_type: "04",
     payee_type: "5000",
-    redirect_url: "https://216.24.57.253/api/v1/notify",
+    redirect_url: "https://kurifturesorts.com/thankYou",
   };
   req.biz_content = biz;
   req.sign = tools.signRequestObject(req);
