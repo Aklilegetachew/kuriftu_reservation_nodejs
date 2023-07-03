@@ -1,0 +1,5 @@
+---
+deployment:
+ tasks:
+ - export DEPLOYPATH=/home/kuriftur/tickets.kurifturesorts.com
+ - /bin/cp -R * $DEPLOYPATH
