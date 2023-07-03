@@ -33,20 +33,22 @@ export const view_activity_price = async (req, res) => {
 };
 
 export const activity_confirmation = async (req, res) => {
-  const notifyResponse = {
-    notify_url: "http://197.156.68.29:5050/v1/api/order/mini/payment",
-    appid: "853694808089602",
-    notify_time: "1677831397396",
-    merch_code: "245431",
-    merch_order_id: "1677831332772_yzdlephu",
-    payment_order_id: "013011053311163600001002",
-    total_amount: "1.00",
-    trans_currency: "ETB",
-    trade_status: "Completed",
-    trans_end_time: "1677831397000",
-    sign: "Z4jTlQ7edeWzZRDku2Xl/vVkguOsL5mDR6Guf2/tCaogx2j4CE3+iWSjsR+9kAn+5oZUH3Ta4c4w8QFonG3iKWyL++YTnOfLnA1zR7RD8/BXFNGVqLp5lZO1ss8z22PtKZa4x4dWPtJ2djVIe1q6WempUy2WS7tamCFLyvTDq/GERmycoaXyuWSfMpa9B3m3oNOieHZCLY6DizZrhIKQbDfqeX0wgVre3mAFy+nUhVHlWbgajxSaixadx/IqQUhbXs+ADRbKzG+uXHcEWM4luYN1SZNo4u8UmDU/yEdhFKy8HmSARYx8+bT3Q7jTsURpudIBXolC/gbC+H/0bBc6ZlvH0aSM3qzal5eBxEMHgyM/WPQZCCVAfyPAkFeP4yrfZ/q2YxMos1GnDGONvOGYthnU/rCmGIhtzU+wWeMMlHakrkPoA0NT++NWoaFvDbtasXRWYtC0KLQ2FvkoZtXJAS5wlTKf4wZRdrjf5YUi+uxwwjGd1W5BZUSJtTXSBU1Y",
-    sign_type: "SHA256WithRSA",
-  };
+  // const notifyResponse = {
+  //   notify_url: "http://197.156.68.29:5050/v1/api/order/mini/payment",
+  //   appid: "853694808089602",
+  //   notify_time: "1677831397396",
+  //   merch_code: "245431",
+  //   merch_order_id: "1677831332772_yzdlephu",
+  //   payment_order_id: "013011053311163600001002",
+  //   total_amount: "1.00",
+  //   trans_currency: "ETB",
+  //   trade_status: "Completed",
+  //   trans_end_time: "1677831397000",
+  //   sign: "Z4jTlQ7edeWzZRDku2Xl/vVkguOsL5mDR6Guf2/tCaogx2j4CE3+iWSjsR+9kAn+5oZUH3Ta4c4w8QFonG3iKWyL++YTnOfLnA1zR7RD8/BXFNGVqLp5lZO1ss8z22PtKZa4x4dWPtJ2djVIe1q6WempUy2WS7tamCFLyvTDq/GERmycoaXyuWSfMpa9B3m3oNOieHZCLY6DizZrhIKQbDfqeX0wgVre3mAFy+nUhVHlWbgajxSaixadx/IqQUhbXs+ADRbKzG+uXHcEWM4luYN1SZNo4u8UmDU/yEdhFKy8HmSARYx8+bT3Q7jTsURpudIBXolC/gbC+H/0bBc6ZlvH0aSM3qzal5eBxEMHgyM/WPQZCCVAfyPAkFeP4yrfZ/q2YxMos1GnDGONvOGYthnU/rCmGIhtzU+wWeMMlHakrkPoA0NT++NWoaFvDbtasXRWYtC0KLQ2FvkoZtXJAS5wlTKf4wZRdrjf5YUi+uxwwjGd1W5BZUSJtTXSBU1Y",
+  //   sign_type: "SHA256WithRSA",
+  // };
+
+  const notifyResponse = req.body;
   // Format the response parameters
   const formattedResponse = {};
   for (let key in notifyResponse) {
