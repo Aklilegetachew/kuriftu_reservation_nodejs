@@ -9,6 +9,7 @@ module.exports = {
     merchantAppId: process.env.MERCHANTAPPID,
     merchantCode: process.env.MERCHANTCODE,
     privateKey: process.env.PRIVATEKEY,
+    publicKey: process.env.PUBLICKEY
   };
   
 

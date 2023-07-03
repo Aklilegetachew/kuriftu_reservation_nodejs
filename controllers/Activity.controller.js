@@ -1,7 +1,26 @@
 // import ActivityLocation from "../models/ActivityLocation.model";
 import ActivityPrice from "../models/ActivityPrice.model";
 import ActivityReserv from "../models/ActivityReservation.model";
+import superAppReservation from "../models/allActivityReservation.model";
 const Sequelize = require("sequelize");
+const config = require("../config/config");
+const crypto = require("crypto");
+
+// Function to verify the response body
+function verifyResponseBody(responseBody, publicKey, signature) {
+  const verifier = crypto.createVerify("SHA256");
+  verifier.update(responseBody);
+
+  const isVerified = verifier.verify(publicKey, signature, "base64");
+  return isVerified;
+}
+
+// Function to convert parameters to camelCase format
+function toCamelCase(parameter) {
+  return parameter.replace(/_([a-z])/g, function (g) {
+    return g[1].toUpperCase();
+  });
+}
 
 export const view_activity_price = async (req, res) => {
   try {
@@ -14,13 +33,67 @@ export const view_activity_price = async (req, res) => {
 };
 
 export const activity_confirmation = async (req, res) => {
+  const notifyResponse = {
+    notify_url: "http://197.156.68.29:5050/v1/api/order/mini/payment",
+    appid: "853694808089602",
+    notify_time: "1677831397396",
+    merch_code: "245431",
+    merch_order_id: "1677831332772_yzdlephu",
+    payment_order_id: "013011053311163600001002",
+    total_amount: "1.00",
+    trans_currency: "ETB",
+    trade_status: "Completed",
+    trans_end_time: "1677831397000",
+    sign: "Z4jTlQ7edeWzZRDku2Xl/vVkguOsL5mDR6Guf2/tCaogx2j4CE3+iWSjsR+9kAn+5oZUH3Ta4c4w8QFonG3iKWyL++YTnOfLnA1zR7RD8/BXFNGVqLp5lZO1ss8z22PtKZa4x4dWPtJ2djVIe1q6WempUy2WS7tamCFLyvTDq/GERmycoaXyuWSfMpa9B3m3oNOieHZCLY6DizZrhIKQbDfqeX0wgVre3mAFy+nUhVHlWbgajxSaixadx/IqQUhbXs+ADRbKzG+uXHcEWM4luYN1SZNo4u8UmDU/yEdhFKy8HmSARYx8+bT3Q7jTsURpudIBXolC/gbC+H/0bBc6ZlvH0aSM3qzal5eBxEMHgyM/WPQZCCVAfyPAkFeP4yrfZ/q2YxMos1GnDGONvOGYthnU/rCmGIhtzU+wWeMMlHakrkPoA0NT++NWoaFvDbtasXRWYtC0KLQ2FvkoZtXJAS5wlTKf4wZRdrjf5YUi+uxwwjGd1W5BZUSJtTXSBU1Y",
+    sign_type: "SHA256WithRSA",
+  };
+  // Format the response parameters
+  const formattedResponse = {};
+  for (let key in notifyResponse) {
+    if (key !== "sign" && key !== "sign_type") {
+      let formattedKey = key === "appid" ? key : toCamelCase(key);
+      formattedResponse[formattedKey] = notifyResponse[key];
+    }
+  }
+
+  // Sort the formatted response parameters alphabetically
+  const sortedResponse = {};
+  Object.keys(formattedResponse)
+    .sort()
+    .forEach((key) => {
+      sortedResponse[key] = formattedResponse[key];
+    });
+
+  const publicKey = config.publicKey;
+  const signature = notifyResponse.sign;
+  // Function to verify the response body
+  const responseBody = JSON.stringify(sortedResponse);
+  const isVerified = verifyResponseBody(responseBody, publicKey, signature);
+  console.log("Response body verification:", isVerified);
+
+  const orderIdParts = notifyResponse.merch_order_id.split("_");
+  const merchOrderId = orderIdParts[1];
+  console.log("HERE is Notification from Telebir Super App", merchOrderId);
   try {
-    console.log("HERE is Notification from Telebir Super App")
-    const result = req.body;
-    console.log(result);
-    res.send(result);
+    const updatedPayment = await superAppReservation.update(
+      { payment_status: "paid" }, // New values to update
+      {
+        where: {
+          confirmation_code: merchOrderId, // Condition for the update
+          payment_status: "unpaid", // Additional condition to ensure the status is unpaid before updating
+        },
+      }
+    );
+
+    if (updatedPayment[0] > 0) {
+      res.send(`Payment with trxId ${merchOrderId} updated successfully.`);
+    } else {
+      res.send(
+        `No payment found with trxId ${merchOrderId} or the payment status is already paid.`
+      );
+    }
   } catch (error) {
-    console.log(error);
+    console.error("Error updating payment:", error);
   }
 };
 

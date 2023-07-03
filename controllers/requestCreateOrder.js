@@ -3,10 +3,10 @@ const config = require("../config/config");
 import https from "http";
 import request from "request";
 
-function createMerchantOrderId() {
-  return new Date().getTime() + "";
+function createMerchantOrderId(codetrx) {
+  return new Date().getTime() + "_" + codetrx;
 }
-function createRequestObject(title, amount) {
+function createRequestObject(title, amount, trxID) {
   let req = {
     timestamp: tools.createTimeStamp(),
     nonce_str: tools.createNonceStr(),
@@ -14,12 +14,11 @@ function createRequestObject(title, amount) {
     version: "1.0",
   };
   let biz = {
-
-    notify_url: "https://tickets.kuriftucloud.com/activity_confirmation",
+    notify_url: "https://tickets.kurifturesorts.com/activity_confirmation",
     trade_type: "InApp",
     appid: config.merchantAppId,
     merch_code: config.merchantCode,
-    merch_order_id: createMerchantOrderId(),
+    merch_order_id: createMerchantOrderId(trxID),
     title: title,
     total_amount: "" + amount + "",
     trans_currency: "ETB",

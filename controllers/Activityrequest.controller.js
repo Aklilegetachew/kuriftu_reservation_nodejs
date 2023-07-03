@@ -144,7 +144,8 @@ export const acceptActivityRequest = async (req, res) => {
             let createOrderResult = await requestCreateOrder(
               fabricToken,
               title,
-              amount
+              amount,
+              confirmation_code
             );
             console.log("PAYER ID ID", createOrderResult);
             let prepayId = createOrderResult.biz_content.prepay_id;
