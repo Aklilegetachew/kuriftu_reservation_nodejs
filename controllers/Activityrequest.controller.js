@@ -7,6 +7,7 @@ const applyFabricToken = require("./applyFabricTokenService");
 const requestCreateOrder = require("./requestCreateOrder");
 const tools = require("../utils/tools");
 const config = require("../config/config");
+const logger = require("../utils/logger");
 
 const customPhone = Joi.extend(JoiPhoneNumber);
 const firstNameJoi = Joi.string().alphanum().min(3).max(30).required();
@@ -88,6 +89,8 @@ export const acceptActivityRequest = async (req, res) => {
         : null,
     };
     console.log(error);
+    logger.info(error);
+
     return res.status(400).json({
       msg: "Invalid Request",
       error,
@@ -137,6 +140,7 @@ export const acceptActivityRequest = async (req, res) => {
           ///////// super App thingy /////////////////////////
           try {
             console.log("SUPER APP");
+            logger.info("========= Super App ===========");
             let title = "Kuriftu " + req.body.reservationType;
             let amount = totalPrice;
             let applyFabricTokenResult = await applyFabricToken();
@@ -148,11 +152,14 @@ export const acceptActivityRequest = async (req, res) => {
               confirmation_code
             );
             console.log("PAYER ID ID", createOrderResult);
+            logger.info(createOrderResult);
+
             let prepayId = createOrderResult.biz_content.prepay_id;
             // console.log("PAYER ID ID", createOrderResult);
             let rawRequest = createRawRequest(prepayId);
             console.log("RAW_REQ_Ebsa: ", rawRequest);
-
+            logger.info("RAW_REQ");
+            logger.info(rawRequest);
             res.send(rawRequest);
           } catch (err) {
             console.log(err);

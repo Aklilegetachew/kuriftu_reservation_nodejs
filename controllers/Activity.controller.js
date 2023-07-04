@@ -5,6 +5,8 @@ import superAppReservation from "../models/allActivityReservation.model";
 const Sequelize = require("sequelize");
 const config = require("../config/config");
 const crypto = require("crypto");
+const logger = require("../utils/logger");
+
 
 // Function to verify the response body
 function verifyResponseBody(responseBody, publicKey, signature) {
@@ -47,6 +49,10 @@ export const activity_confirmation = async (req, res) => {
   //   sign: "Z4jTlQ7edeWzZRDku2Xl/vVkguOsL5mDR6Guf2/tCaogx2j4CE3+iWSjsR+9kAn+5oZUH3Ta4c4w8QFonG3iKWyL++YTnOfLnA1zR7RD8/BXFNGVqLp5lZO1ss8z22PtKZa4x4dWPtJ2djVIe1q6WempUy2WS7tamCFLyvTDq/GERmycoaXyuWSfMpa9B3m3oNOieHZCLY6DizZrhIKQbDfqeX0wgVre3mAFy+nUhVHlWbgajxSaixadx/IqQUhbXs+ADRbKzG+uXHcEWM4luYN1SZNo4u8UmDU/yEdhFKy8HmSARYx8+bT3Q7jTsURpudIBXolC/gbC+H/0bBc6ZlvH0aSM3qzal5eBxEMHgyM/WPQZCCVAfyPAkFeP4yrfZ/q2YxMos1GnDGONvOGYthnU/rCmGIhtzU+wWeMMlHakrkPoA0NT++NWoaFvDbtasXRWYtC0KLQ2FvkoZtXJAS5wlTKf4wZRdrjf5YUi+uxwwjGd1W5BZUSJtTXSBU1Y",
   //   sign_type: "SHA256WithRSA",
   // };
+
+  logger.info("========= Super App Confirmation ===========");
+
+
 
   const notifyResponse = req.body;
   // Format the response parameters

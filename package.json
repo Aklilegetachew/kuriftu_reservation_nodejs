@@ -37,7 +37,8 @@
     "pug": "^3.0.2",
     "qrcode": "^1.5.1",
     "request": "^2.88.2",
-    "sequelize": "^6.28.0"
+    "sequelize": "^6.28.0",
+    "winston": "^3.9.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.20"
