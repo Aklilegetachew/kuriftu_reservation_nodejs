@@ -8,7 +8,7 @@ function createMerchantOrderId(codx) {
   // logger.info("========= trxNum ===========");
   // logger.info(codetrx);
 
-  return new Date().getTime() + "_" + cod;
+  return new Date().getTime() + "_" + codx;
 }
 function createRequestObject(title, amount, trxID) {
   let req = {
