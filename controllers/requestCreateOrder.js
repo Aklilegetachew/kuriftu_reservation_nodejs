@@ -4,11 +4,11 @@ import https from "http";
 import request from "request";
 const logger = require("../utils/logger");
 
-function createMerchantOrderId(codetrx) {
-  logger.info("========= trxNum ===========");
-  logger.info(codetrx);
+function createMerchantOrderId() {
+  // logger.info("========= trxNum ===========");
+  // logger.info(codetrx);
 
-  return new Date().getTime() + "_" + codetrx;
+  return new Date().getTime() + "" ;
 }
 function createRequestObject(title, amount, trxID) {
   let req = {
@@ -22,7 +22,7 @@ function createRequestObject(title, amount, trxID) {
     trade_type: "InApp",
     appid: config.merchantAppId,
     merch_code: config.merchantCode,
-    merch_order_id: createMerchantOrderId("aaaaa"),
+    merch_order_id: createMerchantOrderId(),
     title: title,
     total_amount: "" + amount + "",
     trans_currency: "ETB",
