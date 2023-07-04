@@ -79,8 +79,8 @@ export const activity_confirmation = async (req, res) => {
   const isVerified = verifyResponseBody(responseBody, publicKey, signature);
   console.log("Response body verification:", isVerified);
 
-  const orderIdParts = notifyResponse.merch_order_id.split("_");
-  const merchOrderId = orderIdParts[1];
+  // const orderIdParts = notifyResponse.merch_order_id.split("_");
+  const merchOrderId = notifyResponse.merch_order_id
   console.log("HERE is Notification from Telebir Super App", merchOrderId);
   try {
     const updatedPayment = await superAppReservation.update(
