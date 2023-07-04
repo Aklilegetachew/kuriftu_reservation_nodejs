@@ -6,7 +6,7 @@ const logger = require("../utils/logger");
 
 function createMerchantOrderId(codx) {
   logger.info("========= trxNum 1 ===========");
-  logger.info(codetrx);
+  logger.info(codx);
 
   return new Date().getTime() + "_" + codx;
 }
@@ -32,7 +32,7 @@ function createRequestObject(title, amount, trxID) {
     payee_type: "5000",
     redirect_url: "https://kurifturesorts.com/thankYou",
   };
- 
+
   req.biz_content = biz;
   req.sign = tools.signRequestObject(req);
   req.sign_type = "SHA256WithRSA";
