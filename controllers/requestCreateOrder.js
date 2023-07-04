@@ -2,6 +2,7 @@ const tools = require("../utils/tools");
 const config = require("../config/config");
 import https from "http";
 import request from "request";
+const logger = require("../utils/logger");
 
 function createMerchantOrderId(codetrx) {
   logger.info("========= trxNum ===========");
