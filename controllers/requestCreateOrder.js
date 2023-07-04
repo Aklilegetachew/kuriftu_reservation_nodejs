@@ -8,7 +8,7 @@ function createMerchantOrderId(codx) {
   logger.info("========= trxNum 1 ===========");
   logger.info(codx);
 
-  return new Date().getTime() + "_" + codx;
+  return new Date().getTime() + "$" + codx;
 }
 function createRequestObject(title, amount, trxID) {
   let req = {
@@ -22,7 +22,7 @@ function createRequestObject(title, amount, trxID) {
     trade_type: "InApp",
     appid: config.merchantAppId,
     merch_code: config.merchantCode,
-    merch_order_id: createMerchantOrderId(trxID),
+    merch_order_id: trxID,
     title: title,
     total_amount: "" + amount + "",
     trans_currency: "ETB",

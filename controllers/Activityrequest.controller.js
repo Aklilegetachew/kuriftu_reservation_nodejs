@@ -108,7 +108,7 @@ export const acceptActivityRequest = async (req, res) => {
         const NumberOfGuest = req.body.quantity;
         var totalPrice = activityPrice * NumberOfGuest;
         var confirmation_code = generateUniqueId({
-          length: 8,
+          length: 10,
           useLetters: true,
         });
 
