@@ -5,10 +5,10 @@ import request from "request";
 const logger = require("../utils/logger");
 
 function createMerchantOrderId(codx) {
-  // logger.info("========= trxNum ===========");
-  // logger.info(codetrx);
+  logger.info("========= trxNum 1 ===========");
+  logger.info(codetrx);
 
-  return new Date().getTime() + "";
+  return new Date().getTime() + "_" + codx;
 }
 function createRequestObject(title, amount, trxID) {
   let req = {
@@ -22,7 +22,7 @@ function createRequestObject(title, amount, trxID) {
     trade_type: "InApp",
     appid: config.merchantAppId,
     merch_code: config.merchantCode,
-    merch_order_id: createMerchantOrderId(),
+    merch_order_id: createMerchantOrderId(trxID),
     title: title,
     total_amount: "" + amount + "",
     trans_currency: "ETB",
@@ -32,8 +32,7 @@ function createRequestObject(title, amount, trxID) {
     payee_type: "5000",
     redirect_url: "https://kurifturesorts.com/thankYou",
   };
-  logger.info("========= trxNum ===========");
-  logger.info(trxID);
+ 
   req.biz_content = biz;
   req.sign = tools.signRequestObject(req);
   req.sign_type = "SHA256WithRSA";
@@ -41,9 +40,9 @@ function createRequestObject(title, amount, trxID) {
   return req;
 }
 
-function requestCreateOrder(fabricToken, title, amount) {
+function requestCreateOrder(fabricToken, title, amount, trxNo) {
   return new Promise((resolve) => {
-    let reqObject = createRequestObject(title, amount);
+    let reqObject = createRequestObject(title, amount, trxNo);
 
     console.log("Request Body", reqObject);
 
