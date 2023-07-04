@@ -4,6 +4,9 @@ import https from "http";
 import request from "request";
 
 function createMerchantOrderId(codetrx) {
+  logger.info("========= trxNum ===========");
+  logger.info(codetrx);
+
   return new Date().getTime() + "_" + codetrx;
 }
 function createRequestObject(title, amount, trxID) {
