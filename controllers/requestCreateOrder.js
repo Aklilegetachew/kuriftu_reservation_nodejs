@@ -22,7 +22,7 @@ function createRequestObject(title, amount, trxID) {
     trade_type: "InApp",
     appid: config.merchantAppId,
     merch_code: config.merchantCode,
-    merch_order_id: createMerchantOrderId(trxID),
+    merch_order_id: createMerchantOrderId("aaaaa"),
     title: title,
     total_amount: "" + amount + "",
     trans_currency: "ETB",
