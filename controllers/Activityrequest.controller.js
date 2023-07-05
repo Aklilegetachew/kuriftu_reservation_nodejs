@@ -158,7 +158,7 @@ export const acceptActivityRequest = async (req, res) => {
             // console.log("PAYER ID ID", createOrderResult);
             let rawRequest = createRawRequest(prepayId);
             console.log("RAW_REQ_Ebsa: ", rawRequest);
-            logger.info("RAW_REQ");
+            logger.info("createRawRequest");
             logger.info(rawRequest);
             res.send(rawRequest);
           } catch (err) {

@@ -7,7 +7,6 @@ const config = require("../config/config");
 const crypto = require("crypto");
 const logger = require("../utils/logger");
 
-
 // Function to verify the response body
 function verifyResponseBody(responseBody, publicKey, signature) {
   const verifier = crypto.createVerify("SHA256");
@@ -52,8 +51,6 @@ export const activity_confirmation = async (req, res) => {
 
   logger.info("========= Super App Confirmation ===========");
 
-
-
   const notifyResponse = req.body;
   // Format the response parameters
   const formattedResponse = {};
@@ -78,9 +75,11 @@ export const activity_confirmation = async (req, res) => {
   const responseBody = JSON.stringify(sortedResponse);
   const isVerified = verifyResponseBody(responseBody, publicKey, signature);
   console.log("Response body verification:", isVerified);
+  logger.info("Response body verification");
+  logger.info(isVerified);
 
   // const orderIdParts = notifyResponse.merch_order_id.split("_");
-  const merchOrderId = notifyResponse.merch_order_id
+  const merchOrderId = notifyResponse.merch_order_id;
   console.log("HERE is Notification from Telebir Super App", merchOrderId);
   try {
     const updatedPayment = await superAppReservation.update(
@@ -88,7 +87,7 @@ export const activity_confirmation = async (req, res) => {
       {
         where: {
           confirmation_code: merchOrderId, // Condition for the update
-          payment_status: "unpaid", // Additional condition to ensure the status is unpaid before updating
+          payment_status: "Unpaid", // Additional condition to ensure the status is unpaid before updating
         },
       }
     );
