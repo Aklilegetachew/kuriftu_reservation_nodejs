@@ -34,7 +34,7 @@ export const view_activity_price = async (req, res) => {
 };
 
 export const activity_confirmation = async (req, res) => {
-  // const notifyResponse = {
+  // const testnotifyResponse = {
   //   notify_url: "http://197.156.68.29:5050/v1/api/order/mini/payment",
   //   appid: "853694808089602",
   //   notify_time: "1677831397396",
@@ -75,7 +75,7 @@ export const activity_confirmation = async (req, res) => {
   const responseBody = JSON.stringify(sortedResponse);
   const isVerified = verifyResponseBody(responseBody, publicKey, signature);
   console.log("Response body verification:", isVerified);
-  logger.info("Response body verification");
+
   logger.info(isVerified);
 
   // const orderIdParts = notifyResponse.merch_order_id.split("_");
@@ -93,14 +93,22 @@ export const activity_confirmation = async (req, res) => {
     );
 
     if (updatedPayment[0] > 0) {
-      res.send(`Payment with trxId ${merchOrderId} updated successfully.`);
+      res.send({
+        code: 0,
+        msg: "success",
+      });
     } else {
       res.send(
+        `No payment found with trxId ${merchOrderId} or the payment status is already paid.`
+      );
+
+      logger.info(
         `No payment found with trxId ${merchOrderId} or the payment status is already paid.`
       );
     }
   } catch (error) {
     console.error("Error updating payment:", error);
+    logger.info(`Error updating payment: ${error}`);
   }
 };
 
