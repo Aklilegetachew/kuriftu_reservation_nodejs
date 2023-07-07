@@ -18,7 +18,7 @@ function createRequestObject(title, amount, trxID) {
     version: "1.0",
   };
   let biz = {
-    notify_url: "https://tickets.kurifturesorts.com/activity_confirmation",
+    notify_url: "https://www.tickets.kurifturesorts.com/activity_confirmation",
     trade_type: "InApp",
     appid: config.merchantAppId,
     merch_code: config.merchantCode,
