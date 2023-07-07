@@ -80,10 +80,11 @@ export const activity_confirmation = async (req, res) => {
 
   // const orderIdParts = notifyResponse.merch_order_id.split("_");
   const merchOrderId = notifyResponse.merch_order_id;
+  const transctionID = notifyResponse.transId;
   console.log("HERE is Notification from Telebir Super App", merchOrderId);
   try {
     const updatedPayment = await superAppReservation.update(
-      { payment_status: "paid" }, // New values to update
+      { payment_status: "paid", tx_ref: transctionID }, // New values to update
       {
         where: {
           confirmation_code: merchOrderId, // Condition for the update
