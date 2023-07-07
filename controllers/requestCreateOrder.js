@@ -30,7 +30,7 @@ function createRequestObject(title, amount, trxID) {
     payee_identifier: config.merchantCode,
     payee_identifier_type: "04",
     payee_type: "5000",
-    redirect_url: "https://kurifturesorts.com/thankYou",
+    redirect_url: "https://kurifturesorts.com/Thankyou2",
   };
 
   req.biz_content = biz;
