@@ -10,8 +10,12 @@ const config = require("../config/config");
 const logger = require("../utils/logger");
 
 const customPhone = Joi.extend(JoiPhoneNumber);
-const firstNameJoi = Joi.string().alphanum().min(3).max(30).required();
-const lastNameJoi = Joi.string().alphanum().min(3).max(30).required();
+const firstNameJoi = Joi.string()
+  .regex(/^[a-zA-Z\s]{3,30}$/)
+  .required();
+const lastNameJoi = Joi.string()
+  .regex(/^[a-zA-Z\s]{3,30}$/)
+  .required();
 const phoneNumberJoi = customPhone.string().phoneNumber().required();
 const emailJoi = Joi.string().email({ minDomainSegments: 2 }).required();
 const currencyJoi = Joi.string().required();
