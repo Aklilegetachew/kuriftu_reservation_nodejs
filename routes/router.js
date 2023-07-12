@@ -6,8 +6,8 @@ import {
   view_activity_reservation,
   view_unpaid_activity,
   view_redemed_reservation,
-  view_redemed_location, 
-  activity_confirmation
+  view_redemed_location,
+  activity_confirmation,
 } from "../controllers/Activity.controller";
 import { auth } from "../controllers/authentication.controller";
 import { verifyChapa } from "../controllers/chappa.controller";
@@ -16,6 +16,7 @@ import { qrimage } from "../controllers/qrimages.controllers";
 import { acceptRequest } from "../controllers/request.controller";
 import { acceptActivityRequest } from "../controllers/Activityrequest.controller";
 import { test } from "../controllers/test.controller";
+import cors from "cors";
 import {
   checkGuest,
   verify,
@@ -42,7 +43,6 @@ router.post("/view_activity_price_ID", view_activity_ById);
 // verify telebir super app confirmation
 
 router.post("/activity_confirmation", activity_confirmation);
-
 
 router.post("/add_activity_price", add_activity_price);
 router.post("/view_activity_reservation", view_activity_reservation);

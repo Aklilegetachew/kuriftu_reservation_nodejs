@@ -94,10 +94,16 @@ export const acceptActivityRequest = async (req, res) => {
     };
     console.log(error);
     logger.info(error);
+    const fieldsWithValues = [];
 
-    return res.status(400).json({
-      msg: "Invalid Request",
-      error,
+    for (const key in error) {
+      if (error[key] !== null) {
+        fieldsWithValues.push(key);
+      }
+    }
+    return res.status(500).send({
+      msg: "Invalid Input",
+      why: fieldsWithValues,
     });
   } else {
     try {
