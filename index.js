@@ -19,62 +19,61 @@ const app = express();
 
 app.use(cors());
 
-// app.use(cors(corsOptionsDelegate));
+app.options("*", cors());
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-const allowedIPs = [
-  "109.70.148.58",
-  "10.175.125.15",
-  "10.175.125.16",
-  "10.175.125.18",
-  "10.175.125.17",
-  "10.175.120.0/25", // IP block 1
-  "10.175.125.0/25",
-  "127.0.0.1", // IP block 2
-];
+// const allowedIPs = [
+//   "109.70.148.58",
+//   "10.175.125.15",
+//   "10.175.125.16",
+//   "10.175.125.18",
+//   "10.175.125.17",
+//   "10.175.120.0/25", // IP block 1
+//   "10.175.125.0/25",
+//   "127.0.0.1", // IP block 2
+// ];
 
 // Custom middleware to block requests from all IPs except allowed IPs
-const ipFilterMiddleware = (req, res, next) => {
-  const clientIP = req.ip;
-  console.log(clientIP);
-  if (isIPAllowed(clientIP)) {
-    // IP is allowed, proceed with the request
-    next();
-  } else {
-    // IP is not allowed, block the request
-    res.status(403).send("Access Denied");
-  }
-};
+// const ipFilterMiddleware = (req, res, next) => {
+//   const clientIP = req.ip;
+//   console.log(clientIP);
+//   if (isIPAllowed(clientIP)) {
+//     // IP is allowed, proceed with the request
+//     next();
+//   } else {
+//     // IP is not allowed, block the request
+//     res.status(403).send("Access Denied");
+//   }
+// };
 
-function isIPAllowed(ip) {
-  if (allowedIPs.includes(ip)) {
-    return true;
-  }
+// function isIPAllowed(ip) {
+//   if (allowedIPs.includes(ip)) {
+//     return true;
+//   }
 
-  if (isLoopback(ip)) {
-    return allowedIPs.includes("127.0.0.1") || allowedIPs.includes("::1");
-  }
+//   if (isLoopback(ip)) {
+//     return allowedIPs.includes("127.0.0.1") || allowedIPs.includes("::1");
+//   }
 
-  for (const allowedIP of allowedIPs) {
-    if (isIPInRange(ip, allowedIP)) {
-      return true;
-    }
-  }
+//   for (const allowedIP of allowedIPs) {
+//     if (isIPInRange(ip, allowedIP)) {
+//       return true;
+//     }
+//   }
 
-  return false;
-}
+//   return false;
+// }
 
-function isIPInRange(ip, range) {
-  if (isV4Format(range)) {
-    return ip === range;
-  }
+// function isIPInRange(ip, range) {
+//   if (isV4Format(range)) {
+//     return ip === range;
+//   }
 
-  const subnet = cidrSubnet(range);
-  return subnet.contains(ip);
-}
+//   const subnet = cidrSubnet(range);
+//   return subnet.contains(ip);
+// }
 
-app.use(ipFilterMiddleware);
 app.use(router);
 
 // app.use(router);
