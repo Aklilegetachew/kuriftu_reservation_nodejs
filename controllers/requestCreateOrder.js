@@ -11,44 +11,48 @@ function createMerchantOrderId(codx) {
   return new Date().getTime() + "$" + codx;
 }
 function createRequestObject(title, amount, trxID, location) {
-
+  let fabricAppId;
+  let appSecret;
+  let merchantAppId;
+  let merchantCode;
+  let privateKey;
+  let publicKey;
   if (location == "waterpark") {
-    const fabricAppId = config.wa_fabricAppId;
-    const appSecret = config.wa_appSecret;
-    const merchantAppId = config.wa_merchantAppId;
-    const merchantCode = config.wa_merchantCode;
-    const privateKey = config.wa_privateKey;
-    const publicKey = config.wa_publicKey;
+    fabricAppId = config.wa_fabricAppId;
+    appSecret = config.wa_appSecret;
+    merchantAppId = config.wa_merchantAppId;
+    merchantCode = config.wa_merchantCode;
+    privateKey = config.wa_privateKey;
+    publicKey = config.wa_publicKey;
   } else if (location == "entoto") {
-    const fabricAppId = config.en_fabricAppId;
-    const appSecret = config.en_appSecret;
-    const merchantAppId = config.en_merchantAppId;
-    const merchantCode = config.en_merchantCode;
-    const privateKey = config.en_privateKey;
-    const publicKey = config.en_publicKey;
+    fabricAppId = config.en_fabricAppId;
+    appSecret = config.en_appSecret;
+    merchantAppId = config.en_merchantAppId;
+    merchantCode = config.en_merchantCode;
+    privateKey = config.en_privateKey;
+    publicKey = config.en_publicKey;
   } else if (location == "bishoftu") {
-    const fabricAppId = config.bi_fabricAppId;
-    const appSecret = config.bi_appSecret;
-    const merchantAppId = config.bi_merchantAppId;
-    const merchantCode = config.bi_merchantCode;
-    const privateKey = config.bi_privateKey;
-    const publicKey = config.bi_publicKey;
+    fabricAppId = config.bi_fabricAppId;
+    appSecret = config.bi_appSecret;
+    merchantAppId = config.bi_merchantAppId;
+    merchantCode = config.bi_merchantCode;
+    privateKey = config.bi_privateKey;
+    publicKey = config.bi_publicKey;
   } else if (location == "boston") {
-    const fabricAppId = config.bo_fabricAppId;
-    const appSecret = config.bo_appSecret;
-    const merchantAppId = config.bo_merchantAppId;
-    const merchantCode = config.bo_merchantCode;
-    const privateKey = config.bo_privateKey;
-    const publicKey = config.bo_publicKey;
+    fabricAppId = config.bo_fabricAppId;
+    appSecret = config.bo_appSecret;
+    merchantAppId = config.bo_merchantAppId;
+    merchantCode = config.bo_merchantCode;
+    privateKey = config.bo_privateKey;
+    publicKey = config.bo_publicKey;
   } else {
-    const fabricAppId = config.old_fabricAppId;
-    const appSecret = config.old_appSecret;
-    const merchantAppId = config.old_merchantAppId;
-    const merchantCode = config.old_merchantCode;
-    const privateKey = config.old_privateKey;
-    const publicKey = config.old_publicKey;
+    fabricAppId = config.old_fabricAppId;
+    appSecret = config.old_appSecret;
+    merchantAppId = config.old_merchantAppId;
+    merchantCode = config.old_merchantCode;
+    privateKey = config.old_privateKey;
+    publicKey = config.old_publicKey;
   }
-
   let req = {
     timestamp: tools.createTimeStamp(),
     nonce_str: tools.createNonceStr(),
@@ -81,41 +85,47 @@ function createRequestObject(title, amount, trxID, location) {
 function requestCreateOrder(fabricToken, title, amount, trxNo, location) {
   return new Promise((resolve) => {
     let reqObject = createRequestObject(title, amount, trxNo, location);
+    let fabricAppId;
+    let appSecret;
+    let merchantAppId;
+    let merchantCode;
+    let privateKey;
+    let publicKey;
     if (location == "waterpark") {
-      const fabricAppId = config.wa_fabricAppId;
-      const appSecret = config.wa_appSecret;
-      const merchantAppId = config.wa_merchantAppId;
-      const merchantCode = config.wa_merchantCode;
-      const privateKey = config.wa_privateKey;
-      const publicKey = config.wa_publicKey;
+      fabricAppId = config.wa_fabricAppId;
+      appSecret = config.wa_appSecret;
+      merchantAppId = config.wa_merchantAppId;
+      merchantCode = config.wa_merchantCode;
+      privateKey = config.wa_privateKey;
+      publicKey = config.wa_publicKey;
     } else if (location == "entoto") {
-      const fabricAppId = config.en_fabricAppId;
-      const appSecret = config.en_appSecret;
-      const merchantAppId = config.en_merchantAppId;
-      const merchantCode = config.en_merchantCode;
-      const privateKey = config.en_privateKey;
-      const publicKey = config.en_publicKey;
+      fabricAppId = config.en_fabricAppId;
+      appSecret = config.en_appSecret;
+      merchantAppId = config.en_merchantAppId;
+      merchantCode = config.en_merchantCode;
+      privateKey = config.en_privateKey;
+      publicKey = config.en_publicKey;
     } else if (location == "bishoftu") {
-      const fabricAppId = config.bi_fabricAppId;
-      const appSecret = config.bi_appSecret;
-      const merchantAppId = config.bi_merchantAppId;
-      const merchantCode = config.bi_merchantCode;
-      const privateKey = config.bi_privateKey;
-      const publicKey = config.bi_publicKey;
+      fabricAppId = config.bi_fabricAppId;
+      appSecret = config.bi_appSecret;
+      merchantAppId = config.bi_merchantAppId;
+      merchantCode = config.bi_merchantCode;
+      privateKey = config.bi_privateKey;
+      publicKey = config.bi_publicKey;
     } else if (location == "boston") {
-      const fabricAppId = config.bo_fabricAppId;
-      const appSecret = config.bo_appSecret;
-      const merchantAppId = config.bo_merchantAppId;
-      const merchantCode = config.bo_merchantCode;
-      const privateKey = config.bo_privateKey;
-      const publicKey = config.bo_publicKey;
+      fabricAppId = config.bo_fabricAppId;
+      appSecret = config.bo_appSecret;
+      merchantAppId = config.bo_merchantAppId;
+      merchantCode = config.bo_merchantCode;
+      privateKey = config.bo_privateKey;
+      publicKey = config.bo_publicKey;
     } else {
-      const fabricAppId = config.old_fabricAppId;
-      const appSecret = config.old_appSecret;
-      const merchantAppId = config.old_merchantAppId;
-      const merchantCode = config.old_merchantCode;
-      const privateKey = config.old_privateKey;
-      const publicKey = config.old_publicKey;
+      fabricAppId = config.old_fabricAppId;
+      appSecret = config.old_appSecret;
+      merchantAppId = config.old_merchantAppId;
+      merchantCode = config.old_merchantCode;
+      privateKey = config.old_privateKey;
+      publicKey = config.old_publicKey;
     }
     console.log("Request Body", reqObject);
 
