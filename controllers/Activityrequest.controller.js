@@ -186,12 +186,13 @@ export const acceptActivityRequest = async (req, res) => {
           ///////// super App thingy /////////////////////////
           try {
             console.log("SUPER APP");
-            logger.info("========= Super App ===========");
+            logger.info("111========= Super App ===========111");
             let title = "Kuriftu " + req.body.reservationType;
             let amount = totalPrice;
             let applyFabricTokenResult = await applyFabricToken(
               req.body.location
             );
+            logger.info(applyFabricTokenResult);
             let fabricToken = applyFabricTokenResult.token;
             let createOrderResult = await requestCreateOrder(
               fabricToken,
