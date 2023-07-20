@@ -5,6 +5,7 @@ const logger = require("../utils/logger");
 
 function applyFabricToken(location) {
   logger.info(location);
+  var fabricAppId = "aaaddd";
   if (location == "waterpark") {
     const fabricAppId = config.wa_fabricAppId;
     const appSecret = config.wa_appSecret;
