@@ -1,8 +1,10 @@
 import https from "http";
 const config = require("../config/config");
 import request from "request";
+const logger = require("../utils/logger");
 
 function applyFabricToken(location) {
+  logger.info(location);
   if (location == "waterpark") {
     const fabricAppId = config.wa_fabricAppId;
     const appSecret = config.wa_appSecret;
@@ -55,6 +57,7 @@ function applyFabricToken(location) {
       }),
     };
     console.log(options);
+    logger.info(options);
     try {
       request(options, function (error, response) {
         // console.log("***********");
