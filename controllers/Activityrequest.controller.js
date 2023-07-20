@@ -213,6 +213,7 @@ export const acceptActivityRequest = async (req, res) => {
             res.send(rawRequest);
           } catch (err) {
             console.log(err);
+            logger.info(err);
             res.status(400).json({
               msg: "Error Telebirr Please try again",
             });
