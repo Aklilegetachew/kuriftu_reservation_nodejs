@@ -41,6 +41,7 @@ function applyFabricToken(location) {
     const privateKey = config.old_privateKey;
     const publicKey = config.old_publicKey;
   }
+  logger.info("Fabric and appSeacrt");
   logger.info(fabricAppId);
   logger.info(appSecret);
   return new Promise((resolve, reject) => {
