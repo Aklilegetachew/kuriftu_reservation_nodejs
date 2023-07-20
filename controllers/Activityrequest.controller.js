@@ -34,10 +34,46 @@ const dateFunction = (ts) => {
   return final;
 };
 
-function createRawRequest(prepayId) {
+function createRawRequest(prepayId, location) {
+  if (location == "waterpark") {
+    const fabricAppId = config.wa_fabricAppId;
+    const appSecret = config.wa_appSecret;
+    const merchantAppId = config.wa_merchantAppId;
+    const merchantCode = config.wa_merchantCode;
+    const privateKey = config.wa_privateKey;
+    const publicKey = config.wa_publicKey;
+  } else if (location == "entoto") {
+    const fabricAppId = config.en_fabricAppId;
+    const appSecret = config.en_appSecret;
+    const merchantAppId = config.en_merchantAppId;
+    const merchantCode = config.en_merchantCode;
+    const privateKey = config.en_privateKey;
+    const publicKey = config.en_publicKey;
+  } else if (location == "bishoftu") {
+    const fabricAppId = config.bi_fabricAppId;
+    const appSecret = config.bi_appSecret;
+    const merchantAppId = config.bi_merchantAppId;
+    const merchantCode = config.bi_merchantCode;
+    const privateKey = config.bi_privateKey;
+    const publicKey = config.bi_publicKey;
+  } else if (location == "boston") {
+    const fabricAppId = config.bo_fabricAppId;
+    const appSecret = config.bo_appSecret;
+    const merchantAppId = config.bo_merchantAppId;
+    const merchantCode = config.bo_merchantCode;
+    const privateKey = config.bo_privateKey;
+    const publicKey = config.bo_publicKey;
+  } else {
+    const fabricAppId = config.old_fabricAppId;
+    const appSecret = config.old_appSecret;
+    const merchantAppId = config.old_merchantAppId;
+    const merchantCode = config.old_merchantCode;
+    const privateKey = config.old_privateKey;
+    const publicKey = config.old_publicKey;
+  }
   let map = {
-    appid: config.merchantAppId,
-    merch_code: config.merchantCode,
+    appid: merchantAppId,
+    merch_code: merchantCode,
     nonce_str: tools.createNonceStr(),
     prepay_id: prepayId,
     timestamp: tools.createTimeStamp(),
@@ -153,20 +189,23 @@ export const acceptActivityRequest = async (req, res) => {
             logger.info("========= Super App ===========");
             let title = "Kuriftu " + req.body.reservationType;
             let amount = totalPrice;
-            let applyFabricTokenResult = await applyFabricToken();
+            let applyFabricTokenResult = await applyFabricToken(
+              req.body.location
+            );
             let fabricToken = applyFabricTokenResult.token;
             let createOrderResult = await requestCreateOrder(
               fabricToken,
               title,
               amount,
-              confirmation_code
+              confirmation_code,
+              req.body.location
             );
             console.log("PAYER ID ID", createOrderResult);
             logger.info(createOrderResult);
 
             let prepayId = createOrderResult.biz_content.prepay_id;
             // console.log("PAYER ID ID", createOrderResult);
-            let rawRequest = createRawRequest(prepayId);
+            let rawRequest = createRawRequest(prepayId, req.body.location);
             console.log("RAW_REQ_Ebsa: ", rawRequest);
             logger.info("createRawRequest");
             logger.info(rawRequest);
