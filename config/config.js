@@ -8,8 +8,8 @@ module.exports = {
   old_appSecret: process.env.APPSECRET,
   old_merchantAppId: process.env.MERCHANTAPPID,
   old_merchantCode: process.env.MERCHANTCODE,
-  old_privateKey: process.env.PRIVATEKEY,
-  old_publicKey: process.env.PUBLICKEY,
+  privateKey: process.env.PRIVATEKEY,
+  publicKey: process.env.PUBLICKEY,
 
   // entoto credentials
   en_fabricAppId: process.env.EN_FABRICAPPID,
