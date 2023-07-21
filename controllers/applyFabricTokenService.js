@@ -5,12 +5,12 @@ const logger = require("../utils/logger");
 
 function applyFabricToken(location) {
   logger.info(location);
-  let fabricAppId;
-  let appSecret;
-  let merchantAppId;
-  let merchantCode;
-  let privateKey;
-  let publicKey;
+  var fabricAppId;
+  var appSecret;
+  var merchantAppId;
+  var merchantCode;
+  var privateKey;
+  var publicKey;
   if (location == "waterpark") {
      fabricAppId = config.wa_fabricAppId;
      appSecret = config.wa_appSecret;
@@ -73,12 +73,16 @@ function applyFabricToken(location) {
         // console.log("BODY", response);
         // console.log(typeof response.body);
         let result = JSON.parse(response.body);
+        logger.info("result");
+        logger.info(result);
         // console.log(result);
         // console.log("*****************");
         resolve(result);
       });
     } catch (err) {
       console.log("==========================================================");
+      logger.info("err");
+      logger.info(err);
     }
   });
 }
