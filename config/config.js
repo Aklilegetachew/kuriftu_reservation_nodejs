@@ -28,18 +28,23 @@ module.exports = {
   bi_publicKey: process.env.PUBLICKEY,
 
   // Boston credentials
-  bo_fabricAppId: process.env.BO_FABRICAPPID,
-  bo_appSecret: process.env.BO_APPSECRET,
   bo_merchantAppId: process.env.BO_MERCHANTAPPID,
+  bo_fabricAppSecreat: process.env.BO_FEBRICAPPSECRET,
+  bo_fabricAppId: process.env.BO_FEBRICAPPKEY,
   bo_merchantCode: process.env.BO_MERCHANTCODE,
   bo_privateKey: process.env.PRIVATEKEY,
   bo_publicKey: process.env.PUBLICKEY,
 
   // WATER PARK credentials
-  wa_fabricAppId: process.env.WA_FABRICAPPID,
-  wa_appSecret: process.env.WA_APPSECRET,
   wa_merchantAppId: process.env.WA_MERCHANTAPPID,
+  wa_fabricAppSecreat: process.env.WA_FEBRICAPPSECRET,
+  wa_fabricAppId: process.env.WA_FEBRICAPPKEY,
   wa_merchantCode: process.env.WA_MERCHANTCODE,
   wa_privateKey: process.env.PRIVATEKEY,
   wa_publicKey: process.env.PUBLICKEY,
 };
+
+
+// fabric app id => merchant appId
+// merchantAppId => FabricAppId 
+// app secreat => WA_FEBRICAPPSECRET

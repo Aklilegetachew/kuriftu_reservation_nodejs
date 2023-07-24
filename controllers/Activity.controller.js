@@ -26,12 +26,15 @@ function toCamelCase(parameter) {
 export const view_activity_price = async (req, res) => {
   try {
     const result = await ActivityPrice.findAll();
-    console.log(result);
     res.json(result);
   } catch (error) {
-    console.log(error);
+    res.send(500);
   }
 };
+
+
+
+
 
 export const activity_confirmation = async (req, res) => {
   // const testnotifyResponse = {

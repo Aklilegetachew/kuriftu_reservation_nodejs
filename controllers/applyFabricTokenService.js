@@ -12,9 +12,9 @@ function applyFabricToken(location) {
   var privateKey;
   var publicKey;
   if (location == "waterpark") {
+    merchantAppId = config.wa_merchantAppId;
+     appSecret = config.wa_fabricAppSecreat;
      fabricAppId = config.wa_fabricAppId;
-     appSecret = config.wa_appSecret;
-     merchantAppId = config.wa_merchantAppId;
      merchantCode = config.wa_merchantCode;
      privateKey = config.wa_privateKey;
      publicKey = config.wa_publicKey;
@@ -33,12 +33,12 @@ function applyFabricToken(location) {
      privateKey = config.bi_privateKey;
      publicKey = config.bi_publicKey;
   } else if (location == "boston") {
-     fabricAppId = config.bo_fabricAppId;
-     appSecret = config.bo_appSecret;
-     merchantAppId = config.bo_merchantAppId;
-     merchantCode = config.bo_merchantCode;
-     privateKey = config.bo_privateKey;
-     publicKey = config.bo_publicKey;
+    merchantAppId = config.bo_merchantAppId;
+    appSecret = config.bo_fabricAppSecreat;
+    fabricAppId = config.bo_fabricAppId;
+    merchantCode = config.bo_merchantCode;
+    privateKey = config.bo_privateKey;
+    publicKey = config.bo_publicKey;
   } else {
      fabricAppId = config.old_fabricAppId;
      appSecret = config.old_appSecret;
