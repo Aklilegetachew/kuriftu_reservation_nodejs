@@ -4,25 +4,23 @@ dotenv.config();
 
 module.exports = {
   baseUrl: process.env.BASEURL,
-  old_fabricAppId: process.env.FABRICAPPID,
-  old_appSecret: process.env.APPSECRET,
-  old_merchantAppId: process.env.MERCHANTAPPID,
-  old_merchantCode: process.env.MERCHANTCODE,
   privateKey: process.env.PRIVATEKEY,
   publicKey: process.env.PUBLICKEY,
+  fabricAppKey: process.env.FEBRICAPPKEY,
+  fabricAppSecreat: process.env.FEBRICAPPSECRET,
 
   // entoto credentials
-  en_fabricAppId: process.env.EN_FABRICAPPID,
-  en_appSecret: process.env.EN_APPSECRET,
   en_merchantAppId: process.env.EN_MERCHANTAPPID,
+  en_fabricAppSecreat: process.env.EN_FEBRICAPPSECRET,
+  en_fabricAppId: process.env.EN_FEBRICAPPKEY,
   en_merchantCode: process.env.EN_MERCHANTCODE,
   en_privateKey: process.env.PRIVATEKEY,
   en_publicKey: process.env.PUBLICKEY,
 
   // bishoftu credentials
-  bi_fabricAppId: process.env.BI_FABRICAPPID,
-  bi_appSecret: process.env.BI_APPSECRET,
   bi_merchantAppId: process.env.BI_MERCHANTAPPID,
+  bi_fabricAppSecreat: process.env.BI_FEBRICAPPSECRET,
+  bi_fabricAppId: process.env.BI_FEBRICAPPKEY,
   bi_merchantCode: process.env.BI_MERCHANTCODE,
   bi_privateKey: process.env.PRIVATEKEY,
   bi_publicKey: process.env.PUBLICKEY,
