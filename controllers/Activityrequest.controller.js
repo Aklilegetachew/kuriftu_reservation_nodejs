@@ -247,8 +247,6 @@ export const acceptActivityRequest = async (req, res) => {
   }
 };
 
-
-
 export const mpesaActivityRequest = async (req, res) => {
   console.log(req.body);
   const {
@@ -260,7 +258,7 @@ export const mpesaActivityRequest = async (req, res) => {
     location,
     quantity,
     reservationType,
-    ID
+    ID,
   } = req.body;
 
   const fNameResult = firstNameJoi.validate(first_name);
@@ -292,14 +290,18 @@ export const mpesaActivityRequest = async (req, res) => {
       currency: currencyResult.error ? currencyResult.error.message : null,
       location: locationResult.error ? locationResult.error.message : null,
       quantity: quantityResult.error ? quantityResult.error.message : null,
-      reservationType: reservationTypeResult.error ? reservationTypeResult.error.message : null,
-      ID: IDResult.error ? IDResult.error.message : null
+      reservationType: reservationTypeResult.error
+        ? reservationTypeResult.error.message
+        : null,
+      ID: IDResult.error ? IDResult.error.message : null,
     };
-
+    logger.info("111========= Mini App ===========111");
     console.log(error);
     logger.info(error);
 
-    const fieldsWithValues = Object.keys(error).filter(key => error[key] !== null);
+    const fieldsWithValues = Object.keys(error).filter(
+      (key) => error[key] !== null
+    );
 
     return res.status(400).json({
       msg: "Invalid Input",
@@ -313,13 +315,18 @@ export const mpesaActivityRequest = async (req, res) => {
     });
 
     if (!activityType) {
-      return res.status(400).json({ msg: "Multiple Activity Please Select One" });
+      return res
+        .status(400)
+        .json({ msg: "Multiple Activity Please Select One" });
     }
 
     const activityPrice = activityType.price;
     const NumberOfGuest = quantity;
     const totalPrice = activityPrice * NumberOfGuest;
-    const confirmation_code = generateUniqueId({ length: 10, useLetters: true });
+    const confirmation_code = generateUniqueId({
+      length: 10,
+      useLetters: true,
+    });
     const txr_code = generateUniqueId({ length: 12, useLetters: true });
     const today = dateFunction(Date.now());
 
@@ -341,7 +348,9 @@ export const mpesaActivityRequest = async (req, res) => {
       package: activityType.name,
     });
 
-    res.status(200).json({ msg: "Success", price: totalPrice, ID: confirmation_code });
+    res
+      .status(200)
+      .json({ msg: "Success", price: totalPrice, ID: confirmation_code });
   } catch (err) {
     console.error(err);
     logger.error(err);
