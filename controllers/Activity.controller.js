@@ -32,10 +32,6 @@ export const view_activity_price = async (req, res) => {
   }
 };
 
-
-
-
-
 export const activity_confirmation = async (req, res) => {
   // const testnotifyResponse = {
   //   notify_url: "http://197.156.68.29:5050/v1/api/order/mini/payment",
@@ -116,7 +112,6 @@ export const activity_confirmation = async (req, res) => {
   }
 };
 
-
 export const activity_Mpesa_confirmation = async (req, res) => {
   // {
   //   "RequestType": "Confirmation",
@@ -142,12 +137,11 @@ export const activity_Mpesa_confirmation = async (req, res) => {
 
   logger.info(notifyResponse);
 
-  
-  const transctionID = notifyResponse.TransID;
+  const transctionID = notifyResponse.BillRefNumber;
   console.log("HERE is Notification from Telebir Super App", transctionID);
   try {
     const updatedPayment = await superAppReservation.update(
-      { payment_status: "paid", tx_ref: transctionID }, // New values to update
+      { payment_status: "paid", tx_ref: notifyResponse.TransID }, // New values to update
       {
         where: {
           confirmation_code: transctionID, // Condition for the update
@@ -157,10 +151,9 @@ export const activity_Mpesa_confirmation = async (req, res) => {
     );
 
     if (updatedPayment[0] > 0) {
-      res.send({
-        code: 0,
-        msg: "success",
-      });
+      res
+        .status(200)
+        .json({ ResultCode: 0, ResultDesc: "Request processed successfully" });
     } else {
       res.send(
         `No payment found with trxId ${transctionID} or the payment status is already paid.`

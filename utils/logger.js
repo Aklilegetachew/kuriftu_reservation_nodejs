@@ -4,7 +4,7 @@ import winston from "winston";
 const logger = winston.createLogger({
   transports: [
     new winston.transports.File({
-      filename: "app.log", // Specify the log file name
+      filename: "mpesa.log", // Specify the log file name
       level: "info", // Specify the log level
       format: winston.format.combine(
         winston.format.timestamp(),
