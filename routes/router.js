@@ -8,14 +8,17 @@ import {
   view_redemed_reservation,
   view_redemed_location,
   activity_confirmation,
-  activity_Mpesa_confirmation
+  activity_Mpesa_confirmation,
 } from "../controllers/Activity.controller";
 import { auth } from "../controllers/authentication.controller";
 import { verifyChapa } from "../controllers/chappa.controller";
 import { main } from "../controllers/index.controller";
 import { qrimage } from "../controllers/qrimages.controllers";
 import { acceptRequest } from "../controllers/request.controller";
-import { acceptActivityRequest } from "../controllers/Activityrequest.controller";
+import {
+  acceptActivityRequest,
+  mpesaActivityRequest,
+} from "../controllers/Activityrequest.controller";
 import { test } from "../controllers/test.controller";
 import cors from "cors";
 import {
@@ -31,7 +34,7 @@ router.get("/", main);
 router.get("/index", main);
 router.post("/request", acceptRequest);
 router.post("/activityRequests", acceptActivityRequest);
-router.post("/mpesa/activityRequests", acceptActivityRequest);
+router.post("/mpesa/activityRequests", mpesaActivityRequest);
 router.get("/test", test);
 router.get("/qrimage/:id", qrimage);
 router.post("/verify", verify);
@@ -46,7 +49,6 @@ router.post("/view_activity_price_ID", view_activity_ById);
 
 router.post("/activity_confirmation", activity_confirmation);
 router.post("/api2/mini-app-verification", activity_Mpesa_confirmation);
-
 
 router.post("/add_activity_price", add_activity_price);
 router.post("/view_activity_reservation", view_activity_reservation);
