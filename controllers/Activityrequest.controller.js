@@ -246,3 +246,105 @@ export const acceptActivityRequest = async (req, res) => {
     }
   }
 };
+
+
+
+export const mpesaActivityRequest = async (req, res) => {
+  console.log(req.body);
+  const {
+    first_name,
+    last_name,
+    phone_number,
+    email,
+    currency,
+    location,
+    quantity,
+    reservationType,
+    ID
+  } = req.body;
+
+  const fNameResult = firstNameJoi.validate(first_name);
+  const lNameResult = lastNameJoi.validate(last_name);
+  const phoneResult = phoneNumberJoi.validate(phone_number);
+  const emailResult = emailJoi.validate(email);
+  const currencyResult = currencyJoi.validate(currency);
+  const locationResult = locationJoi.validate(location);
+  const quantityResult = quantityJoi.validate(quantity);
+  const reservationTypeResult = reservationTypeJoi.validate(reservationType);
+  const IDResult = IDJoi.validate(ID);
+
+  if (
+    fNameResult.error ||
+    lNameResult.error ||
+    phoneResult.error ||
+    emailResult.error ||
+    currencyResult.error ||
+    locationResult.error ||
+    quantityResult.error ||
+    reservationTypeResult.error ||
+    IDResult.error
+  ) {
+    const error = {
+      first_name: fNameResult.error ? fNameResult.error.message : null,
+      last_name: lNameResult.error ? lNameResult.error.message : null,
+      phone_number: phoneResult.error ? phoneResult.error.message : null,
+      email: emailResult.error ? emailResult.error.message : null,
+      currency: currencyResult.error ? currencyResult.error.message : null,
+      location: locationResult.error ? locationResult.error.message : null,
+      quantity: quantityResult.error ? quantityResult.error.message : null,
+      reservationType: reservationTypeResult.error ? reservationTypeResult.error.message : null,
+      ID: IDResult.error ? IDResult.error.message : null
+    };
+
+    console.log(error);
+    logger.info(error);
+
+    const fieldsWithValues = Object.keys(error).filter(key => error[key] !== null);
+
+    return res.status(400).json({
+      msg: "Invalid Input",
+      why: fieldsWithValues,
+    });
+  }
+
+  try {
+    const activityType = await ActivityPrice.findOne({
+      where: { id: IDResult.value },
+    });
+
+    if (!activityType) {
+      return res.status(400).json({ msg: "Multiple Activity Please Select One" });
+    }
+
+    const activityPrice = activityType.price;
+    const NumberOfGuest = quantity;
+    const totalPrice = activityPrice * NumberOfGuest;
+    const confirmation_code = generateUniqueId({ length: 10, useLetters: true });
+    const txr_code = generateUniqueId({ length: 12, useLetters: true });
+    const today = dateFunction(Date.now());
+
+    await SuperAppActivityReserv.create({
+      location,
+      first_name,
+      last_name,
+      email,
+      phone_number,
+      currency,
+      confirmation_code,
+      reservation_date: today,
+      quantity: NumberOfGuest,
+      price: totalPrice,
+      tx_ref: txr_code,
+      payment_method: "Mpesa Mini App",
+      payment_status: "Unpaid",
+      order_status: "Unconfirmed",
+      package: activityType.name,
+    });
+
+    res.status(200).json({ msg: "Success", price: totalPrice, ID: confirmation_code });
+  } catch (err) {
+    console.error(err);
+    logger.error(err);
+    res.status(500).json({ msg: "Server Error", error: err.message });
+  }
+};

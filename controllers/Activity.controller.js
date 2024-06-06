@@ -116,6 +116,66 @@ export const activity_confirmation = async (req, res) => {
   }
 };
 
+
+export const activity_Mpesa_confirmation = async (req, res) => {
+  // {
+  //   "RequestType": "Confirmation",
+  //   "TransactionType":"Pay Bill",
+  //   "TransID":"QAYGDMWP8S",
+  //   "TransTime":"20230815091011",
+  //   "TransAmount":"150",
+  //   "BusinessShortCode":"40444",
+  //   "BillRefNumber":"251799123456",
+  //   "InvoiceNumber":"",
+  //   "OrgAccountBalance":"4275.00",
+  //   "ThirdPartyTransID":"",
+  //   "MSISDN":"251799123456",
+  //   "FirstName":"Dawit",
+  //   "MiddleName":"",
+  //   "LastName":"Tadesse"
+  // }
+
+  logger.info("========= Mpesa mini App Confirmation ===========");
+
+  const notifyResponse = req.body;
+  console.log("Response body verification:", notifyResponse);
+
+  logger.info(notifyResponse);
+
+  
+  const transctionID = notifyResponse.TransID;
+  console.log("HERE is Notification from Telebir Super App", transctionID);
+  try {
+    const updatedPayment = await superAppReservation.update(
+      { payment_status: "paid", tx_ref: transctionID }, // New values to update
+      {
+        where: {
+          confirmation_code: transctionID, // Condition for the update
+          payment_status: "Unpaid", // Additional condition to ensure the status is unpaid before updating
+        },
+      }
+    );
+
+    if (updatedPayment[0] > 0) {
+      res.send({
+        code: 0,
+        msg: "success",
+      });
+    } else {
+      res.send(
+        `No payment found with trxId ${transctionID} or the payment status is already paid.`
+      );
+
+      logger.info(
+        `No payment found with trxId ${transctionID} or the payment status is already paid.`
+      );
+    }
+  } catch (error) {
+    console.error("Error updating payment:", error);
+    logger.info(`Error updating payment: ${error}`);
+  }
+};
+
 export const view_activity_ById = async (req, res) => {
   console.log(req.body.ID);
   try {
