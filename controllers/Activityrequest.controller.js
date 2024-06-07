@@ -261,10 +261,7 @@ export const mpesaActivityRequest = async (req, res) => {
     ID,
   } = req.body;
 
-  const fNameResult = firstNameJoi.validate(first_name);
-  const lNameResult = lastNameJoi.validate(last_name);
-  const phoneResult = phoneNumberJoi.validate(phone_number);
-  const emailResult = emailJoi.validate(email);
+ 
   const currencyResult = currencyJoi.validate(currency);
   const locationResult = locationJoi.validate(location);
   const quantityResult = quantityJoi.validate(quantity);
@@ -272,10 +269,6 @@ export const mpesaActivityRequest = async (req, res) => {
   const IDResult = IDJoi.validate(ID);
 
   if (
-    fNameResult.error ||
-    lNameResult.error ||
-    phoneResult.error ||
-    emailResult.error ||
     currencyResult.error ||
     locationResult.error ||
     quantityResult.error ||
@@ -283,10 +276,6 @@ export const mpesaActivityRequest = async (req, res) => {
     IDResult.error
   ) {
     const error = {
-      first_name: fNameResult.error ? fNameResult.error.message : null,
-      last_name: lNameResult.error ? lNameResult.error.message : null,
-      phone_number: phoneResult.error ? phoneResult.error.message : null,
-      email: emailResult.error ? emailResult.error.message : null,
       currency: currencyResult.error ? currencyResult.error.message : null,
       location: locationResult.error ? locationResult.error.message : null,
       quantity: quantityResult.error ? quantityResult.error.message : null,
