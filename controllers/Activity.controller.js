@@ -170,7 +170,7 @@ export const activity_Mpesa_confirmation = async (req, res) => {
 };
 
 export const view_activity_ById = async (req, res) => {
-  console.log(req.body.ID);
+  console.log("Id", req.body.ID);
   try {
     const result = await ActivityPrice.findAll({
       where: {

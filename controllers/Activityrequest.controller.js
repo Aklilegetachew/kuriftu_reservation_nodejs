@@ -261,42 +261,41 @@ export const mpesaActivityRequest = async (req, res) => {
     ID,
   } = req.body;
 
- 
   const currencyResult = currencyJoi.validate(currency);
   const locationResult = locationJoi.validate(location);
   const quantityResult = quantityJoi.validate(quantity);
   const reservationTypeResult = reservationTypeJoi.validate(reservationType);
   const IDResult = IDJoi.validate(ID);
 
-  if (
-    currencyResult.error ||
-    locationResult.error ||
-    quantityResult.error ||
-    reservationTypeResult.error ||
-    IDResult.error
-  ) {
-    const error = {
-      currency: currencyResult.error ? currencyResult.error.message : null,
-      location: locationResult.error ? locationResult.error.message : null,
-      quantity: quantityResult.error ? quantityResult.error.message : null,
-      reservationType: reservationTypeResult.error
-        ? reservationTypeResult.error.message
-        : null,
-      ID: IDResult.error ? IDResult.error.message : null,
-    };
-    logger.info("111========= Mini App ===========111");
-    console.log(error);
-    logger.info(error);
+  // if (
+  //   currencyResult.error ||
+  //   locationResult.error ||
+  //   quantityResult.error ||
+  //   reservationTypeResult.error ||
+  //   IDResult.error
+  // ) {
+  //   const error = {
+  //     currency: currencyResult.error ? currencyResult.error.message : null,
+  //     location: locationResult.error ? locationResult.error.message : null,
+  //     quantity: quantityResult.error ? quantityResult.error.message : null,
+  //     reservationType: reservationTypeResult.error
+  //       ? reservationTypeResult.error.message
+  //       : null,
+  //     ID: IDResult.error ? IDResult.error.message : null,
+  //   };
+  //   logger.info("111========= Mini App ===========111");
+  //   console.log(error);
+  //   logger.info(error);
 
-    const fieldsWithValues = Object.keys(error).filter(
-      (key) => error[key] !== null
-    );
+  //   const fieldsWithValues = Object.keys(error).filter(
+  //     (key) => error[key] !== null
+  //   );
 
-    return res.status(400).json({
-      msg: "Invalid Input",
-      why: fieldsWithValues,
-    });
-  }
+  //   return res.status(400).json({
+  //     msg: "Invalid Input",
+  //     why: fieldsWithValues,
+  //   });
+  // }
 
   try {
     const activityType = await ActivityPrice.findOne({
